@@ -30,8 +30,10 @@ public class Train
 	/*
 	 * Attributs
 	 */
+	//LE train est responsable de gerer le nbr de bandits + responsable de les creer
 	private final int MAX_NB_BANDITS = 3 ;
 	private int NB_BANDITS =0 ;
+	private final int MAX_N_ACTION = 5;
 	private final int NB_WAGONS;
 	private Wagon locomotive;
 	private Wagon firstWagon;
@@ -72,7 +74,6 @@ public class Train
 		return out;
 	}
 	public String toString() {
-		int n =0;
 		String out ="";
 		out += this.locomotive;
 		out += this.firstWagon;
@@ -84,9 +85,23 @@ public class Train
 		return out;
 	}
 	
+	public int getMAX_N_ACTION() {
+		return this.MAX_N_ACTION;
+	}
 	
 	
-	
+/*
+^
+|
+|
+|	* prison    *           *           *     B *
+|	*************************           *********
+|	*Locomotive **   First  *           * Last	*
+|	*************************...........*********
+|
+|____________Direction(wagon.suivant, Action.avancer) ______________>
+
+ */
 	
 	public static void main(String args[]) {
 		Train t = new Train(2);
@@ -94,6 +109,13 @@ public class Train
 		Bandit b1 = new Bandit(t,"Jean");
 		System.out.println("adding bandit");
 		System.out.print(t);
+		b1.addAction(Action.Recule);
+		b1.addAction(Action.Descendre);
+		b1.executeAction();
+		b1.executeAction();
+		/*System.out.println("Le train apres les actions");
+		System.out.print(t);*/
+		
 	}
 	
 	
@@ -119,13 +141,15 @@ public class Train
 		public boolean isLoco() {
 			return this==(train.locomotive);
 		}
-		public void avanceBandit(Bandit bandit) {
+		public Wagon avanceBandit(Bandit bandit) {
 			bandits.remove(bandit);
 			this.suivant.bandits.add(bandit);	
+			return this.suivant;
 		}
-		public void reculeBandit(Bandit bandit) {
+		public Wagon reculeBandit(Bandit bandit) {
 			bandits.remove(bandit);
-			this.precedent.bandits.add(bandit);	
+			this.precedent.bandits.add(bandit);
+			return this.precedent;
 		}
 		
 		public String toString() {

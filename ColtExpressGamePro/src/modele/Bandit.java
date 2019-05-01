@@ -1,4 +1,7 @@
 package modele;
+import java.util.Hashtable;
+import java.util.Set;
+
 
 
 /*
@@ -8,9 +11,9 @@ package modele;
 public class Bandit
 {
 	private String name; // nom de bandit
-	public Train.Wagon wagon; //Le wagon ou il existe
+	private Train.Wagon wagon; //Le wagon ou il existe
 	private boolean interieur; //pour savoir s'il est sur le toit ou dans le wagon
-	private Action[] actions; //L'esemble des actions qui va prendre chaque tour max = 5
+	private ActionList actions; //L'esemble des actions qui va prendre chaque tour max = 5
 	
 	/*
 	 * Creer le bandit sur le toit de dernier wagon
@@ -18,7 +21,7 @@ public class Bandit
 	public Bandit(Train t, String name){
 		wagon = t.banditLastWagon(this); //method de la classe wagon rdv sa propre description
 		interieur = false; // au debut il est sur le toit
-		actions = new Action[5]; //maximum  actions
+		actions = new ActionList(this, t.getMAX_N_ACTION()); //maximum  actions
 		this.name = name;
 	}
 	
@@ -30,42 +33,89 @@ public class Bandit
 	//execute an action s'il en a 
 	public void executeAction() {
 		//si cette action est nulle rien va etre executer
-		Action actionExcute = this.premierActionExcecution();
+		Action actionExcute = actions.actionToExecute();
 		if(interieur && actionExcute.equals(Action.Monter)) {
 			interieur = false;
+			System.out.println(name+" monte sur le toit");
+			System.out.println(wagon);
+			return;
 		}
 		if(!interieur && actionExcute.equals(Action.Descendre)) {
 			interieur = true;
+			System.out.println(name+" descend a l'interieur");
+			System.out.println(wagon);
+			return;
 		}
 		if(!wagon.isLastWagon() && actionExcute.equals(Action.Avance)) {
-			wagon.avanceBandit(this);
+			Train.Wagon newWagon = wagon.avanceBandit(this);
+			System.out.println(name+" avance vers la fin de train");
+			wagon =  newWagon;
+			System.out.println(wagon);
+			return;
 		}
 		if(!wagon.isFirstWagon() && actionExcute.equals(Action.Recule)) {
-			wagon.reculeBandit(this);
-		}	
+			Train.Wagon newWagon =wagon.reculeBandit(this);
+			System.out.println(name+" recule vers le debut de train");
+			wagon =  newWagon;
+			System.out.println(wagon);
+			return;
+		}
+		System.out.println(name+ " has nothing to do!");
 	}
 	
-	//le premier action qu'il faut executer
-	private Action premierActionExcecution() {
-		for(Action act : actions)
-			if(act!=(null)) 
-				return act;
-		return null;
-	}
+	
 	public void addAction(Action a) {
-		for(Action act : actions) {
-			if(act==(null)) {
-				act = a;
-				return;
-			}
-		}
+		actions.addAction(a);
 	}
 	
 	public String toString() {
-		String pos = (this.interieur)? ("a l'nterieur"):("sur le toit") ;
+		String pos = (this.interieur)? ("a l'interieur"):("sur le toit") ;
 		return this.name + " est " + pos;
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	private class ActionList {
+		private Hashtable<Integer, Action> actions;
+		private int MAX_N;
+		private int index;
+		
+		
+		ActionList(Bandit bandit, int n ){
+			MAX_N = n;
+			index=0;
+			actions = new Hashtable<Integer, Action>();
+		}
+		
+		private void addAction(Action act) {
+			if(index>= MAX_N) return;
+			this.actions.put(index, act);
+			index++;
+		}
+		
+		private int minSet(Set<Integer> s) {
+			int out = this.MAX_N;
+			for(int k : s) {
+				if(out>k) out = k;
+			}
+			return out;
+		}
+		
+		private Action actionToExecute() {
+			if(actions.size()==0) return null;
+			int firstActionIndex = minSet(actions.keySet());
+			Action out = actions.get(firstActionIndex);
+			actions.remove(firstActionIndex);
+			return out;
+		}
+	}
+		
+		
 
 	
 }

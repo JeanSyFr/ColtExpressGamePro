@@ -1,4 +1,5 @@
 package modele;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 /*
@@ -126,6 +127,7 @@ public class Train
 		private Wagon suivant;
 		private Wagon precedent;
 		private Set<Bandit> bandits;
+		private Butins butins;
 		private int ordre;
 		public Wagon(Train t, int o){
 			train =t;
@@ -157,6 +159,32 @@ public class Train
 					"		Bandits" + bandits + "\n";
 			
 		}
+		
+		public void addButin(Butin b) {
+			butins.pushButin(b);
+		}
+		public Butin stoleButin() {
+			return butins.popButin();
+		}
+		public Bandit anotherBanditThan(Bandit b1) {
+			if(bandits.size()<=1) return null;
+			for(Bandit b2 : bandits) {
+				if(!b2.equals(b1)) return b2;
+			}
+			return null;
+		}
+		
+		public ContainerStack getButins() {
+			return butins;
+		}
+		
+		/*
+		 * Just to rename the abstract class
+		 */
+		class Butins extends ContainerStack{ }
+
+
+		
 	
 	}
 	

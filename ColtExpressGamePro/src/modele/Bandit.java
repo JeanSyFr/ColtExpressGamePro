@@ -1,8 +1,6 @@
 package modele;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Set;
-import java.util.Stack;
 
 
 
@@ -126,9 +124,14 @@ public class Bandit
 	}
 	
 	/*
-	 * Juste pour changer le nom de class
+	 * Juste pour changer le nom de class and max = 4 
 	 */
-	private class SacButin extends ContainerStack{	}
+	private class SacButin extends ContainerStack{ 
+		SacButin() {
+			super(4);
+		}
+		
+	}
 		
 		
 

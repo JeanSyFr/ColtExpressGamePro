@@ -9,9 +9,9 @@ import java.util.Set;
 |
 |
 |
-|	* prison	 *			*			*	  B *
+|	* prison    *           *           *     B *
 |	*************************			*********
-|	*Locomotive **   First	*			* Last	*
+|	*Locomotive **   First  *           * Last	*
 |	*************************...........*********
 |
 |____________Direction(wagon.suivant, Action.avancer) ______________>

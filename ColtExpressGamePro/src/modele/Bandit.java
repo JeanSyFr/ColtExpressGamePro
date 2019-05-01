@@ -19,6 +19,7 @@ public class Bandit
 		wagon = t.banditLastWagon(this); //method de la classe wagon rdv sa propre description
 		interieur = false; // au debut il est sur le toit
 		actions = new Action[5]; //maximum  actions
+		this.name = name;
 	}
 	
 	// getter pour les autres classes
@@ -47,17 +48,22 @@ public class Bandit
 	//le premier action qu'il faut executer
 	private Action premierActionExcecution() {
 		for(Action act : actions)
-			if(!act.equals(null)) 
+			if(act!=(null)) 
 				return act;
 		return null;
 	}
 	public void addAction(Action a) {
 		for(Action act : actions) {
-			if(act.equals(null)) {
+			if(act==(null)) {
 				act = a;
 				return;
 			}
 		}
+	}
+	
+	public String toString() {
+		String pos = (this.interieur)? ("a l'nterieur"):("sur le toit") ;
+		return this.name + " est " + pos;
 	}
 	
 

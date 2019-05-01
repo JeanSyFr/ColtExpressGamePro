@@ -1,5 +1,4 @@
 package modele;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 /*
@@ -59,6 +58,9 @@ public class Train
 			add.precedent = current;
 			current = add;
 		}
+	}
+	public Train() {
+		this(4);
 	}
 
 	/*
@@ -128,7 +130,7 @@ public class Train
 		private Wagon precedent;
 		private Set<Bandit> bandits;
 		private Butins butins;
-		private int ordre;
+		private int ordre; //tile pour les test unitaire
 		public Wagon(Train t, int o){
 			train =t;
 			bandits = new HashSet<Bandit>(0);
@@ -181,7 +183,12 @@ public class Train
 		/*
 		 * Just to rename the abstract class
 		 */
-		class Butins extends ContainerStack{ }
+		class Butins extends ContainerStack{
+
+			Butins() {
+				super(8);
+			} 
+		}
 
 
 		

@@ -180,8 +180,8 @@ public class Train
 			return butins;
 		}
 		
-		/*
-		 * Just to rename the abstract class
+		/* 
+		 * Just to rename the abstract class and max = 8
 		 */
 		class Butins extends ContainerStack{
 

@@ -1,41 +1,47 @@
 package modele;
-import java.util.Hashtable;
-import java.util.Set;
 
 
+import modele.Train.Wagon;
 
 /*
  * Le class qui represente le bandit
  * 
  */
-public class Bandit
+public class Bandit extends Personne
 {
-	private String name; // nom de bandit
-	private Train.Wagon wagon; //Le wagon ou il existe
+	
 	private boolean interieur; //pour savoir s'il est sur le toit ou dans le wagon
-	private ActionList actions; //L'esemble des actions qui va prendre chaque tour max = 5
-	private SacButin sac;
+	protected SacButin sac;
 	
 	/*
 	 * Creer le bandit sur le toit de dernier wagon
 	 */
 	public Bandit(Train t, String name){
-		wagon = t.banditLastWagon(this); //method de la classe wagon rdv sa propre description
+		super(t,name);
 		interieur = false; // au debut il est sur le toit
-		actions = new ActionList(this, t.getMAX_N_ACTION()); //maximum  actions
-		this.name = name;
 		sac = new SacButin();
+	}
+	
+	@Override
+	protected Wagon personneWagon(Train t, Personne p) {
+		return t.banditLastWagon(this);
 	}
 	
 	// getter pour les autres classes
 	public boolean getInterieur( ) { 
 		return this.interieur;
 	}
-	
-	//execute le premiere action s'il en a
-	public void executeAction() {
+	@Override
+	protected void executeAction() {
 		//si cette action est nulle rien va etre executer
 		Action actionExcute = actions.actionToExecute();
+		
+		if(actionExcute.equals(Action.Tirer)) {
+			this.tirer();
+		}
+		if(actionExcute.equals(Action.Braquer)) {
+			this.braquer();
+		}
 		if(interieur && actionExcute.equals(Action.Monter)) {
 			interieur = false;
 			System.out.println(name+" monte sur le toit");
@@ -66,9 +72,6 @@ public class Bandit
 	}
 	
 	
-	public void addAction(Action a) {
-		actions.addAction(a);
-	}
 	
 	
 	public String toString() {
@@ -77,61 +80,32 @@ public class Bandit
 	}
 	
 	
-	public void tirer() {
-		Bandit b2 = wagon.anotherBanditThan(this);
-		wagon.addButin(b2.sac.popButin());
-	}
+	
 	public void braquer() {
 		if(wagon.getButins().isEmpty()) return;
 		this.sac.pushButin(wagon.stoleButin());
 	}
 	
 	
-	
-	
-	
-	
-	
-	private class ActionList {
-		private Hashtable<Integer, Action> actions;
-		private int MAX_N;
-		private int index;
-		ActionList(Bandit bandit, int n ){
-			MAX_N = n;
-			index=0;
-			actions = new Hashtable<Integer, Action>();
-		}
-		private void addAction(Action act) {
-			if(index>= MAX_N) return;
-			this.actions.put(index, act);
-			index++;
-		}
-		private int minSet(Set<Integer> s) {
-			int out = this.MAX_N;
-			for(int k : s) {
-				if(out>k) out = k;
-			}
-			return out;
-		}
-		
-		private Action actionToExecute() {
-			if(actions.size()==0) return null;
-			int firstActionIndex = minSet(actions.keySet());
-			Action out = actions.get(firstActionIndex);
-			actions.remove(firstActionIndex);
-			return out;
-		}
-	}
-	
 	/*
 	 * Juste pour changer le nom de class and max = 4 
 	 */
-	private class SacButin extends ContainerStack{ 
+	class SacButin extends ContainerStack{ 
 		SacButin() {
 			super(4);
 		}
 		
 	}
+
+
+
+
+
+
+
+
+
+	
 		
 		
 

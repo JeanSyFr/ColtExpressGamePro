@@ -76,6 +76,14 @@ public class Train
 		this.NB_BANDITS++;
 		return out;
 	}
+	
+	/*
+	 * Cette fonction permet a un Marshall de monter sur le locomotive de train
+	 */
+	public Wagon marshaLocomotive(Marshall b) {
+		this.locomotive.marshall = true;
+		return this.locomotive;
+	}
 	public String toString() {
 		String out ="";
 		out += this.locomotive;
@@ -110,25 +118,37 @@ public class Train
 		Train t = new Train(2);
 		System.out.print(t);
 		Bandit b1 = new Bandit(t,"Jean");
+		Marshall m = new Marshall(t, "Marshall");
 		System.out.println("adding bandit");
 		System.out.print(t);
 		b1.addAction(Action.Recule);
 		b1.addAction(Action.Descendre);
+		m.addAction(Action.Avance);
 		b1.executeAction();
 		b1.executeAction();
-		/*System.out.println("Le train apres les actions");
-		System.out.print(t);*/
+		m.executeAction();
+		
+		m.addAction(Action.Tirer);
+		m.executeAction();
+		
+		b1.addAction(Action.Tirer);
+		b1.executeAction();
+		System.out.println();
+		System.out.println("Le train apres les actions");
+		System.out.println();
+		System.out.print(t);
 		
 	}
 	
 	
 	
-	class Wagon
+	protected class Wagon
 	{
 		private Train train;
 		private Wagon suivant;
 		private Wagon precedent;
 		private Set<Bandit> bandits;
+		private boolean marshall;
 		private Butins butins;
 		private int ordre; //tile pour les test unitaire
 		public Wagon(Train t, int o){
@@ -145,6 +165,18 @@ public class Train
 		public boolean isLoco() {
 			return this==(train.locomotive);
 		}
+		public Wagon avanceMarshall() {
+			if(!this.marshall) return null;
+			this.marshall = false;
+			this.suivant.marshall = true;	
+			return this.suivant;
+		}
+		public Wagon reculeMarshall() {
+			if(!this.marshall) return null;//si le marshall n'est pas ici 
+			this.marshall = false;
+			this.precedent.marshall = true;	
+			return this.precedent;
+		}
 		public Wagon avanceBandit(Bandit bandit) {
 			bandits.remove(bandit);
 			this.suivant.bandits.add(bandit);	
@@ -157,8 +189,10 @@ public class Train
 		}
 		
 		public String toString() {
-			return "Wagon "+ordre+":\n"+
+			String marsh = (this.marshall)?" ":" not ";
+			String out = "Wagon contains"+marsh+"marshall"+ordre+":\n"+
 					"		Bandits" + bandits + "\n";
+			return out;
 			
 		}
 		
@@ -168,10 +202,13 @@ public class Train
 		public Butin stoleButin() {
 			return butins.popButin();
 		}
-		public Bandit anotherBanditThan(Bandit b1) {
-			if(bandits.size()<=1) return null;
+		public Bandit anotherBanditThan(Personne p) {
+			/*if(bandits.size()<=1) {
+				System.err.println("Wagon : nobody here");
+				return null;
+			}*/
 			for(Bandit b2 : bandits) {
-				if(!b2.equals(b1)) return b2;
+				if(!b2.equals(p)) return b2;
 			}
 			return null;
 		}

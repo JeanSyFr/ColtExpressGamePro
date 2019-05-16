@@ -1,7 +1,7 @@
 package vue;
 
 import modele.Bandit;
-//import modele.Butin;
+import modele.Butin;
 import modele.Train;
 
 
@@ -29,7 +29,7 @@ public class VueTrain extends JPanel implements Observer {
 		 * l'interface, calculée en fonction du nombre de cellules et de la
 		 * taille d'affichage.
 		 */
-		Dimension dim = new Dimension(this.largeurPosition * train.getNB_WAGONS(),
+		Dimension dim = new Dimension(this.largeurPosition * train.NB_WAGONS,
 					      this.hauteurPosition * 2);
 		this.setPreferredSize(dim);
     }
@@ -55,9 +55,9 @@ public class VueTrain extends JPanel implements Observer {
     public void paintComponent(Graphics g) {
 		super.repaint();
 		
-		Train.Wagon currentWagon = train.getLoco();
+		Train.Wagon currentWagon = train.getLocomotive();
 		
-		final int NB_WAGONS = train.getNB_WAGONS();
+		final int NB_WAGONS = train.NB_WAGONS;
 		int x = 10;
 		int y = 10;
 		
@@ -98,7 +98,7 @@ public class VueTrain extends JPanel implements Observer {
     	}
     	
     	ytemp = 5;
-    	for (Butin b : w.getButins()) {
+    	for (Butin b : w.getButins().getButins()) {
     		g.drawString(b.getNom(), x + 55, ytemp);
     		ytemp += 10;
     	}

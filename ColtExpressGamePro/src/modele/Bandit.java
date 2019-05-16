@@ -82,19 +82,24 @@ public class Bandit extends Personne
 	
 	
 	public void braquer() {
-		if(wagon.getButins().isEmpty()) return;
-		this.sac.pushButin(wagon.stoleButin());
+		if(wagon.getPossesseur().isEmpty()) return;
+		this.sac.addButin(wagon.stoleButin());
 	}
 	
 	
 	/*
 	 * Juste pour changer le nom de class and max = 4 
 	 */
-	class SacButin extends ContainerStack{ 
+	class SacButin extends Possesseur{ 
 		SacButin() {
 			super(4);
 		}
 		
+	}
+
+
+	public String getName() {
+		return this.name;
 	}
 
 

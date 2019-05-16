@@ -9,7 +9,7 @@ import java.util.Stack;
 
 public abstract class Possesseur {
 	
-	private Set<Butin> butins;
+	private HashSet<Butin> butins;
 	private final int MAX_CAPACITY;
 	private int n ;
 	
@@ -57,7 +57,7 @@ public abstract class Possesseur {
 		return butins.isEmpty();
 	}
 	
-	public Set<Butin> getButins() {
+	public HashSet<Butin> getButins() {
 		return butins;
 	}
 	

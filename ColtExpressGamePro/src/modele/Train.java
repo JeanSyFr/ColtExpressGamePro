@@ -31,10 +31,10 @@ public class Train extends Observable
 	 * Attributs
 	 */
 	//LE train est responsable de gerer le nbr de bandits + responsable de les creer
-	private final int MAX_NB_BANDITS = 3 ;
+	public final int MAX_NB_BANDITS = 3 ;
 	private int NB_BANDITS =0 ;
-	private final int MAX_N_ACTION = 5;
-	private final int NB_WAGONS;
+	public final int MAX_N_ACTION = 5;
+	public final int NB_WAGONS;
 	private Wagon locomotive;
 	private Wagon firstWagon;
 	
@@ -46,15 +46,15 @@ public class Train extends Observable
 	public Train(int n){
 		if(n <1) n =1;
 		this.NB_WAGONS = n;
-		locomotive = new Wagon(this,0);
+		setLocomotive(new Wagon(this,0));
 		firstWagon = new Wagon(this,1);
-		locomotive.suivant = firstWagon;
-		firstWagon.precedent = locomotive;
+		getLocomotive().setSuivant(firstWagon);
+		firstWagon.precedent = getLocomotive();
 		n -= 1;
 		Wagon current = firstWagon;
 		for(int i =0; i<n ;i++) {
 			Wagon add = new Wagon(this,i+2);
-			current.suivant = add;
+			current.setSuivant(add);
 			add.precedent = current;
 			current = add;
 		}
@@ -68,9 +68,9 @@ public class Train extends Observable
 	 */
 	public Wagon banditLastWagon(Bandit b) {
 		if(this.NB_BANDITS >= this.MAX_NB_BANDITS) return null;
-		Wagon out = this.locomotive;
-		while(out.suivant!=(null)) {
-			out = out.suivant;
+		Wagon out = this.getLocomotive();
+		while(out.getSuivant()!=(null)) {
+			out = out.getSuivant();
 		}
 		out.bandits.add(b);
 		this.NB_BANDITS++;
@@ -81,16 +81,16 @@ public class Train extends Observable
 	 * Cette fonction permet a un Marshall de monter sur le locomotive de train
 	 */
 	public Wagon marshaLocomotive(Marshall b) {
-		this.locomotive.marshall = true;
-		return this.locomotive;
+		this.getLocomotive().marshall = true;
+		return this.getLocomotive();
 	}
 	public String toString() {
 		String out ="";
-		out += this.locomotive;
+		out += this.getLocomotive();
 		out += this.firstWagon;
 		Wagon curent = this.firstWagon;
-		while(curent.suivant!=(null)) {
-			curent = curent.suivant;
+		while(curent.getSuivant()!=(null)) {
+			curent = curent.getSuivant();
 			out += curent;
 		}
 		return out;
@@ -142,6 +142,16 @@ public class Train extends Observable
 	
 	
 	
+	public Wagon getLocomotive() {
+		return locomotive;
+	}
+
+	public void setLocomotive(Wagon loco) {
+		this.locomotive = loco;
+	}
+
+
+
 	public class Wagon
 	{
 		private Train train;
@@ -149,7 +159,7 @@ public class Train extends Observable
 		private Wagon precedent;
 		private Set<Bandit> bandits;
 		private boolean marshall;
-		private Butins butins;
+		private Possesseur poss; // il pourrait etre plus judicieux de faire un héritage
 		private int ordre; //tile pour les test unitaire
 		public Wagon(Train t, int o){
 			train =t;
@@ -157,19 +167,19 @@ public class Train extends Observable
 			ordre = o;
 		}
 		public boolean isLastWagon() {
-			return  this.suivant==(null);
+			return  this.getSuivant()==(null);
 		}
 		public boolean isFirstWagon() {
 			return this==(train.firstWagon);
 		}
 		public boolean isLoco() {
-			return this==(train.locomotive);
+			return this==(train.getLocomotive());
 		}
 		public Wagon avanceMarshall() {
 			if(!this.marshall) return null;
 			this.marshall = false;
-			this.suivant.marshall = true;	
-			return this.suivant;
+			this.getSuivant().marshall = true;	
+			return this.getSuivant();
 		}
 		public Wagon reculeMarshall() {
 			if(!this.marshall) return null;//si le marshall n'est pas ici 
@@ -179,8 +189,8 @@ public class Train extends Observable
 		}
 		public Wagon avanceBandit(Bandit bandit) {
 			bandits.remove(bandit);
-			this.suivant.bandits.add(bandit);	
-			return this.suivant;
+			this.getSuivant().bandits.add(bandit);	
+			return this.getSuivant();
 		}
 		public Wagon reculeBandit(Bandit bandit) {
 			bandits.remove(bandit);
@@ -197,10 +207,10 @@ public class Train extends Observable
 		}
 		
 		public void addButin(Butin b) {
-			butins.pushButin(b);
+			this.poss.addButin(b);
 		}
 		public Butin stoleButin() {
-			return butins.popButin();
+			return this.poss.popButin();
 		}
 		public Bandit anotherBanditThan(Personne p) {
 			/*if(bandits.size()<=1) {
@@ -213,18 +223,32 @@ public class Train extends Observable
 			return null;
 		}
 		
-		public ContainerStack getButins() {
-			return butins;
+		public Possesseur getPossesseur() {
+			return this.poss;
 		}
 		
+		public Wagon getSuivant() {
+			return suivant;
+		}
+		public void setSuivant(Wagon suivant) {
+			this.suivant = suivant;
+		}
+
 		/* 
 		 * Just to rename the abstract class and max = 8
 		 */
-		class Butins extends ContainerStack{
+		/*
+		class Butins extends Possesseur{
 
 			Butins() {
 				super(8);
 			} 
+		}
+		*/
+
+	
+		public Set<Bandit> getBandits() {
+			return this.bandits;
 		}
 
 

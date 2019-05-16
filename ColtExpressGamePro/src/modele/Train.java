@@ -37,7 +37,7 @@ public class Train extends Observable
 	public final int NB_WAGONS;
 	private Wagon locomotive;
 	private Wagon firstWagon;
-	private Marshall marshall; // utile pour VueTrain
+	//private Marshall marshall; // utile pour VueTrain
 	
 	/*
 	 * Constructeur 
@@ -45,7 +45,7 @@ public class Train extends Observable
 	 * le nombre de wagon dans ce train il y aura au moins un locomotive et un wagon
 	 */
 	public Train(int n){
-		this.marshall = new Marshall(this, "Marshall");
+		
 		
 		if(n <1) n =1;
 		this.NB_WAGONS = n;
@@ -151,10 +151,6 @@ public class Train extends Observable
 
 	public void setLocomotive(Wagon loco) {
 		this.locomotive = loco;
-	}
-
-	public Marshall getMarshall() {
-		return this.marshall;
 	}
 
 

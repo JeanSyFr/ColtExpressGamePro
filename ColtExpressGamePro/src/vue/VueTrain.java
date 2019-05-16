@@ -104,7 +104,7 @@ public class VueTrain extends JPanel implements Observer {
     	}
     	
     	if (w.getMarshall()) {
-    		g.drawString(this.train.getMarshall().getName(), x + 105, 5);
+    		g.drawString("Marshall", x + 105, 5);
     	}
     }
 

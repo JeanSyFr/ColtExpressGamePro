@@ -37,7 +37,7 @@ public class Train extends Observable
 	public final int NB_WAGONS;
 	private Wagon locomotive;
 	private Wagon firstWagon;
-	private Marshall marshall;
+	private Marshall marshall; // utile pour VueTrain
 	
 	/*
 	 * Constructeur 
@@ -153,9 +153,8 @@ public class Train extends Observable
 		this.locomotive = loco;
 	}
 
-	public Bandit getMarshall() {
-		// TODO Auto-generated method stub
-		return null;
+	public Marshall getMarshall() {
+		return this.marshall;
 	}
 
 

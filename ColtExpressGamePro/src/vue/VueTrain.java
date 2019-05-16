@@ -98,13 +98,13 @@ public class VueTrain extends JPanel implements Observer {
     	}
     	
     	ytemp = 5;
-    	for (Butin b : w.getButins().getButins()) {
+    	for (Butin b : w.getPossesseur().getButins()) {
     		g.drawString(b.getNom(), x + 55, ytemp);
     		ytemp += 10;
     	}
     	
-    	if (w.isMarshall()) {
-    		g.drawString(w.getMarshall().getName(), x + 105, 5);
+    	if (w.getMarshall()) {
+    		g.drawString(this.train.getMarshall().getName(), x + 105, 5);
     	}
     }
 

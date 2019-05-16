@@ -6,6 +6,10 @@ public abstract class Butin {
 	protected int valeur;
 	protected String nom;
 	protected Possesseur possesseur;
+	
+	public String getNom() {
+		return this.nom;
+	}
 }
 
 class Bourse extends Butin {

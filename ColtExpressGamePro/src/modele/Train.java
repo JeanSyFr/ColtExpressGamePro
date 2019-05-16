@@ -37,6 +37,7 @@ public class Train extends Observable
 	public final int NB_WAGONS;
 	private Wagon locomotive;
 	private Wagon firstWagon;
+	private Marshall marshall;
 	
 	/*
 	 * Constructeur 
@@ -44,6 +45,8 @@ public class Train extends Observable
 	 * le nombre de wagon dans ce train il y aura au moins un locomotive et un wagon
 	 */
 	public Train(int n){
+		this.marshall = new Marshall(this, "Marshall");
+		
 		if(n <1) n =1;
 		this.NB_WAGONS = n;
 		setLocomotive(new Wagon(this,0));
@@ -150,6 +153,10 @@ public class Train extends Observable
 		this.locomotive = loco;
 	}
 
+	public Bandit getMarshall() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 	public class Wagon
@@ -250,11 +257,17 @@ public class Train extends Observable
 		public Set<Bandit> getBandits() {
 			return this.bandits;
 		}
+		
+		public boolean getMarshall() {
+			return this.marshall;
+		}
 
 
 		
 	
 	}
+
+
 	
 }
 

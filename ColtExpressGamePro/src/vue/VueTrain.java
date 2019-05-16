@@ -1,7 +1,7 @@
 package vue;
 
 import modele.Bandit;
-import modele.Butin;
+//import modele.Butin;
 import modele.Train;
 
 
@@ -55,7 +55,7 @@ public class VueTrain extends JPanel implements Observer {
     public void paintComponent(Graphics g) {
 		super.repaint();
 		
-		Train.Wagon currentWagon = train.getLocomotive();
+		Train.Wagon currentWagon = train.getLoco();
 		
 		final int NB_WAGONS = train.getNB_WAGONS();
 		int x = 10;

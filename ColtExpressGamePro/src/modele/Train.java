@@ -25,7 +25,7 @@ import java.util.Set;
  */
 
 
-public class Train
+public class Train extends Observable
 {
 	/*
 	 * Attributs
@@ -142,7 +142,7 @@ public class Train
 	
 	
 	
-	protected class Wagon
+	public class Wagon
 	{
 		private Train train;
 		private Wagon suivant;

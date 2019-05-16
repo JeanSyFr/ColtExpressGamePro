@@ -9,6 +9,9 @@ public abstract class Personne {
 	protected Train.Wagon wagon; //Le wagon ou il existe
 	protected ActionList actions; //L'esemble des actions qui va prendre chaque tour max = 5
 	
+	public String getName() {
+		return this.name;
+	}
 	
 	public Personne(Train t, String name){
 		wagon = personneWagon(t, this); //method de la classe wagon rdv sa propre description

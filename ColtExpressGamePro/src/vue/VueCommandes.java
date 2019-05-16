@@ -84,5 +84,13 @@ public class VueCommandes extends JPanel {
 	    	}
 	    });
 		
+		/*
+		if(action.acc <= train.liste.size()){
+			boutonAction.setEnabled(true);
+		} 
+		else {
+			boutonAction.setEnabled(false);
+		}
+		*/
     }
 }

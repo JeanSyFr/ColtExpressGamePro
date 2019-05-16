@@ -15,8 +15,8 @@ public class VueTrain extends JPanel implements Observer {
     private Train train;
     
     // dimention d'une position en nombre de pixels 
-    private final static int largeurPosition = 150;
-    private final static int hauteurPosition = 100;
+    private final static int largeurWagon = 150;
+    private final static int hauteurWagon = 100;
     
 
     /** Constructeur. */
@@ -29,8 +29,8 @@ public class VueTrain extends JPanel implements Observer {
 		 * l'interface, calculée en fonction du nombre de cellules et de la
 		 * taille d'affichage.
 		 */
-		Dimension dim = new Dimension(this.largeurPosition * train.NB_WAGONS,
-					      this.hauteurPosition * 2);
+		Dimension dim = new Dimension(this.largeurWagon * train.NB_WAGONS,
+					      this.hauteurWagon * 2);
 		this.setPreferredSize(dim);
     }
 

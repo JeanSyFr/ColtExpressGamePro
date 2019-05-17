@@ -417,7 +417,8 @@ public class CEVue {
 	      e.printStackTrace();
 	    }
 	    
-
+		m.addAction(Action.Avance);
+		m.executeAction();
 		affichage.console.setText("t'es un BG");
 		System.out.println("ok");
 		

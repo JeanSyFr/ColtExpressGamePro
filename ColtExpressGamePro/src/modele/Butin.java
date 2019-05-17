@@ -2,37 +2,44 @@ package modele;
 
 import java.util.Random;
 
-public abstract class Butin {
+
+abstract class Butin {
 	protected int valeur;
 	protected String nom;
-	protected Possesseur possesseur;
+	protected Train.Wagon wagon;
 	
-	public String getNom() {
-		return this.nom;
+	public Butin(Train.Wagon wagon) {
+		this.wagon = wagon;
+		//this.wagon.addButin(this);
+	}
+	public String toString() {
+		return nom+ "("+valeur+")$";
 	}
 }
 
 class Bourse extends Butin {
-	public Bourse(Possesseur pos){
+	public Bourse(Train.Wagon wagon){
+		super(wagon);
 		this.nom ="Bourse";
-		this.possesseur = pos;
     	Random rnd = new Random();
     	this.valeur = rnd.nextInt(501);
 	}
 }
 
 class Bijou extends Butin {
-	public Bijou(Possesseur pos){
+	public Bijou(Train.Wagon wagon){
+		super(wagon);
 		this.nom ="Bijou";
 		this.valeur = 500;
-		this.possesseur = pos;
 	}
 }
 
 class Magot extends Butin {
-	public Magot(Possesseur pos){
+	public Magot(Train.Wagon wagon){
+		super(wagon);
 		this.nom = "Magot";
 		this.valeur = 1000;
-		this.possesseur = pos;
 	}
 }
+
+

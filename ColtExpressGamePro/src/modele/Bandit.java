@@ -9,46 +9,56 @@ import modele.Train.Wagon;
  */
 public class Bandit extends Personne
 {
-	
 	private boolean interieur; //pour savoir s'il est sur le toit ou dans le wagon
-	protected SacButin sac;
+	private boolean joueur = false;
+	private final int bulit = 6;
 	
 	/*
 	 * Creer le bandit sur le toit de dernier wagon
 	 */
-	public Bandit(Train t, String name){
+	public Bandit(Train t, String name, boolean j){
 		super(t,name);
 		interieur = false; // au debut il est sur le toit
-		sac = new SacButin();
+		joueur = j;
+	}
+	public Bandit(Train t, String name) {
+		this(t,name,false);
 	}
 	
 	@Override
-	protected Wagon personneWagon(Train t, Personne p) {
+	protected Wagon mettrePersonneBonWagon(Train t, Personne p) {
 		return t.banditLastWagon(this);
 	}
 	
 	// getter pour les autres classes
-	public boolean getInterieur( ) { 
+	public boolean getInterieur() { 
 		return this.interieur;
 	}
 	@Override
-	public void executeAction() {
+	protected void executeAction() {
 		//si cette action est nulle rien va etre executer
 		Action actionExcute = actions.actionToExecute();
-		
-		if(actionExcute.equals(Action.Tirer)) {
+		if(actionExcute ==(null)) return;
+		if(interieur && actionExcute.equals(Action.Tirer)) {
 			this.tirer();
+			return;
 		}
 		if(actionExcute.equals(Action.Braquer)) {
-			this.braquer();
+			if(interieur) {
+				this.braquer();
+				System.err.println(name+" a braquer");
+			}else {
+				System.err.println(name+" n'a pas braquer");
+			}
+			
 		}
-		if(interieur && actionExcute.equals(Action.Monter)) {
+		if(interieur && !wagon.isLoco() && actionExcute.equals(Action.Monter)) {
 			interieur = false;
 			System.out.println(name+" monte sur le toit");
 			System.out.println(wagon);
 			return;
 		}
-		if(!interieur && actionExcute.equals(Action.Descendre)) {
+		if( !interieur  && !wagon.isLoco() && actionExcute.equals(Action.Descendre)) {
 			interieur = true;
 			System.out.println(name+" descend a l'interieur");
 			System.out.println(wagon);
@@ -61,7 +71,7 @@ public class Bandit extends Personne
 			System.out.println(wagon);
 			return;
 		}
-		if(!wagon.isFirstWagon() && actionExcute.equals(Action.Recule)) {
+		if(!wagon.isLoco() && actionExcute.equals(Action.Recule)) {
 			Train.Wagon newWagon =wagon.reculeBandit(this);
 			System.out.println(name+" recule vers le debut de train");
 			wagon =  newWagon;
@@ -73,47 +83,18 @@ public class Bandit extends Personne
 	
 	
 	
-	
 	public String toString() {
 		String pos = (this.interieur)? ("a l'interieur"):("sur le toit") ;
-		return this.name + " est " + pos;
+		return this.name + pos + " avec " +super.toString();
 	}
 	
 	
 	
 	public void braquer() {
-		if(wagon.getPossesseur().isEmpty()) return;
-		this.sac.addButin(wagon.stoleButin());
+		if(wagon.isEmpty()) return;
+		this.addButin(wagon.popButin());
 	}
 	
-	
-	/*
-	 * Juste pour changer le nom de class and max = 4 
-	 */
-	class SacButin extends Possesseur{ 
-		SacButin() {
-			super(4);
-		}
-		
-	}
-
-
-	public String getName() {
-		return this.name;
-	}
-
-
-
-
-
-
-
-
-
-	
-		
-		
-
 	
 }
 

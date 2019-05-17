@@ -36,7 +36,7 @@ public class Train extends Observable
 	private int NB_BANDITS =0 ;
 	public final int MAX_N_ACTION = 5;
 	public final int MAX_N_BUTIN = 5;
-	public final int NB_WAGONS_MAX = 5;
+	public final static int NB_WAGONS_MAX = 5;
 	private final double NERVOISITE_MARSHALL = 0.3;
 	private Wagon locomotive;
 	private Wagon firstWagon;
@@ -65,7 +65,7 @@ public class Train extends Observable
 		}
 	}
 	public Train() {
-		this(4);
+		this(NB_WAGONS_MAX);
 	}
 
 	/*

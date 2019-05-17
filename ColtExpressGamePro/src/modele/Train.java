@@ -26,17 +26,17 @@ import java.util.Set;
  */
 
 
-public class Train
+public class Train extends Observable
 {
 	/*
 	 * Attributs
 	 */
 	//LE train est responsable de gerer le nbr de bandits + responsable de les creer
-	private final int MAX_NB_BANDITS = 3 ;
+	public final int MAX_NB_BANDITS = 3 ;
 	private int NB_BANDITS =0 ;
-	private final int MAX_N_ACTION = 5;
-	private final int MAX_N_BUTIN = 5;
-	private final int NB_WAGONS_MAX = 5;
+	public final int MAX_N_ACTION = 5;
+	public final int MAX_N_BUTIN = 5;
+	public final int NB_WAGONS_MAX = 5;
 	private final double NERVOISITE_MARSHALL = 0.3;
 	private Wagon locomotive;
 	private Wagon firstWagon;
@@ -175,12 +175,12 @@ public class Train
 	
 	
 	
-	protected class Wagon extends Possesseur
+	public class Wagon extends Possesseur
 	{
 		private Train train;
 		private Wagon suivant;
 		private Wagon precedent;
-		private Set<Bandit> bandits;
+		private HashSet<Bandit> bandits;
 		private boolean marshall;
 		private int ordre; //utile pour les test unitaire
 		public Wagon(Train t, int o){
@@ -245,11 +245,29 @@ public class Train
 			}
 			return null;
 		}
+
+		public HashSet<Bandit> getBandits() {
+			return this.bandits;
+		}
+
+		public Wagon getSuivant() {
+			return this.suivant;
+		}
+
+		public boolean getMarshall() {
+			return this.marshall;
+		}
 		
 
 
 		
 	
+	}
+
+
+
+	public Wagon getLocomotive() {
+		return this.locomotive;
 	}
 	
 }

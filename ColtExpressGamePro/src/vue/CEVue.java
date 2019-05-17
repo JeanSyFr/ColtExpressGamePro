@@ -64,7 +64,8 @@ public class CEVue {
 		frame.add(vueTrain);
 		vueCommandes = new VueCommandes(train);
 		frame.add(vueCommandes);
-		this.console = new JTextArea(500, 50);
+		this.console = new JTextArea(7, 50);
+		this.console.setBackground(Color.YELLOW);
 		frame.add(console);
 		
 		this.vueTrain.repaint();
@@ -111,10 +112,10 @@ public class CEVue {
 			 * l'interface, calculée en fonction du nombre de cellules et de la
 			 * taille d'affichage.
 			 */
-			Dimension dim = new Dimension(this.largeurWagon * train.NB_WAGONS + 250,
+			Dimension dim = new Dimension(this.largeurWagon * train.NB_WAGONS_MAX + 250,
 						      this.hauteurWagon + 100);
 			this.setPreferredSize(dim);
-			this.setBackground(Color.WHITE);
+			this.setBackground(Color.cyan);
 	    }
 	
 	    /**
@@ -140,7 +141,7 @@ public class CEVue {
 			
 			Train.Wagon currentWagon = train.getLocomotive();
 			
-			final int NB_WAGONS = train.NB_WAGONS;
+			final int NB_WAGONS = train.NB_WAGONS_MAX;
 			int x = 0;
 			int y = 100;
 			
@@ -246,8 +247,13 @@ public class CEVue {
 			 * Puis on ajoute ce bouton au panneau [this].
 			 */
 			
-			JButton boutonAvance = new JButton(">");
+			JButton boutonAvance = new JButton("RIGHT");
 			this.add(boutonAvance);
+			
+
+			Dimension dim = new Dimension(300, 100);
+			this.setPreferredSize(dim);
+			this.setBackground(Color.BLACK);
 			
 			// classe interne anonyme.
 			boutonAvance.addActionListener(new ActionListener() {
@@ -259,7 +265,7 @@ public class CEVue {
 		    	}
 		    });
 
-			JButton boutonDescend = new JButton("V");
+			JButton boutonDescend = new JButton("DOWN");
 			this.add(boutonDescend);
 			
 			boutonDescend.addActionListener(new ActionListener() {
@@ -271,7 +277,7 @@ public class CEVue {
 		    	}
 		    });
 
-			JButton boutonRecule = new JButton("<");
+			JButton boutonRecule = new JButton("LEFT");
 			this.add(boutonRecule);
 
 			boutonRecule.addActionListener(new ActionListener() {
@@ -282,7 +288,19 @@ public class CEVue {
 		    	}
 		    });
 			
-			JButton boutonMonte = new JButton("^");
+
+			JButton boutonAction = new JButton("LEFT");
+			this.add(boutonAction);
+
+			boutonAction.addActionListener(new ActionListener() {
+		    	public void actionPerformed(ActionEvent e) {
+		    	    // TODO
+		    		//modele.avance();
+		    		System.out.println("recule");
+		    	}
+		    });
+			
+			JButton boutonMonte = new JButton("UP");
 			this.add(boutonMonte);
 			
 			boutonMonte.addActionListener(new ActionListener() {
@@ -293,7 +311,7 @@ public class CEVue {
 		    	}
 		    });
 
-			JButton boutonTire = new JButton("-");
+			JButton boutonTire = new JButton("PAN!");
 			this.add(boutonTire);
 			
 			boutonTire.addActionListener(new ActionListener() {
@@ -304,7 +322,18 @@ public class CEVue {
 		    	}
 		    });
 
-			JButton boutonBraque = new JButton("$");
+			JButton boutonBraque = new JButton("$$$");
+			this.add(boutonBraque);
+			
+			boutonBraque.addActionListener(new ActionListener() {
+		    	public void actionPerformed(ActionEvent e) {
+		    	    // TODO
+		    		//modele.avance();
+		    		System.out.println("braque");
+		    	}
+		    });
+			
+			JButton boutondort = new JButton("Zzz");
 			this.add(boutonBraque);
 			
 			boutonBraque.addActionListener(new ActionListener() {

@@ -18,6 +18,10 @@ public abstract class Personne extends Possesseur{
 		//tour = 0;
 	}
 	
+	public String getName() {
+		return this.name;
+	}
+	
 	/*public static int getTour() {
 		return tour;
 	}*/

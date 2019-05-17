@@ -26,7 +26,7 @@ public class Bandit extends Personne
 	}
 	
 	@Override
-	protected Wagon mettrePersonneBonWagon(Train t, Personne p) {
+	public Wagon mettrePersonneBonWagon(Train t, Personne p) {
 		return t.banditLastWagon(this);
 	}
 	
@@ -35,7 +35,7 @@ public class Bandit extends Personne
 		return this.interieur;
 	}
 	@Override
-	protected void executeAction() {
+	public void executeAction() {
 		//si cette action est nulle rien va etre executer
 		Action actionExcute = actions.actionToExecute();
 		if(actionExcute ==(null)) return;

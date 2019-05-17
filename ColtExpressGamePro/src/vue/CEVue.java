@@ -405,7 +405,7 @@ public class CEVue {
 		Train t = new Train();
 		Bandit b1 = new Bandit(t,"Jean");
 		Bandit b2 = new Bandit(t,"Arnaud");
-		Marshall m = new Marshall(t, "Marshall");
+		Marshall m = new Marshall(t);
 		CEVue affichage = new CEVue(t);
 		System.out.println("stand by");
 		affichage.console.setText("salut");

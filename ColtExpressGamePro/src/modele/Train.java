@@ -42,8 +42,8 @@ public class Train extends Observable
 	private final double NERVOISITE_MARSHALL = 0.3;
 	private Wagon locomotive;
 	private Wagon firstWagon;
-	public Marshall marshall;
-	public ArrayList<Bandit> joueurs;
+	private Marshall marshall;
+	private ArrayList<Bandit> joueurs;
 	/*
 	 * Constructeur 
 	 * @param n : int 
@@ -281,11 +281,6 @@ public class Train extends Observable
 		public boolean getMarshall() {
 			return this.marshall;
 		}
-		
-
-
-		
-	
 	}
 
 

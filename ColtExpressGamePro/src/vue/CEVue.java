@@ -144,21 +144,25 @@ public class CEVue {
 			final int NB_WAGONS = train.NB_WAGONS_MAX;
 			int x = 0;
 			int y = 100;
+			int i = 0;
 			
 			// affichage de la locomotive
 			//paint(g, currentWagon, x + NB_WAGONS*160, y);
 			paintLoco(g, currentWagon, x, y);
 			
 			/** Pour chaque locomotive... */
-			for(int i=1; i<=NB_WAGONS; i++) {
+			while (currentWagon != null) {
+				i += 1;
 			    //for(int j=1; j<=1; j++) {
 				/**
 				 * ... Appeler une fonction d'affichage auxiliaire.
 				 * On lui fournit les informations de dessin [g] et les
 				 * coordonnées du coin en haut à gauche.
 				 */
-				currentWagon = currentWagon.getSuivant();
+				
 				paintWagon(g, currentWagon, i*largeurWagon, y);
+				currentWagon = currentWagon.getSuivant();
+				
 				
 				
 			    
@@ -185,6 +189,11 @@ public class CEVue {
 	    	int ytemp;
 	    	
 	    	ytemp = 85;
+	    	
+	    	if (w == null) {
+	    		System.out.println("ERROR WAGON");
+	    	}
+	    	
 	    	for (Bandit b : w.getBandits() ) {
 	    		g.drawString(b.getName(), x + 15, ytemp);
 	    		ytemp += 15;

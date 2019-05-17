@@ -32,6 +32,8 @@ public class CEVue {
     private VueTrain vueTrain;
     private VueCommandes vueCommandes;
     private JTextArea console;
+
+    private static Bandit banditCourant; // pour les commandes
      
 
     /** Construction d'une vue attachée au modèle, contenu dans la classe Train. */
@@ -113,7 +115,7 @@ public class CEVue {
 			 * l'interface, calculée en fonction du nombre de cellules et de la
 			 * taille d'affichage.
 			 */
-			Dimension dim = new Dimension(this.largeurWagon * train.NB_WAGONS_MAX + 250,
+			Dimension dim = new Dimension(this.largeurWagon * train.NB_WAGONS_MAX,
 						      this.hauteurWagon + 100);
 			this.setPreferredSize(dim);
 			this.setBackground(Color.cyan);
@@ -149,7 +151,7 @@ public class CEVue {
 			
 			// affichage de la locomotive
 			//paint(g, currentWagon, x + NB_WAGONS*160, y);
-			paintLoco(g, currentWagon, x, y);
+			paintLoco(g, x, y);
 			
 			/** Pour chaque locomotive... */
 			while (currentWagon != null) {
@@ -196,8 +198,22 @@ public class CEVue {
 	    	}
 	    	
 	    	for (Bandit b : w.getBandits() ) {
-	    		train;
-	    		g.drawString(b.getName(), x + 15, ytemp);
+	    		
+	    		int id = train.getBandit().indexOf(b);
+	    		String nomImage = String.format("bandit%d.jpg", id + 1);
+	    		System.out.println(id);
+	    		
+	    		try {
+	    			System.out.println(nomImage);
+		    	      Image img = ImageIO.read(new File(nomImage));
+		    	      g.drawImage(img, x + 25 + 70*id , y + 64, 40, 68, this);
+		    	      //Pour une image de fond
+		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+		  	    } catch (IOException e) {
+		  	      e.printStackTrace();
+		  	    } 
+	    		
+	    		//g.drawString(b.getName(), x + 15, ytemp);
 	    		ytemp += 15;
 	    		
 	    	}
@@ -234,7 +250,7 @@ public class CEVue {
 	    	}
 	    }
 	    
-	    private void paintLoco(Graphics g, Train.Wagon w, int x, int y) {
+	    private void paintLoco(Graphics g, int x, int y) {
 	    	//g.drawRoundRect(x, y + 10, 140, 90, 10, 10);
 	    	
 	    	try {
@@ -277,13 +293,7 @@ public class CEVue {
 			this.add(boutonAvance);
 			
 			// classe interne anonyme.
-			boutonAvance.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    	    // conditions
-		    		
-		    		System.out.println("avance");
-		    	}
-		    });
+			boutonAvance.addActionListener(new Braque(train));
 
 			JButton boutonDescend = new JButton("DOWN");
 			this.add(boutonDescend);
@@ -373,22 +383,27 @@ public class CEVue {
 		    });
 			
 
-		abstract class Bouton implements ActionListener {
+		
+	    }
+	    
+	    abstract class Bouton implements ActionListener {
 		    Train train;
-		    int indiceBandit;
-		    Bandit banditCourant;
-		    
-		    Bouton(Train train, int idBandit){
-	
+		    //int indiceBandit;
+		     
+		    Bouton(Train train){
 		    	this.train = train;
-				this.indiceBandit = idBandit;
-				this.banditCourant = train.getBandit(this.indiceBandit);
+				//this.indiceBandit = idBandit;
+				//this.banditCourant = train.getBandit().get(this.indiceBandit);
 		    }
 		
+		    private int indiceBandit() {
+		    	return train.getBandit().indexOf(banditCourant);
+		    }
 
 		    private void banditSuivant() {
-		    	this.indiceBandit = (this.indiceBandit + 1) % train.MAX_NB_BANDITS;
-		    	this.banditCourant = train.getBandit(this.indiceBandit);
+		    	//this.indiceBandit = (this.indiceBandit + 1) % train.MAX_NB_BANDITS;
+		    	int idSuivant = (this.indiceBandit() + 1) % train.MAX_NB_BANDITS;
+		    	banditCourant = train.getBandit().get(idSuivant);
 		    }
 		    
 		    abstract public void actionPerformed(ActionEvent e);
@@ -396,80 +411,80 @@ public class CEVue {
 		
 		class Braque extends Bouton {
 		
-		    public Braque(Train train, int idBandit){
-		    	super(train, idBandit);
+		    public Braque(Train train){
+		    	super(train);
 		    	
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	this.banditCourant.addAction(Action.Braquer);
+		    	banditCourant.addAction(Action.Braquer);
 		    }
 	    }
 		
 		class Monte extends Bouton {
 			
-		    public Monte(Train train, int idBandit){
-		    	super(train, idBandit);
+		    public Monte(Train train){
+		    	super(train);
 		    	
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	this.banditCourant.addAction(Action.Monter);
+		    	CEVue.banditCourant.addAction(Action.Monter);
 		    }
 	    }
 		
 		class Descend extends Bouton {
 			
-		    public Descend(Train train, int idBandit){
-		    	super(train, idBandit);
+		    public Descend(Train train){
+		    	super(train);
 		    	
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	this.banditCourant.addAction(Action.Descendre);
+		    	CEVue.banditCourant.addAction(Action.Descendre);
 		    }
 	    }
 		
 		class Avance extends Bouton {
 			
-		    public Avance(Train train, int idBandit){
-		    	super(train, idBandit);
+		    public Avance(Train train){
+		    	super(train);
 		    	
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	this.banditCourant.addAction(Action.Avance);
+		    	CEVue.banditCourant.addAction(Action.Avance);
 		    }
 	    }
 		
 		class Recule extends Bouton {
 			
-		    public Recule(Train train, int idBandit){
-		    	super(train, idBandit);
+		    public Recule(Train train){
+		    	super(train);
 		    	
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	this.banditCourant.addAction(Action.Recule);
+		    	CEVue.banditCourant.addAction(Action.Recule);
 		    }
 	    }
 		
 		class Tire extends Bouton {
 			
-		    public Tire(Train train, int idBandit){
-		    	super(train, idBandit);
+		    public Tire(Train train){
+		    	super(train);
 		    	
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	this.banditCourant.addAction(Action.Tirer);
+		    	CEVue.banditCourant.addAction(Action.Tirer);
 		    }
 	    }
 		
-		class Action extends Bouton {
-			
-		    public Action(Train train, int idBandit){
-		    	super(train, idBandit);
+		class Act extends Bouton {
+
+			public Act(Train train){
+		    	super(train);
 		    	
 		    }
 		
@@ -477,7 +492,17 @@ public class CEVue {
 		    	this.train.excuteTour();
 		    }
 	    }
-	}
+		
+		class Dort extends Bouton {
+			
+		    public Dort(Train train){
+		    	super(train);
+		    	
+		    }
+		
+		    public void actionPerformed(ActionEvent e) {
+		    }
+	    }
 }
 	/*
 	public class Console extends JTextArea {

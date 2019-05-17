@@ -3,11 +3,9 @@ package modele;
 
 import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
-import java.util.Stack;
 
 
-public class Possesseur {
+public abstract class Possesseur {
 	
 	private HashSet<Butin> butins;
 	private final int MAX_CAPACITY;
@@ -30,7 +28,6 @@ public class Possesseur {
 	public Butin popButin() {
 		if(butins.isEmpty()) return null ;
 		n--;
-		
 		// On enlève un buin au hasard
 		int size = butins.size();
 		int item = new Random().nextInt(size); // In real life, the Random object should be rather more shared than this
@@ -39,19 +36,14 @@ public class Possesseur {
 		for(Butin butin : butins) {
 		    if (i == item) {
 		    	enleve = butin;
-		        butins.remove(enleve);
-		    i++;
 		    }
+		    i++;
 		}
+		butins.remove(enleve);
+		System.err.println("size is "+size+"    the "+i+" element to remove  " + enleve+"\n");
 
 		return enleve;	
 	}
-	
-	/*
-	public Butin peekButin() {
-		return getButins().peek();
-	}
-	*/
 	
 	public boolean isEmpty() {
 		return butins.isEmpty();
@@ -59,6 +51,12 @@ public class Possesseur {
 	
 	public HashSet<Butin> getButins() {
 		return butins;
+	}
+	
+	public String toString() {
+		String out = "Butins : ";
+		for(Butin b : butins) out += " "+b;
+		return out;
 	}
 	
 	public static void main(String[] args) {

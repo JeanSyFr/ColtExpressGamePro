@@ -9,7 +9,7 @@ public class Marshall extends Personne{
 	}
 
 	@Override
-	Wagon personneWagon(Train t, Personne p) {
+	Wagon mettrePersonneBonWagon(Train t, Personne p) {
 		return t.marshaLocomotive(this);
 
 	}
@@ -32,7 +32,7 @@ public class Marshall extends Personne{
 		}
 		if(!wagon.isFirstWagon() && actionExcute.equals(Action.Recule)) {
 			Train.Wagon newWagon =wagon.reculeMarshall();
-			if(newWagon == null) System.err.println("OUUPS CHECK1 executeAction  Marshall");
+			if(newWagon == null) System.err.println("OUUPS CHECK 2 executeAction  Marshall");
 			System.out.println(name+" recule vers le debut de train");
 			wagon =  newWagon;
 			System.out.println(wagon);

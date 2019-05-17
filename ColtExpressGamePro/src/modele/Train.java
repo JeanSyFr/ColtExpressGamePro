@@ -163,11 +163,14 @@ public class Train extends Observable
 		private boolean marshall;
 		private Possesseur poss; // il pourrait etre plus judicieux de faire un héritage
 		private int ordre; //tile pour les test unitaire
+		
 		public Wagon(Train t, int o){
 			train =t;
 			bandits = new HashSet<Bandit>(0);
 			ordre = o;
+			this.poss = new Possesseur(5);
 		}
+		
 		public boolean isLastWagon() {
 			return  this.getSuivant()==(null);
 		}

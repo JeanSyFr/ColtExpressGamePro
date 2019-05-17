@@ -16,8 +16,6 @@ public class ColtExpress {
 			Personne mars = new Marshall(modele, "Marshall");
 			CEVue vue = new CEVue(modele);
 		    });
-
-
 	}
 
 }

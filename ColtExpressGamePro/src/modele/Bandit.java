@@ -32,7 +32,7 @@ public class Bandit extends Personne
 		return this.interieur;
 	}
 	@Override
-	protected void executeAction() {
+	public void executeAction() {
 		//si cette action est nulle rien va etre executer
 		Action actionExcute = actions.actionToExecute();
 		

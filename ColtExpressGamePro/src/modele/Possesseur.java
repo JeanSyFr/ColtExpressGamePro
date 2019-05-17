@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.Stack;
 
 
-public abstract class Possesseur {
+public class Possesseur {
 	
 	private HashSet<Butin> butins;
 	private final int MAX_CAPACITY;

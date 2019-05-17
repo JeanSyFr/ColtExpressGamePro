@@ -1,4 +1,5 @@
 package modele;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -40,7 +41,8 @@ public class Train extends Observable
 	private final double NERVOISITE_MARSHALL = 0.3;
 	private Wagon locomotive;
 	private Wagon firstWagon;
-	
+	public Marshall marshall;
+	public ArrayList<Bandit> joueurs;
 	/*
 	 * Constructeur 
 	 * @param n : int 
@@ -49,6 +51,7 @@ public class Train extends Observable
 	public Train(int n){
 		if(n <1) n =1;
 		if(n>this.NB_WAGONS_MAX ) n = this.NB_WAGONS_MAX;
+		joueurs = new ArrayList<Bandit>();
 		locomotive = new Wagon(this,0);
 		firstWagon = new Wagon(this,1);
 		locomotive.suivant = firstWagon;
@@ -56,6 +59,8 @@ public class Train extends Observable
 		n -= 1;
 		Wagon current = firstWagon;
 		this.addButins(current);
+		this.addButins(locomotive);
+		this.marshall = new Marshall(this);
 		for(int i =2; i<n ;i++) {
 			Wagon addedWagon = new Wagon(this,i);
 			current.suivant = addedWagon;
@@ -63,9 +68,23 @@ public class Train extends Observable
 			current = addedWagon;
 			this.addButins(current);
 		}
+		
+		for(int i = 0 ; i < MAX_NB_BANDITS ; i++) {
+			joueurs.add(new Bandit(this, "Player"+(i+1)));
+		}
+		
 	}
+	
 	public Train() {
 		this(NB_WAGONS_MAX);
+	}
+	
+
+	public Marshall getMarshall() {
+		return this.marshall;
+	}
+	public Bandit getBandit(int i) {
+		return joueurs.get(i);
 	}
 
 	/*
@@ -120,6 +139,11 @@ public class Train extends Observable
 		System.out.println(s);
 	}
 	private void addButins(Wagon w) {
+		if(w==this.locomotive) {
+			Butin b = new Magot(locomotive);
+			w.addButin(b);
+			return;
+		}
 		Random rnd = new Random();
 		int butinNbr = rnd.nextInt(MAX_N_BUTIN );
 		Butin b = new Bourse(w);
@@ -148,11 +172,7 @@ public class Train extends Observable
 	public static void main(String args[]) {
 		Train t = new Train(2);
 		System.out.print(t);
-		Bandit b1 = new Bandit(t,"Jean");
-		Marshall m = new Marshall(t, "Marshall");
-		System.out.println("adding a bandit");
-		System.out.print(t);
-		b1.addAction(Action.Descendre);
+		/*b1.addAction(Action.Descendre);
 		b1.addAction(Action.Braquer);
 		m.addAction(Action.Avance);
 		b1.executeAction();
@@ -170,11 +190,13 @@ public class Train extends Observable
 		System.out.println();
 		System.out.print(t);	
 		System.out.println();
-			
-	}
+				*/
 	
 	
-	
+}
+
+
+
 	public class Wagon extends Possesseur
 	{
 		private Train train;

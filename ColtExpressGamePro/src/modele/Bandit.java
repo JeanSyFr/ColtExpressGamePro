@@ -34,6 +34,12 @@ public class Bandit extends Personne
 	public boolean getInterieur() { 
 		return this.interieur;
 	}
+	public void addAction(Action a) {
+		super.addAction(a);
+		if(a==Action.Tirer)	bulits--;
+
+	}
+		
 	@Override
 	public void executeAction() {
 		//si cette action est nulle rien va etre executer
@@ -41,7 +47,6 @@ public class Bandit extends Personne
 		if(actionExcute ==(null)) return;
 		if(bulits>=0 && interieur && actionExcute.equals(Action.Tirer)) {
 			this.tirer();
-			bulits--;
 			return;
 		}
 		if(actionExcute.equals(Action.Braquer)) {
@@ -85,7 +90,7 @@ public class Bandit extends Personne
 	
 	
 	public String toString() {
-		String pos = (this.interieur)? ("a l'interieur"):("sur le toit") ;
+		String pos = (this.interieur)? (" a l'interieur"):(" sur le toit") ;
 		return this.name + pos + " avec " +super.toString();
 	}
 	

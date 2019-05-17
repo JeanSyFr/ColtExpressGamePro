@@ -3,6 +3,7 @@ package vue;
 import modele.Action;
 import modele.Bandit;
 import modele.Marshall;
+import modele.Personne;
 import modele.Train;
 import vue.Observer;
 
@@ -99,7 +100,7 @@ public class CEVue {
 	    
 	    // dimention d'une position en nombre de pixels 
 	    private final static int largeurWagon = 220;
-	    private final static int hauteurWagon = 170;
+	    private final static int hauteurWagon = 200;
 	    
 	
 	    /** Constructeur. */
@@ -141,7 +142,7 @@ public class CEVue {
 			
 			Train.Wagon currentWagon = train.getLocomotive();
 			
-			final int NB_WAGONS = train.NB_WAGONS_MAX;
+			final int NB_WAGONS = train.NB_WAGONS_MAX; 
 			int x = 0;
 			int y = 100;
 			int i = 0;
@@ -220,7 +221,14 @@ public class CEVue {
 	    	}
 	    	*/
 	    	if (w.getMarshall()) {
-	    		g.drawString("Marshall", x + 15, 85);
+	    		try {
+		    	      Image img = ImageIO.read(new File("marshall.jpg"));
+		    	      g.drawImage(img, x +150, y + 64, 40, 68, this);
+		    	      //Pour une image de fond
+		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	    	    } catch (IOException e) {
+	    	      e.printStackTrace();
+	    	    } 
 	    	}
 	    }
 	    
@@ -246,23 +254,27 @@ public class CEVue {
 	     * référence au modèle.
 	     */
 	    private Train train;
+	    Bandit banditCourant;
 
 	    /** Constructeur. */
 	    public VueCommandes(Train train) {
 			this.train = train;
+			this.banditCourant = new Bandit(train, "test"); // a modifier
+			
 			/**
 			 * On crée un nouveau bouton, de classe [JButton], en précisant le
 			 * texte qui doit l'étiqueter.
 			 * Puis on ajoute ce bouton au panneau [this].
 			 */
 			
-			JButton boutonAvance = new JButton("RIGHT");
-			this.add(boutonAvance);
 			
 
 			Dimension dim = new Dimension(300, 100);
 			this.setPreferredSize(dim);
 			this.setBackground(Color.BLACK);
+			
+			JButton boutonAvance = new JButton("RIGHT");
+			this.add(boutonAvance);
 			
 			// classe interne anonyme.
 			boutonAvance.addActionListener(new ActionListener() {
@@ -297,8 +309,9 @@ public class CEVue {
 		    	}
 		    });
 			
+			
 
-			JButton boutonAction = new JButton("LEFT");
+			JButton boutonAction = new JButton("ACTION");
 			this.add(boutonAction);
 
 			boutonAction.addActionListener(new ActionListener() {
@@ -308,6 +321,13 @@ public class CEVue {
 		    		System.out.println("recule");
 		    	}
 		    });
+			
+			if(true){
+				boutonAction.setEnabled(true);
+			} 
+			else {
+				boutonAction.setEnabled(false);
+			}
 			
 			JButton boutonMonte = new JButton("UP");
 			this.add(boutonMonte);
@@ -343,9 +363,9 @@ public class CEVue {
 		    });
 			
 			JButton boutondort = new JButton("Zzz");
-			this.add(boutonBraque);
+			this.add(boutondort);
 			
-			boutonBraque.addActionListener(new ActionListener() {
+			boutondort.addActionListener(new ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
 		    	    // TODO
 		    		//modele.avance();
@@ -389,6 +409,8 @@ public class CEVue {
 		CEVue affichage = new CEVue(t);
 		System.out.println("stand by");
 		affichage.console.setText("salut");
+		m.addAction(Action.Avance);
+		m.executeAction();
 		try {
 		      Thread.sleep(3000);
 	    } catch (InterruptedException e) {

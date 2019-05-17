@@ -38,7 +38,7 @@ public abstract class Personne extends Possesseur{
 	}
 	public void tirer() {
 		Bandit b2 = wagon.anotherBanditThan(this);
-		if(b2 == null) {
+		if(b2 == null) { 
 			System.out.println(this.name + " has shot no body");
 			return;
 		}

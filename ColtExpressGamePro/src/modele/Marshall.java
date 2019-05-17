@@ -4,8 +4,8 @@ import modele.Train.Wagon;
 
 public class Marshall extends Personne{
 
-	public Marshall(Train t, String name) {
-		super(t, name);
+	public Marshall(Train t) {
+		super(t, "Marshall");
 	}
 
 	@Override
@@ -15,7 +15,7 @@ public class Marshall extends Personne{
 	}
 	
 	@Override
-	protected void executeAction() {
+	public void executeAction() {
 		//si cette action est nulle rien va etre executer
 		Action actionExcute = actions.actionToExecute();
 		

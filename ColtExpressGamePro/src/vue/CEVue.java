@@ -100,7 +100,7 @@ public class CEVue {
 	    
 	    // dimention d'une position en nombre de pixels 
 	    private final static int largeurWagon = 220;
-	    private final static int hauteurWagon = 170;
+	    private final static int hauteurWagon = 200;
 	    
 	
 	    /** Constructeur. */
@@ -142,7 +142,7 @@ public class CEVue {
 			
 			Train.Wagon currentWagon = train.getLocomotive();
 			
-			final int NB_WAGONS = train.NB_WAGONS_MAX;
+			final int NB_WAGONS = train.NB_WAGONS_MAX; 
 			int x = 0;
 			int y = 100;
 			int i = 0;
@@ -221,7 +221,14 @@ public class CEVue {
 	    	}
 	    	*/
 	    	if (w.getMarshall()) {
-	    		g.drawString("Marshall", x + 15, 85);
+	    		try {
+		    	      Image img = ImageIO.read(new File("marshall.jpg"));
+		    	      g.drawImage(img, x +150, y + 64, 40, 68, this);
+		    	      //Pour une image de fond
+		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	    	    } catch (IOException e) {
+	    	      e.printStackTrace();
+	    	    } 
 	    	}
 	    }
 	    
@@ -248,13 +255,11 @@ public class CEVue {
 	     */
 	    private Train train;
 	    Bandit banditCourant;
-	    boolean test;
 
 	    /** Constructeur. */
 	    public VueCommandes(Train train) {
 			this.train = train;
 			this.banditCourant = new Bandit(train, "test"); // a modifier
-			this.test = false;
 			
 			/**
 			 * On crée un nouveau bouton, de classe [JButton], en précisant le
@@ -317,7 +322,7 @@ public class CEVue {
 		    	}
 		    });
 			
-			if(test){
+			if(true){
 				boutonAction.setEnabled(true);
 			} 
 			else {
@@ -404,6 +409,7 @@ public class CEVue {
 		CEVue affichage = new CEVue(t);
 		System.out.println("stand by");
 		affichage.console.setText("salut");
+		m.addAction(Action.Avance);
 		try {
 		      Thread.sleep(3000);
 	    } catch (InterruptedException e) {

@@ -56,7 +56,7 @@ public class Train extends Observable
 		n -= 1;
 		Wagon current = firstWagon;
 	 	this.addButins(current); 
-		for(int i =2; i<n ;i++) {
+		for(int i =2; i<=n ;i++) {
 			Wagon addedWagon = new Wagon(this,i);
 			current.suivant = addedWagon;
 			addedWagon.precedent = current;

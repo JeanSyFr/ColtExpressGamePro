@@ -11,7 +11,7 @@ public class Bandit extends Personne
 {
 	private boolean interieur; //pour savoir s'il est sur le toit ou dans le wagon
 	private boolean joueur = false;
-	private final int bulit = 6;
+	private  int bulits = 6;
 	
 	/*
 	 * Creer le bandit sur le toit de dernier wagon
@@ -39,8 +39,9 @@ public class Bandit extends Personne
 		//si cette action est nulle rien va etre executer
 		Action actionExcute = actions.actionToExecute();
 		if(actionExcute ==(null)) return;
-		if(interieur && actionExcute.equals(Action.Tirer)) {
+		if(bulits>=0 && interieur && actionExcute.equals(Action.Tirer)) {
 			this.tirer();
+			bulits--;
 			return;
 		}
 		if(actionExcute.equals(Action.Braquer)) {

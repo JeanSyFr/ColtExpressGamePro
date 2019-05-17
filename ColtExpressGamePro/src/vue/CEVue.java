@@ -253,6 +253,7 @@ public class CEVue {
 			boutonAvance.addActionListener(new ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
 		    	    // TODO
+		    		
 		    		//modele.avance();
 		    		System.out.println("avance");
 		    	}

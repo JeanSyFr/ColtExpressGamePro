@@ -25,6 +25,7 @@ import java.util.Set;
  Le modelisation a ete choisi comme ca car c'est plus proche de modele reel + conseil de prof
  Un train : un esemble de wagons connectes l'un et l'autre
  */
+import java.util.stream.Collectors;
 
 
 public class Train extends Observable
@@ -82,6 +83,10 @@ public class Train extends Observable
 	}
 	public Bandit getBandit(int i) {
 		return joueurs.get(i);
+	}
+	public void excuteTour() {
+		Random rnd = new Random();
+		this.joueurs.stream().map(x -> x.executeAction()).collect(Collectors.toList());
 	}
 
 	/*

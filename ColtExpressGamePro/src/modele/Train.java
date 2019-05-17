@@ -106,14 +106,22 @@ public class Train extends Observable
 		}
 	}
 	public void actionsPreDefini() {
+		//joueurs.get(0).addAction(Action.Tirer);
+
 		for(Bandit b : joueurs) {
 			b.addAction(Action.Descendre);
 			b.addAction(Action.Braquer);
+			b.addAction(Action.Recule);
 			b.addAction(Action.Braquer);
+			b.addAction(Action.Tirer);
+			//b.addAction(Action.Descendre);
+			//b.addAction(Action.Braquer);
+			//b.addAction(Action.Tirer);
 			/*b.addAction(Action.Recule);
 			b.addAction(Action.Braquer);
 			b.addAction(Action.Tirer);*/
 		}
+		
 	}
 
 	/*
@@ -202,6 +210,7 @@ public class Train extends Observable
 		Train t = new Train();
 		System.out.print(t);
 		t.actionsPreDefini();
+		t.excuteTour();
 		t.excuteTour();
 		t.excuteTour();
 		t.excuteTour();

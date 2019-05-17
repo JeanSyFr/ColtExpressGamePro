@@ -1,6 +1,8 @@
 package modele;
 
+import java.util.Hashtable;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 
 public abstract class Personne extends Possesseur{
@@ -53,7 +55,7 @@ public abstract class Personne extends Possesseur{
 		/*
 		 * A modifier pour faire une file
 		 */
-		private PriorityQueue<Action> actions;
+		/*private PriorityQueue<Action> actions;
 		private int MAX_N;
 		private int index;
 		ActionList(int n){
@@ -68,7 +70,40 @@ public abstract class Personne extends Possesseur{
 		
 		protected Action actionToExecute() {
 			return actions.poll();
+		}*/
+		private Hashtable<Integer, Action> actions;
+		private int MAX_N;
+		private int index;
+
+		
+		ActionList(int n){
+			MAX_N = n;
+			index=0;
+			actions = new Hashtable<Integer, Action>();
 		}
+
+		protected void addAction(Action act) {
+			if(index>= MAX_N) return;
+			this.actions.put(index, act);
+			index++;
+		}
+		private int minSet(Set<Integer> s) {
+			int out = this.MAX_N;
+			for(int k : s) {
+				if(out>k) out = k;
+			}
+			return out;
+		}
+		
+		
+		protected Action actionToExecute() {
+			if(actions.size()==0) return null;
+			int firstActionIndex = minSet(actions.keySet());
+			Action out = actions.get(firstActionIndex);
+			actions.remove(firstActionIndex);
+			return out;
+		}
+
 		
 	}
 	

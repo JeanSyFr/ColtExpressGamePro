@@ -45,6 +45,7 @@ public class Bandit extends Personne
 		//si cette action est nulle rien va etre executer
 		Action actionExcute = actions.actionToExecute();
 		if(actionExcute ==(null)) return;
+		//System.out.println("We are doing " + actionExcute);
 		if(bulits>=0 && interieur && actionExcute.equals(Action.Tirer)) {
 			this.tirer();
 			return;
@@ -56,6 +57,7 @@ public class Bandit extends Personne
 			}else {
 				System.out.println(name+" n'a pas braquer il est sur le toit");
 			}
+			return;
 			
 		}
 		if(interieur && !wagon.isLoco() && actionExcute.equals(Action.Monter)) {
@@ -85,7 +87,7 @@ public class Bandit extends Personne
 			System.out.println(wagon);
 			return;
 		}
-		System.out.println(name+ " has nothing to do!");
+		System.out.println(name+ " tried to do "+actionExcute+" bu he couldnt");
 	}
 	public void tirer() {
 		Bandit b2 = wagon.anotherBanditThan(this);

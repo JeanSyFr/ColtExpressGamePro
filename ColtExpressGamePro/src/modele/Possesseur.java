@@ -40,7 +40,7 @@ public abstract class Possesseur {
 		    i++;
 		}
 		butins.remove(enleve);
-		System.err.println("size is "+size+"    the "+i+" element to remove  " + enleve+"\n");
+		//System.err.println("size is "+size+"    the "+i+" element to remove  " + enleve+"\n");
 
 		return enleve;	
 	}

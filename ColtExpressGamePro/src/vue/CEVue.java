@@ -35,10 +35,12 @@ public class CEVue {
 
     private static Bandit banditCourant; // pour les commandes
      
+    Train train;
 
     /** Construction d'une vue attachée au modèle, contenu dans la classe Train. */
     public CEVue(Train train) {
 		/** Définition de la fenêtre principale. */
+    	
 		frame = new JFrame();
 		frame.setTitle("Colt Express");
 		/**
@@ -62,10 +64,11 @@ public class CEVue {
 		//frame.setBackground(Color.BLACK);
 	
 		/** Définition des deux vues et ajout à la fenêtre. */
-		
-		vueTrain = new VueTrain(train);
+		this.train = train;
+		this.banditCourant = this.train.getBandit().get(0);
+		vueTrain = new VueTrain();
 		frame.add(vueTrain);
-		vueCommandes = new VueCommandes(train);
+		vueCommandes = new VueCommandes();
 		frame.add(vueCommandes);
 		this.console = new JTextArea(7, 50);
 		this.console.setBackground(Color.YELLOW);
@@ -98,7 +101,7 @@ public class CEVue {
 
 	public class VueTrain extends JPanel implements Observer {
 	    /** On maintient une référence vers le modèle. */
-	    private Train train;
+	    //Train train;
 	    
 	    // dimention d'une position en nombre de pixels 
 	    private final static int largeurWagon = 220;
@@ -106,8 +109,8 @@ public class CEVue {
 	    
 	
 	    /** Constructeur. */
-	    public VueTrain(Train train) {
-			this.train = train;
+	    public VueTrain() {
+			//this.train = train;
 			/** On enregistre la vue [this] en tant qu'observateur de [modele]. */
 			train.addObserver(this);
 			/**
@@ -206,7 +209,7 @@ public class CEVue {
 	    		try {
 	    			System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
-		    	      g.drawImage(img, x + 25 + 70*id , y + 64, 40, 68, this);
+		    	      g.drawImage(img, x + 25 + 40*id , y + 64, 40, 68, this);
 		    	      //Pour une image de fond
 		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 		  	    } catch (IOException e) {
@@ -271,12 +274,12 @@ public class CEVue {
 	     * Pour que le bouton puisse transmettre ses ordres, on garde une
 	     * référence au modèle.
 	     */
-	    private Train train;
+	    //private Train train;
 
 	    
 	    /** Constructeur. */
-	    public VueCommandes(Train train) {
-			this.train = train;
+	    public VueCommandes() {
+			//this.train = train;
 			//this.banditCourant = new Bandit(train, "test"); // a modifier
 			
 			/**
@@ -298,14 +301,7 @@ public class CEVue {
 			JButton boutonDescend = new JButton("DOWN");
 			this.add(boutonDescend);
 			
-			boutonDescend.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    	    // TODO
-		    		//modele.avance();
-		    		System.out.println("descend");
-		    		
-		    	}
-		    });
+			boutonDescend.addActionListener(new Descend(train));
 
 			JButton boutonRecule = new JButton("LEFT");
 			this.add(boutonRecule);
@@ -490,6 +486,7 @@ public class CEVue {
 		
 		    public void actionPerformed(ActionEvent e) {
 		    	this.train.excuteTour();
+		    	vueTrain.update();
 		    }
 	    }
 		

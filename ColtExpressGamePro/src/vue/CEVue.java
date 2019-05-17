@@ -410,6 +410,7 @@ public class CEVue {
 		System.out.println("stand by");
 		affichage.console.setText("salut");
 		m.addAction(Action.Avance);
+		m.executeAction();
 		try {
 		      Thread.sleep(3000);
 	    } catch (InterruptedException e) {

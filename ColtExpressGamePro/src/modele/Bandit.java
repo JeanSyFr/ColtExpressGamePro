@@ -98,6 +98,7 @@ public class Bandit extends Personne
 		if(!b2.isEmpty()) {
 			Butin out = b2.popButin();
 			System.out.println(name +" has shot "+b2.name+" who droped "+out + "in wagon ");
+			b2.interieur =false;
 			wagon.addButin(out);
 		}
 		else {

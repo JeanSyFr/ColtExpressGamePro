@@ -92,8 +92,8 @@ public class Train extends Observable
 		}
 		Random rnd = new Random();
 		double p = rnd.nextDouble();
-		if(p<0.3) {
-			if(p/0.3 >0.2) {
+		if(p>0.3) {
+			if(this.marshall.wagon.suivant!=null &&  this.marshall.wagon.suivant.bandits.isEmpty()) {
 				this.marshall.addAction(Action.Avance);
 			}else {
 				this.marshall.addAction(Action.Recule);
@@ -102,6 +102,7 @@ public class Train extends Observable
 			if(!this.marshall.wagon.bandits.isEmpty()) {
 				this.marshall.addAction(Action.Tirer);
 				this.marshall.executeAction();
+				System.err.println("Yes marshal has shot !");
 			}
 		}
 	}

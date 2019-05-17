@@ -13,7 +13,7 @@ public class ColtExpress {
 			Personne b1 = new Bandit(modele, "Bandito");
 			Personne b2 = new Bandit(modele, "Zorro");
 			Personne b3 = new Bandit(modele, "Garcia");
-			Personne mars = new Marshall(modele, "Marshall");
+			Personne mars = new Marshall(modele);
 			CEVue vue = new CEVue(modele);
 		    });
 	}

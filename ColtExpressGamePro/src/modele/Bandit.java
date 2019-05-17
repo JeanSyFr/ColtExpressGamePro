@@ -64,6 +64,7 @@ public class Bandit extends Personne
 			System.out.println(wagon);
 			return;
 		}
+		
 		if( !interieur  && !wagon.isLoco() && actionExcute.equals(Action.Descendre)) {
 			interieur = true;
 			System.out.println(name+" descend a l'interieur");

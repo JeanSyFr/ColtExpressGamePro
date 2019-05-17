@@ -196,8 +196,10 @@ public class CEVue {
 	    	}
 	    	
 	    	for (Bandit b : w.getBandits() ) {
+	    		train;
 	    		g.drawString(b.getName(), x + 15, ytemp);
 	    		ytemp += 15;
+	    		
 	    	}
 	    	
 	    	ytemp = 85;
@@ -254,12 +256,12 @@ public class CEVue {
 	     * référence au modèle.
 	     */
 	    private Train train;
-	    Bandit banditCourant;
 
+	    
 	    /** Constructeur. */
 	    public VueCommandes(Train train) {
 			this.train = train;
-			this.banditCourant = new Bandit(train, "test"); // a modifier
+			//this.banditCourant = new Bandit(train, "test"); // a modifier
 			
 			/**
 			 * On crée un nouveau bouton, de classe [JButton], en précisant le
@@ -267,8 +269,6 @@ public class CEVue {
 			 * Puis on ajoute ce bouton au panneau [this].
 			 */
 			
-			
-
 			Dimension dim = new Dimension(300, 100);
 			this.setPreferredSize(dim);
 			this.setBackground(Color.BLACK);
@@ -279,9 +279,8 @@ public class CEVue {
 			// classe interne anonyme.
 			boutonAvance.addActionListener(new ActionListener() {
 		    	public void actionPerformed(ActionEvent e) {
-		    	    // TODO
+		    	    // conditions
 		    		
-		    		//modele.avance();
 		    		System.out.println("avance");
 		    	}
 		    });
@@ -318,7 +317,7 @@ public class CEVue {
 		    	public void actionPerformed(ActionEvent e) {
 		    	    // TODO
 		    		//modele.avance();
-		    		System.out.println("recule");
+		    		System.out.println("Action !");
 		    	}
 		    });
 			
@@ -373,16 +372,113 @@ public class CEVue {
 		    	}
 		    });
 			
-			/*
-			if(action.acc <= train.liste.size()){
-				boutonAction.setEnabled(true);
-			} 
-			else {
-				boutonAction.setEnabled(false);
-			}
-			*/
+
+		abstract class Bouton implements ActionListener {
+		    Train train;
+		    int indiceBandit;
+		    Bandit banditCourant;
+		    
+		    Bouton(Train train, int idBandit){
+	
+		    	this.train = train;
+				this.indiceBandit = idBandit;
+				this.banditCourant = train.getBandit(this.indiceBandit);
+		    }
+		
+
+		    private void banditSuivant() {
+		    	this.indiceBandit = (this.indiceBandit + 1) % train.MAX_NB_BANDITS;
+		    	this.banditCourant = train.getBandit(this.indiceBandit);
+		    }
+		    
+		    abstract public void actionPerformed(ActionEvent e);
+		}
+		
+		class Braque extends Bouton {
+		
+		    public Braque(Train train, int idBandit){
+		    	super(train, idBandit);
+		    	
+		    }
+		
+		    public void actionPerformed(ActionEvent e) {
+		    	this.banditCourant.addAction(Action.Braquer);
+		    }
+	    }
+		
+		class Monte extends Bouton {
+			
+		    public Monte(Train train, int idBandit){
+		    	super(train, idBandit);
+		    	
+		    }
+		
+		    public void actionPerformed(ActionEvent e) {
+		    	this.banditCourant.addAction(Action.Monter);
+		    }
+	    }
+		
+		class Descend extends Bouton {
+			
+		    public Descend(Train train, int idBandit){
+		    	super(train, idBandit);
+		    	
+		    }
+		
+		    public void actionPerformed(ActionEvent e) {
+		    	this.banditCourant.addAction(Action.Descendre);
+		    }
+	    }
+		
+		class Avance extends Bouton {
+			
+		    public Avance(Train train, int idBandit){
+		    	super(train, idBandit);
+		    	
+		    }
+		
+		    public void actionPerformed(ActionEvent e) {
+		    	this.banditCourant.addAction(Action.Avance);
+		    }
+	    }
+		
+		class Recule extends Bouton {
+			
+		    public Recule(Train train, int idBandit){
+		    	super(train, idBandit);
+		    	
+		    }
+		
+		    public void actionPerformed(ActionEvent e) {
+		    	this.banditCourant.addAction(Action.Recule);
+		    }
+	    }
+		
+		class Tire extends Bouton {
+			
+		    public Tire(Train train, int idBandit){
+		    	super(train, idBandit);
+		    	
+		    }
+		
+		    public void actionPerformed(ActionEvent e) {
+		    	this.banditCourant.addAction(Action.Tirer);
+		    }
+	    }
+		
+		class Action extends Bouton {
+			
+		    public Action(Train train, int idBandit){
+		    	super(train, idBandit);
+		    	
+		    }
+		
+		    public void actionPerformed(ActionEvent e) {
+		    	this.train.excuteTour();
+		    }
 	    }
 	}
+}
 	/*
 	public class Console extends JTextArea {
 		 
@@ -403,12 +499,10 @@ public class CEVue {
 	*/
 	public static void main(String[] args) {
 		Train t = new Train();
-		Bandit b1 = new Bandit(t,"Jean");
-		Bandit b2 = new Bandit(t,"Arnaud");
-		Marshall m = new Marshall(t);
 		CEVue affichage = new CEVue(t);
 		System.out.println("stand by");
 		affichage.console.setText("salut");
+		Marshall m = t.getMarshall();
 		m.addAction(Action.Avance);
 		m.executeAction();
 		try {
@@ -422,8 +516,8 @@ public class CEVue {
 		affichage.console.setText("t'es un BG");
 		System.out.println("ok");
 		
-		b2.addAction(Action.Recule);
-		b2.executeAction();
+		//b2.addAction(Action.Recule);
+		//b2.executeAction();
 		affichage.vueTrain.repaint();
 		//affichage = new CEVue(t);
 	}

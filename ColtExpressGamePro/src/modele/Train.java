@@ -91,6 +91,7 @@ public class Train extends Observable
 			b.executeAction();
 		}
 		Random rnd = new Random();
+<<<<<<< HEAD
 		double p = rnd.nextDouble();
 		if(p<0.3) {
 			if(p/0.3 >0.2) {
@@ -114,13 +115,16 @@ public class Train extends Observable
 			b.addAction(Action.Braquer);
 			b.addAction(Action.Tirer);*/
 		}
+=======
+		//this.joueurs.stream().map(x -> x.executeAction()).collect(Collectors.toList());
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 	}
 
 	/*
 	 * Cette fonction permet a un bandit de sauter sur le dernier wagon de train
 	 */
 	public Wagon banditLastWagon(Bandit b) {
-		if(this.NB_BANDITS >= this.MAX_NB_BANDITS) return null;
+		assert (this.NB_BANDITS <= this.MAX_NB_BANDITS);
 		Wagon out = this.locomotive;
 		while(out.suivant!=(null)) {
 			out = out.suivant;
@@ -258,13 +262,15 @@ public class Train extends Observable
 			return this==(train.locomotive);
 		}
 		public Wagon avanceMarshall() {
-			if(!this.marshall) return null;
+			//if(!this.marshall) return null;
+			assert this.marshall;
 			this.marshall = false;
 			this.suivant.marshall = true;	
 			return this.suivant;
 		}
 		public Wagon reculeMarshall() {
-			if(!this.marshall) return null;//si le marshall n'est pas ici 
+			//if(!this.marshall) return null;//si le marshall n'est pas ici 
+			assert this.marshall;
 			this.marshall = false;
 			this.precedent.marshall = true;	
 			return this.precedent;

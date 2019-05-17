@@ -48,9 +48,8 @@ public class Train extends Observable
 	 * @param n : int 
 	 * le nombre de wagon dans ce train il y aura au moins un locomotive et un wagon
 	 */
-	public Train(int n){
-		if(n <1) n =1;
-		if(n>this.NB_WAGONS_MAX ) n = this.NB_WAGONS_MAX;
+	public Train(){
+		int n = this.NB_WAGONS_MAX;
 		joueurs = new ArrayList<Bandit>();
 		locomotive = new Wagon(this,0);
 		firstWagon = new Wagon(this,1);
@@ -75,9 +74,7 @@ public class Train extends Observable
 		
 	}
 	
-	public Train() {
-		this(NB_WAGONS_MAX);
-	}
+	
 	
 
 	public Marshall getMarshall() {
@@ -170,7 +167,7 @@ public class Train extends Observable
  */
 	
 	public static void main(String args[]) {
-		Train t = new Train(2);
+		Train t = new Train();
 		System.out.print(t);
 		/*b1.addAction(Action.Descendre);
 		b1.addAction(Action.Braquer);

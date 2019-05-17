@@ -37,7 +37,7 @@ public class Train extends Observable
 	private int NB_BANDITS =0 ;
 	public final int MAX_N_ACTION = 5;
 	public final int MAX_N_BUTIN = 5;
-	public final static int NB_WAGONS_MAX = 4;
+	public final static int NB_WAGONS_MAX = 5;
 	private final double NERVOISITE_MARSHALL = 0.3;
 	private Wagon locomotive;
 	private Wagon firstWagon;
@@ -58,15 +58,10 @@ public class Train extends Observable
 		firstWagon.precedent = locomotive;
 		n -= 1;
 		Wagon current = firstWagon;
-<<<<<<< HEAD
 		this.addButins(current);
 		this.addButins(locomotive);
 		this.marshall = new Marshall(this);
 		for(int i =2; i<n ;i++) {
-=======
-	 	this.addButins(current); 
-		for(int i =2; i<=n ;i++) {
->>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 			Wagon addedWagon = new Wagon(this,i);
 			current.suivant = addedWagon;
 			addedWagon.precedent = current;

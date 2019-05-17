@@ -30,7 +30,7 @@ public class Marshall extends Personne{
 			System.out.println(wagon);
 			return;
 		}
-		if(!wagon.isFirstWagon() && actionExcute.equals(Action.Recule)) {
+		if(!wagon.isLoco() && actionExcute.equals(Action.Recule)) {
 			Train.Wagon newWagon =wagon.reculeMarshall();
 			if(newWagon == null) System.err.println("OUUPS CHECK 2 executeAction  Marshall");
 			System.out.println(name+" recule vers le debut de train");
@@ -39,6 +39,23 @@ public class Marshall extends Personne{
 			return;
 		}
 		System.out.println(name+ " will do nothing now!");
+	}
+	
+	
+	public void tirer() {
+		Bandit b2 = wagon.anotherBanditThan(this);
+		if(b2 == null) { 
+			System.out.println(this.name + " has shot no body");
+			return;
+		}	
+		if(!b2.isEmpty()) {
+			Butin out = b2.popButin();
+			System.out.println(name +" has shot "+b2.name+" who droped "+out + "in wagon ");
+			wagon.addButin(out);
+		}
+		else {
+			System.out.println(name +" has shot "+b2.name+" who has nothing to drop");
+		}
 	}
 	
 

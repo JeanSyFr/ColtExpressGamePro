@@ -52,9 +52,9 @@ public class Bandit extends Personne
 		if(actionExcute.equals(Action.Braquer)) {
 			if(interieur) {
 				this.braquer();
-				System.err.println(name+" a braquer");
+				System.out.println(name+" a braquer");
 			}else {
-				System.err.println(name+" n'a pas braquer");
+				System.out.println(name+" n'a pas braquer il est sur le toit");
 			}
 			
 		}
@@ -86,7 +86,21 @@ public class Bandit extends Personne
 		}
 		System.out.println(name+ " has nothing to do!");
 	}
-	
+	public void tirer() {
+		Bandit b2 = wagon.anotherBanditThan(this);
+		if(b2 == null) { 
+			System.out.println(this.name + " has shot no body");
+			return;
+		}	
+		if(!b2.isEmpty()) {
+			Butin out = b2.popButin();
+			System.out.println(name +" has shot "+b2.name+" who droped "+out + "in wagon ");
+			wagon.addButin(out);
+		}
+		else {
+			System.out.println(name +" has shot "+b2.name+" who has nothing to drop");
+		}
+	}
 	
 	
 	public String toString() {

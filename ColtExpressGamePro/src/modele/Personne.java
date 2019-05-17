@@ -36,18 +36,7 @@ public abstract class Personne extends Possesseur{
 	public void addAction(Action a) {
 		actions.addAction(a);
 	}
-	public void tirer() {
-		Bandit b2 = wagon.anotherBanditThan(this);
-		if(b2 == null) { 
-			System.out.println(this.name + " has shot no body");
-			return;
-		}
-		System.out.println(this.name + " has shot "+b2.name);
-
-			
-		if(!b2.isEmpty())
-			wagon.addButin(b2.popButin());
-	}
+	
 	
 	/*protected static void incrementTour() {
 		tour++;

@@ -81,12 +81,39 @@ public class Train extends Observable
 	public Marshall getMarshall() {
 		return this.marshall;
 	}
-	public Bandit getBandit(int i) {
-		return joueurs.get(i);
+	public ArrayList<Bandit> getBandit() {
+		return joueurs;
 	}
 	public void excuteTour() {
+		//this.joueurs.stream().map(x -> x.executeAction()).collect(Collectors.toList());
+		
+		for(Bandit b : joueurs) {
+			b.executeAction();
+		}
 		Random rnd = new Random();
-		this.joueurs.stream().map(x -> x.executeAction()).collect(Collectors.toList());
+		double p = rnd.nextDouble();
+		if(p<0.3) {
+			if(p/0.3 >0.2) {
+				this.marshall.addAction(Action.Avance);
+			}else {
+				this.marshall.addAction(Action.Recule);
+			}
+			this.marshall.executeAction();
+			if(!this.marshall.wagon.bandits.isEmpty()) {
+				this.marshall.addAction(Action.Tirer);
+				this.marshall.executeAction();
+			}
+		}
+	}
+	public void actionsPreDefini() {
+		for(Bandit b : joueurs) {
+			b.addAction(Action.Descendre);
+			b.addAction(Action.Braquer);
+			b.addAction(Action.Braquer);
+			/*b.addAction(Action.Recule);
+			b.addAction(Action.Braquer);
+			b.addAction(Action.Tirer);*/
+		}
 	}
 
 	/*
@@ -174,6 +201,13 @@ public class Train extends Observable
 	public static void main(String args[]) {
 		Train t = new Train();
 		System.out.print(t);
+		t.actionsPreDefini();
+		t.excuteTour();
+		t.excuteTour();
+		t.excuteTour();
+		t.excuteTour();
+		print("/nTrain after actions/n");
+		System.out.println(t);
 		/*b1.addAction(Action.Descendre);
 		b1.addAction(Action.Braquer);
 		m.addAction(Action.Avance);

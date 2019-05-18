@@ -32,17 +32,19 @@ public class CEVue {
      * nos deux parties de l'interface graphique.
      */
     private VueTrain vueTrain;
-    private VueCommandes vueCommandes;
+    private static VueCommandes vueCommandes;
     private JTextArea console;
 
-    private static Bandit banditCourant; // pour les commandes
-    private static int numAction;
-    private static int numBandit;
+    static Bandit banditCourant; // pour les commandes
+    static int numAction = 0;
+    static int numBandit = 0;
      
     Train train;
-	private JTable tableau;
-	Object[][] dataTableau;
+	static JTable tableau;
+	static Object[][] dataTableau;
 	String[] nomBandits;
+	
+	static boolean planification = true;
 
     /** Construction d'une vue attachée au modèle, contenu dans la classe Train. */
     public CEVue(Train train) {
@@ -72,9 +74,9 @@ public class CEVue {
 	
 		/** Définition des deux vues et ajout à la fenêtre. */
 		this.train = train;
-		this.banditCourant = this.train.getBandit().get(0);
-		this.numAction = 0;
-		this.numBandit = 0;
+		//this.banditCourant = this.train.getBandit().get(0);
+		//this.numAction = 0;
+		//this.numBandit = 0;
 		
 		/*
 		this.tableau = new JTable();
@@ -156,12 +158,12 @@ public class CEVue {
 		//this.frame.add(table);
 		//this.frame.add(comp, index)
         //this.frame.add(tableau.getTableHeader(), 2);
-        this.frame.add(tableau);
+        //this.frame.add(tableau);
         //frame.add(tableau, );
      	
         		
 		this.vueTrain.repaint();
-		
+		this.banditCourant = train.getBandit().get(0);
 
         //this.frame.pack();
 		
@@ -371,6 +373,8 @@ public class CEVue {
 	     * référence au modèle.
 	     */
 	    //private Train train;
+		HashSet<JButton> boutonsPlannification;
+		JButton boutonAction;
 
 	    
 	    /** Constructeur. */
@@ -381,67 +385,82 @@ public class CEVue {
 			/**
 			 * On crée un nouveau bouton, de classe [JButton], en précisant le
 			 * texte qui doit l'étiqueter.
-			 * Puis on ajoute ce bouton au panneau [this].
+			 * Puis on ajoute ce bouton au panneau [this]. 
 			 */
-			
+	    	boutonsPlannification = new HashSet<JButton>();
+	    	
 			Dimension dim = new Dimension(300, 100);
 			this.setPreferredSize(dim);
 			this.setBackground(Color.BLACK);
 			
 			JButton boutonAvance = new JButton("RIGHT");
 			this.add(boutonAvance);
+			this.boutonsPlannification.add(boutonAvance);
 			
 			// classe interne anonyme.
 			boutonAvance.addActionListener(new Avance(train));
 
 			JButton boutonDescend = new JButton("DOWN");
 			this.add(boutonDescend);
+			this.boutonsPlannification.add(boutonDescend);
 			
 			boutonDescend.addActionListener(new Descend(train));
 
 			JButton boutonRecule = new JButton("LEFT");
 			this.add(boutonRecule);
+			this.boutonsPlannification.add(boutonRecule);
 
 			boutonRecule.addActionListener(new Recule(train));
 
-			JButton boutonAction = new JButton("ACTION");
+			boutonAction = new JButton("ACTION");
 			this.add(boutonAction);
 
 			boutonAction.addActionListener(new Act(train));
 			
-			if(true){
-				boutonAction.setEnabled(true);
-			} 
-			else {
-				boutonAction.setEnabled(false);
-			}
-			
 			JButton boutonMonte = new JButton("UP");
 			this.add(boutonMonte);
+			this.boutonsPlannification.add(boutonMonte);
 			
 			boutonMonte.addActionListener(new Monte(train));
 
 			JButton boutonTire = new JButton("PAN!");
 			this.add(boutonTire);
+			this.boutonsPlannification.add(boutonTire);
 			
 			boutonTire.addActionListener(new Tire(train));
 			
 			JButton boutonBraque = new JButton("$$$"); 
 			this.add(boutonBraque);
+			this.boutonsPlannification.add(boutonBraque);
 			
 			boutonBraque.addActionListener(new Braque(train));
 			
 			JButton boutondort = new JButton("Zzz");
 			this.add(boutondort);
+			this.boutonsPlannification.add(boutondort);
 			
 			boutondort.addActionListener(new Dort(train));
 			
 			//this.add(tableau.getTableHeader(), BorderLayout.NORTH);
 	        //this.add(tableau, BorderLayout.CENTER);
-	        
-
-
 		
+	    }
+	    
+	    public void maj() {
+	    	if(CEVue.planification){
+				boutonAction.setEnabled(false);
+				for (JButton b : boutonsPlannification) {
+					b.setEnabled(true);
+				}
+				
+			} 
+			else {
+				boutonAction.setEnabled(true);
+				for (JButton b : boutonsPlannification) {
+					b.setEnabled(false);
+				}
+			}
+				
 	    }
 	    
 	    abstract class Bouton implements ActionListener {
@@ -458,11 +477,30 @@ public class CEVue {
 		    	return train.getBandit().indexOf(banditCourant);
 		    }
 
-		    private void banditSuivant() {
+		    void banditSuivant() {
 		    	//this.indiceBandit = (this.indiceBandit + 1) % train.MAX_NB_BANDITS;
-		    	int idSuivant = (this.indiceBandit() + 1) % train.MAX_NB_BANDITS;
-		    	banditCourant = train.getBandit().get(idSuivant);
+		    	CEVue.numBandit = (CEVue.numBandit + 1) % train.MAX_NB_BANDITS;
+		    	CEVue.banditCourant = train.getBandit().get(CEVue.numBandit);
 		    }
+		    
+		    void actionSuivante() {
+		    	
+		    	System.out.println(CEVue.numBandit);
+		    	if (CEVue.numAction < train.MAX_N_ACTION - 1) {
+		    		
+		    		CEVue.numAction ++;
+		    	}
+		    	else {
+		    		CEVue.numAction = 0;
+		    		CEVue.numBandit ++;
+		    		
+		    		if (CEVue.numBandit == train.MAX_NB_BANDITS) {
+		    			CEVue.planification = false;
+		    			maj();
+		    		}
+		    	}
+		    }
+		    
 		    
 		    abstract public void actionPerformed(ActionEvent e);
 		}
@@ -477,6 +515,9 @@ public class CEVue {
 		    public void actionPerformed(ActionEvent e) {
 		    	banditCourant.addAction(Action.Braquer);
 		    	console.setText("braquage !");
+		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "$";
+		    	CEVue.tableau.repaint();
+		    	this.actionSuivante();
 		    }
 	    }
 		
@@ -565,7 +606,7 @@ public class CEVue {
 		    }
 	    }
 	}
-	
+
 	/*
 	public class Console extends JTextArea {
 		 
@@ -586,6 +627,7 @@ public class CEVue {
 	*/
 	public static void main(String[] args) {
 		Train t = new Train();
+		System.out.println(t.MAX_NB_BANDITS);
 		CEVue affichage = new CEVue(t);
 		
 		

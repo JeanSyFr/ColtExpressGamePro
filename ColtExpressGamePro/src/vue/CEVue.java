@@ -17,6 +17,8 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 public class CEVue {
 	
@@ -34,8 +36,13 @@ public class CEVue {
     private JTextArea console;
 
     private static Bandit banditCourant; // pour les commandes
+    private static int numAction;
+    private static int numBandit;
      
     Train train;
+	private JTable tableau;
+	Object[][] dataTableau;
+	String[] nomBandits;
 
     /** Construction d'une vue attachée au modèle, contenu dans la classe Train. */
     public CEVue(Train train) {
@@ -66,15 +73,97 @@ public class CEVue {
 		/** Définition des deux vues et ajout à la fenêtre. */
 		this.train = train;
 		this.banditCourant = this.train.getBandit().get(0);
+		this.numAction = 0;
+		this.numBandit = 0;
+		
+		/*
+		this.tableau = new JTable();
+		dataTableau = new String[5][3];
+		for (int i=0; i<5; i++) {
+        	for (int j=0; j<3; j++){
+        		dataTableau[i][j] = "z";
+        	}
+        }
+
+
+		this.nomBandits = new String[train.MAX_NB_BANDITS];
+		
+		for (int i=0; i<train.MAX_NB_BANDITS; i++) {
+			try {
+				nomBandits[i] = train.getBandit().get(0).getName();
+	  	    } catch (NullPointerException e) {
+	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
+				nomBandits[i] = String.format("Bandit %d", i);
+	  	    } 
+			
+		}
+		
+		*/
+		
+		this.nomBandits = new String[train.MAX_NB_BANDITS];
+		for (int i=0; i<train.MAX_NB_BANDITS; i++) {
+			try {
+				nomBandits[i] = train.getBandit().get(0).getName();
+	  	    } catch (NullPointerException e) {
+	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
+				nomBandits[i] = String.format("Bandit %d", i);
+	  	    } 
+			
+		}
+		
+		this.tableau = new JTable();
+		dataTableau = new String[6][4];
+		for (int i=1; i<6; i++) {
+        	for (int j=1; j<4; j++){
+        		dataTableau[i][j] = " ";
+        	}
+        }
+
+
+		//this.nomBandits = new String[train.MAX_NB_BANDITS];
+		
+		for (int i=0; i<train.MAX_NB_BANDITS; i++) {
+			try {
+				dataTableau[0][i] = train.getBandit().get(0).getName();
+	  	    } catch (NullPointerException e) {
+	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
+	  	    	dataTableau[0][i] = String.format("Bandit %d", i);
+	  	    } 
+			
+		}
+		
+
+        this.tableau = new JTable(this.dataTableau, this.nomBandits);
+     	this.tableau.setAutoResizeMode(this.tableau.AUTO_RESIZE_ALL_COLUMNS);
+		
+		
 		vueTrain = new VueTrain();
 		frame.add(vueTrain);
 		vueCommandes = new VueCommandes();
 		frame.add(vueCommandes);
 		this.console = new JTextArea(7, 50);
 		this.console.setBackground(Color.YELLOW);
-		frame.add(console);
+		//frame.add(console);
+		this.frame.add(tableau);
 		
+        //this.frame.pack();
+        //frame.add(this.tableau, BorderLayout.SOUTH);
+        
+		//JPanel table = new JPanel();
+		//table.add(tableau.getTableHeader(), BorderLayout.NORTH);
+		//table.add(tableau, BorderLayout.CENTER);
+		//table.setPreferredSize(new Dimension(500, 500));
+		//this.frame.add(table);
+		//this.frame.add(comp, index)
+        //this.frame.add(tableau.getTableHeader(), 2);
+        this.frame.add(tableau);
+        //frame.add(tableau, );
+     	
+        		
 		this.vueTrain.repaint();
+		
+
+        //this.frame.pack();
 		
 		/**
 		 * Remarque : on peut passer à la méthode [add] des paramètres
@@ -121,7 +210,7 @@ public class CEVue {
 			Dimension dim = new Dimension(this.largeurWagon * train.NB_WAGONS_MAX,
 						      this.hauteurWagon + 100);
 			this.setPreferredSize(dim);
-			this.setBackground(Color.cyan);
+			this.setBackground(Color.WHITE);
 	    }
 	
 	    /**
@@ -196,20 +285,27 @@ public class CEVue {
 	    	
 	    	ytemp = 85;
 	    	
+	    	/*
 	    	if (w == null) {
 	    		System.out.println("ERROR WAGON");
 	    	}
+	    	*/
 	    	
 	    	for (Bandit b : w.getBandits() ) {
 	    		
 	    		int id = train.getBandit().indexOf(b);
 	    		String nomImage = String.format("bandit%d.jpg", id + 1);
-	    		System.out.println(id);
+	    		//System.out.println(id);
 	    		
+	    		int etage = 0;
+	    		if (!b.getInterieur()) { 
+	    			etage = -128;
+	    		}
 	    		try {
-	    			System.out.println(nomImage);
+	    			//System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
-		    	      g.drawImage(img, x + 25 + 40*id , y + 64, 40, 68, this);
+		    	      
+		    	      g.drawImage(img, x + 25 + 40*id , y + 64 + etage, 40, 68, this);
 		    	      //Pour une image de fond
 		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 		  	    } catch (IOException e) {
@@ -296,7 +392,7 @@ public class CEVue {
 			this.add(boutonAvance);
 			
 			// classe interne anonyme.
-			boutonAvance.addActionListener(new Braque(train));
+			boutonAvance.addActionListener(new Avance(train));
 
 			JButton boutonDescend = new JButton("DOWN");
 			this.add(boutonDescend);
@@ -306,26 +402,12 @@ public class CEVue {
 			JButton boutonRecule = new JButton("LEFT");
 			this.add(boutonRecule);
 
-			boutonRecule.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    	    // TODO
-		    		//modele.avance();
-		    		System.out.println("recule");
-		    	}
-		    });
-			
-			
+			boutonRecule.addActionListener(new Recule(train));
 
 			JButton boutonAction = new JButton("ACTION");
 			this.add(boutonAction);
 
-			boutonAction.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    	    // TODO
-		    		//modele.avance();
-		    		System.out.println("Action !");
-		    	}
-		    });
+			boutonAction.addActionListener(new Act(train));
 			
 			if(true){
 				boutonAction.setEnabled(true);
@@ -337,47 +419,27 @@ public class CEVue {
 			JButton boutonMonte = new JButton("UP");
 			this.add(boutonMonte);
 			
-			boutonMonte.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    	    // TODO
-		    		//modele.avance();
-		    		System.out.println("monte");
-		    	}
-		    });
+			boutonMonte.addActionListener(new Monte(train));
 
 			JButton boutonTire = new JButton("PAN!");
 			this.add(boutonTire);
 			
-			boutonTire.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    	    // TODO
-		    		//modele.avance();
-		    		System.out.println("tire");
-		    	}
-		    });
-
-			JButton boutonBraque = new JButton("$$$");
+			boutonTire.addActionListener(new Tire(train));
+			
+			JButton boutonBraque = new JButton("$$$"); 
 			this.add(boutonBraque);
 			
-			boutonBraque.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    	    // TODO
-		    		//modele.avance();
-		    		System.out.println("braque");
-		    	}
-		    });
+			boutonBraque.addActionListener(new Braque(train));
 			
 			JButton boutondort = new JButton("Zzz");
 			this.add(boutondort);
 			
-			boutondort.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent e) {
-		    	    // TODO
-		    		//modele.avance();
-		    		System.out.println("braque");
-		    	}
-		    });
+			boutondort.addActionListener(new Dort(train));
 			
+			//this.add(tableau.getTableHeader(), BorderLayout.NORTH);
+	        //this.add(tableau, BorderLayout.CENTER);
+	        
+
 
 		
 	    }
@@ -409,11 +471,12 @@ public class CEVue {
 		
 		    public Braque(Train train){
 		    	super(train);
-		    	
+
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
 		    	banditCourant.addAction(Action.Braquer);
+		    	console.setText("braquage !");
 		    }
 	    }
 		
@@ -485,7 +548,8 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	this.train.excuteTour();
+		    	CEVue.banditCourant.executeAction();
+		    	//this.train.excuteTour();
 		    	vueTrain.update();
 		    }
 	    }
@@ -500,7 +564,8 @@ public class CEVue {
 		    public void actionPerformed(ActionEvent e) {
 		    }
 	    }
-}
+	}
+	
 	/*
 	public class Console extends JTextArea {
 		 
@@ -522,26 +587,8 @@ public class CEVue {
 	public static void main(String[] args) {
 		Train t = new Train();
 		CEVue affichage = new CEVue(t);
-		System.out.println("stand by");
-		affichage.console.setText("salut");
-		Marshall m = t.getMarshall();
-		m.addAction(Action.Avance);
-		m.executeAction();
-		try {
-		      Thread.sleep(3000);
-	    } catch (InterruptedException e) {
-	      e.printStackTrace();
-	    }
-	    
-		m.addAction(Action.Avance);
-		m.executeAction();
-		affichage.console.setText("t'es un BG");
-		System.out.println("ok");
 		
-		//b2.addAction(Action.Recule);
-		//b2.executeAction();
-		affichage.vueTrain.repaint();
-		//affichage = new CEVue(t);
+		
 	}
 
 }

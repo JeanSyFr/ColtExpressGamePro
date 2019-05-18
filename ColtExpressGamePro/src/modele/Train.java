@@ -129,7 +129,7 @@ public class Train extends Observable
 	 * Cette fonction permet a un bandit de sauter sur le dernier wagon de train
 	 */
 	public Wagon banditLastWagon(Bandit b) {
-		if(this.NB_BANDITS >= this.MAX_NB_BANDITS) return null;
+		assert this.NB_BANDITS <= this.MAX_NB_BANDITS ;
 		Wagon out = this.locomotive;
 		while(out.suivant!=(null)) {
 			out = out.suivant;

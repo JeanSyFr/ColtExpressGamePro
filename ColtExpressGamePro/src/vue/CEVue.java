@@ -393,7 +393,7 @@ public class CEVue {
 			this.setPreferredSize(dim);
 			this.setBackground(Color.BLACK);
 			
-			JButton boutonAvance = new JButton("RIGHT");
+			JButton boutonAvance = new JButton("LEFT");
 			this.add(boutonAvance);
 			this.boutonsPlannification.add(boutonAvance);
 			
@@ -406,7 +406,7 @@ public class CEVue {
 			
 			boutonDescend.addActionListener(new Descend(train));
 
-			JButton boutonRecule = new JButton("LEFT");
+			JButton boutonRecule = new JButton("RIGHT");
 			this.add(boutonRecule);
 			this.boutonsPlannification.add(boutonRecule);
 
@@ -441,6 +441,7 @@ public class CEVue {
 			
 			boutondort.addActionListener(new Dort(train));
 			
+			maj();
 			//this.add(tableau.getTableHeader(), BorderLayout.NORTH);
 	        //this.add(tableau, BorderLayout.CENTER);
 		
@@ -530,6 +531,9 @@ public class CEVue {
 		
 		    public void actionPerformed(ActionEvent e) {
 		    	CEVue.banditCourant.addAction(Action.Monter);
+		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "A";
+		    	CEVue.tableau.repaint();
+		    	this.actionSuivante();
 		    }
 	    }
 		
@@ -542,6 +546,9 @@ public class CEVue {
 		
 		    public void actionPerformed(ActionEvent e) {
 		    	CEVue.banditCourant.addAction(Action.Descendre);
+		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "v";
+		    	CEVue.tableau.repaint();
+		    	this.actionSuivante();
 		    }
 	    }
 		
@@ -554,6 +561,9 @@ public class CEVue {
 		
 		    public void actionPerformed(ActionEvent e) {
 		    	CEVue.banditCourant.addAction(Action.Avance);
+		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "<";
+		    	CEVue.tableau.repaint();
+		    	this.actionSuivante();
 		    }
 	    }
 		
@@ -566,6 +576,9 @@ public class CEVue {
 		
 		    public void actionPerformed(ActionEvent e) {
 		    	CEVue.banditCourant.addAction(Action.Recule);
+		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = ">";
+		    	CEVue.tableau.repaint();
+		    	this.actionSuivante();
 		    }
 	    }
 		
@@ -578,6 +591,9 @@ public class CEVue {
 		
 		    public void actionPerformed(ActionEvent e) {
 		    	CEVue.banditCourant.addAction(Action.Tirer);
+		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "-";
+		    	CEVue.tableau.repaint();
+		    	this.actionSuivante();
 		    }
 	    }
 		
@@ -603,6 +619,9 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
+		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "Z";
+		    	CEVue.tableau.repaint();
+		    	this.actionSuivante();
 		    }
 	    }
 	}

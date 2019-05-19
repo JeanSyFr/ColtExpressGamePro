@@ -1,8 +1,18 @@
 package modele;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.After;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
 /*
 
 ^
@@ -28,7 +38,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-public class Train extends Observable
+public class Train extends Observable implements Iterable<Train.Wagon>
 {
 	/*
 	 * Attributs
@@ -40,7 +50,7 @@ public class Train extends Observable
 	public final int MAX_N_BUTIN = 5;
 	public final static int NB_WAGONS_MAX = 5;
 	private final double NERVOISITE_MARSHALL = 0.3;
-	private Wagon locomotive;
+	Wagon locomotive;
 	private Wagon firstWagon;
 	private Marshall marshall;
 	private ArrayList<Bandit> joueurs;
@@ -56,7 +66,10 @@ public class Train extends Observable
 		firstWagon = new Wagon(this,1);
 		locomotive.suivant = firstWagon;
 		firstWagon.precedent = locomotive;
-		n -= 1;
+		//n -= 1;
+		/*
+		 * pourquoi tu as mis 
+		 */
 		Wagon current = firstWagon;
 		this.addButins(current);
 		this.addButins(locomotive);
@@ -83,6 +96,45 @@ public class Train extends Observable
 	}
 	public ArrayList<Bandit> getBandit() {
 		return joueurs;
+	}
+	public int getMAX_N_ACTION() {
+		return this.MAX_N_ACTION;
+	}
+	public int getMAX_N_BUTIN() {
+		return this.MAX_N_BUTIN;
+	}
+	Wagon getLastWagon() {
+		Wagon out = this.locomotive;
+		while(out.suivant!=(null)) {
+			out = out.suivant;
+		}
+		return out;
+	}
+	/*Wagon getLocomotive() {
+		return this.locomotive;
+	}
+	Wagon getFirstWagon() {
+		return this.firstWagon;
+	}*/
+	
+	
+	private boolean checkWagonOrdre(Wagon w) {
+		int o = 0;
+		Wagon current = this.locomotive;
+		while(w!=current && o <this.NB_WAGONS_MAX) {
+			o++;
+			assert (current != null) : "pas de coherence entre NB_WAGONS_MAX et le vrai nombre de wagon";
+			current = current.suivant;
+		}
+		assert o <this.NB_WAGONS_MAX: "checking the order of wagon that does not exist in the train";
+		return o == w.ordre;		
+	}
+	public boolean checkInvariants() {
+		return ForEachPredicat.forEach(t, w->t.checkWagonOrdre(w)) && 
+	}
+	
+	private boolean checkBanditsPalce() {
+		
 	}
 	public void excuteTour() {
 		//this.joueurs.stream().map(x -> x.executeAction()).collect(Collectors.toList());
@@ -130,10 +182,7 @@ public class Train extends Observable
 	 */
 	public Wagon banditLastWagon(Bandit b) {
 		assert this.NB_BANDITS <= this.MAX_NB_BANDITS ;
-		Wagon out = this.locomotive;
-		while(out.suivant!=(null)) {
-			out = out.suivant;
-		}
+		Wagon out = this.getLastWagon();
 		out.bandits.add(b);
 		this.NB_BANDITS++;
 		return out;
@@ -158,12 +207,7 @@ public class Train extends Observable
 		return out;
 	}
 	
-	public int getMAX_N_ACTION() {
-		return this.MAX_N_ACTION;
-	}
-	public int getMAX_N_BUTIN() {
-		return this.MAX_N_BUTIN;
-	}
+
 	
 	
 	/*
@@ -173,9 +217,6 @@ public class Train extends Observable
 	/*
 	 * Ajouter des butins au hasard entre 1 et 4
 	 */
-	public static void print(String s) {
-		System.out.println(s);
-	}
 	private void addButins(Wagon w) {
 		if(w==this.locomotive) {
 			Butin b = new Magot(locomotive);
@@ -206,10 +247,21 @@ public class Train extends Observable
 |____________Direction(wagon.suivant, Action.avancer) ______________>
 
  */
+	public static void print(Object o) { System.out.println(o);}
+	
 	
 	public static void main(String args[]) {
 		Train t = new Train();
-		System.out.print(t);
+		
+		//ForEach.forEach(t, w -> print(t.checkWagonOrdre(w)));
+		print(ForEachPredicat.forEach(t, w->t.checkWagonOrdre(w)));
+		
+		
+		/*for(Wagon w : t) {
+			print(w.ordre);
+		}
+		print(t.getLastWagon().ordre);*/
+		/*System.out.print(t);
 		t.actionsPreDefini();
 		t.excuteTour();
 		t.excuteTour();
@@ -217,7 +269,7 @@ public class Train extends Observable
 		t.excuteTour();
 		t.excuteTour();
 		print("/nTrain after actions/n");
-		System.out.println(t);
+		print(t);*/
 		/*b1.addAction(Action.Descendre);
 		b1.addAction(Action.Braquer);
 		m.addAction(Action.Avance);
@@ -246,9 +298,9 @@ public class Train extends Observable
 	public class Wagon extends Possesseur
 	{
 		private Train train;
-		private Wagon suivant;
-		private Wagon precedent;
-		private HashSet<Bandit> bandits;
+		Wagon suivant;
+		Wagon precedent;
+		HashSet<Bandit> bandits;
 		private boolean marshall;
 		private int ordre; //utile pour les test unitaire
 		public Wagon(Train t, int o){
@@ -256,6 +308,18 @@ public class Train extends Observable
 			train =t;
 			bandits = new HashSet<Bandit>(0);
 			ordre = o;
+		}
+		
+		public HashSet<Bandit> getBandits() {
+			return this.bandits;
+		}
+
+		public Wagon getSuivant() {
+			return this.suivant;
+		}
+
+		public boolean getMarshall() {
+			return this.marshall;
 		}
 		
 		public boolean isLastWagon() {
@@ -290,14 +354,7 @@ public class Train extends Observable
 			return this.precedent;
 		}
 		
-		public String toString() {
-			String marsh = (this.marshall)?" contains marshall":" ";
-			String out = "Wagon '"+ordre+"'"+ marsh +":\n"+
-					"		Bandits" + bandits + ".\n";
-			out += "		"+super.toString() + "\n";
-			return out;
-			
-		}
+		
 		
 		
 		public Butin stoleButin() {
@@ -313,25 +370,104 @@ public class Train extends Observable
 			}
 			return null;
 		}
-
-		public HashSet<Bandit> getBandits() {
-			return this.bandits;
+		
+		@Override
+		public String toString() {
+			String marsh = (this.marshall)?" contains marshall":" ";
+			String out = "Wagon '"+ordre+"'"+ marsh +":\n"+
+					"		Bandits" + bandits + ".\n";
+			out += "		"+super.toString() + "\n";
+			return out;
+			
 		}
 
-		public Wagon getSuivant() {
-			return this.suivant;
-		}
-
-		public boolean getMarshall() {
-			return this.marshall;
-		}
+		
 	}
 
 
 
-	public Wagon getLocomotive() {
-		return this.locomotive;
+	@Override
+	public Iterator<Wagon> iterator() {
+		return new TrainIterator(this);
+		
 	}
+	
+	class TrainIterator implements Iterator<Wagon>{
+		private Wagon current;
+		TrainIterator(Train t){
+			current = t.locomotive;
+		}
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return current !=null;
+		}
+
+		@Override
+		public Wagon next() {
+			Wagon w = current;
+			current = current.suivant;
+			return w ;
+		}
+	}
+	
+	class test{
+		
+		
+		
+		Train t;
+		@Before
+		void setUp() {
+			t = new Train();
+		}
+		
+		@Test
+		void testVariants() {
+			assert t.checkInvariants() : "Test of variants failed";
+		}
+		@Test
+		void testInitialPlace() {
+			assert ForEachPredicat.forEach(t.getBandit(), b -> t.getLastWagon().bandits.contains(b)) : "The initial place of bandits is flase";
+		}
+		@Test
+		void testDLL() {
+			boolean out;
+			out = t.locomotive.precedent ==null;
+			out &= t.locomotive.suivant.precedent == t.locomotive;
+			out &= t.getLastWagon().suivant ==null;
+			out &= t.getLastWagon() == t.getLastWagon().precedent.suivant;
+			
+			assert ForEachPredicat.forEach (
+					t , w -> 
+			{ //implementing the predicat function
+				if(w==t.locomotive || w==t.getLastWagon()) {
+					return true; //beacause we already tested it
+				}else {
+					return w ==w.suivant.precedent && w==w.precedent.suivant;
+				}
+			}	
+					
+					) : "";			
+		}
+		
+		
+		
+		
+		@After
+		void tearDown() {
+			t = null;
+		}
+		
+		public void main(String[] args) {
+			
+		}
+		
+		
+		
+		
+		
+	}
+	
 	
 }
 

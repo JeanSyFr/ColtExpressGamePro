@@ -105,6 +105,7 @@ public class Train extends Observable
 				System.err.println("Yes marshal has shot !");
 			}
 		}
+		this.notifyObservers();
 	}
 	public void actionsPreDefini() {
 		//joueurs.get(0).addAction(Action.Tirer);
@@ -325,6 +326,11 @@ public class Train extends Observable
 		public boolean getMarshall() {
 			return this.marshall;
 		}
+		
+		public Train getTrain() {
+			return train;
+		}
+		
 	}
 
 

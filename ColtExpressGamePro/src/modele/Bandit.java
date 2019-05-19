@@ -88,6 +88,7 @@ public class Bandit extends Personne
 			return;
 		}
 		System.out.println(name+ " tried to do "+actionExcute+" bu he couldnt");
+		this.wagon.getTrain().notifyObservers();
 	}
 	public void tirer() {
 		Bandit b2 = wagon.anotherBanditThan(this);

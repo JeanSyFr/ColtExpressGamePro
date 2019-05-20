@@ -111,12 +111,12 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		}
 		return out;
 	}
-	/*Wagon getLocomotive() {
+	public Wagon getLocomotive() {
 		return this.locomotive;
 	}
-	Wagon getFirstWagon() {
+	public Wagon getFirstWagon() {
 		return this.firstWagon;
-	}*/
+	}
 	
 	
 	private boolean checkWagonOrdre(Wagon w) {

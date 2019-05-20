@@ -42,8 +42,8 @@ public class CEVue {
     static int compteurActions = 0;
      
     Train train;
-	static JTable tableau;
-	static Object[][] dataTableau;
+	JTable tableau;
+	Object[][] dataTableau;
 	String[] nomBandits;
 	
 	static boolean planification = true;
@@ -196,6 +196,16 @@ public class CEVue {
 			
 		}
     }
+    
+    // TODO
+    void maj(){
+        this.console.repaint();
+        this.vueTrain.repaint();
+        this.vueCommandes.repaint();
+        this.frame.repaint();
+    }
+    
+
 
 	public class VueTrain extends JPanel implements Observer {
 	    /** On maintient une référence vers le modèle. */
@@ -506,6 +516,8 @@ public class CEVue {
 	    
 	    abstract class Bouton implements ActionListener {
 		    Train train;
+		    VueCommandes vc;
+		    
 		    //int indiceBandit;
 		     
 		    Bouton(Train train){
@@ -677,6 +689,7 @@ public class CEVue {
 			    		CEVue.dataTableau[CEVue.numAction][i] = " ";
 			    	}
 		    	}
+		    	this.train.maj();
 		    	majBoutons();
 		    }
 	    }

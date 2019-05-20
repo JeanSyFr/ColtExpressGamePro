@@ -164,6 +164,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 				System.err.println("Yes marshal has shot !");
 			}
 		}
+		this.notifyObservers();
 	}
 	public void actionsPreDefini() {
 		//joueurs.get(0).addAction(Action.Tirer);
@@ -388,6 +389,20 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			
 		}
 
+<<<<<<< HEAD
+=======
+		public Wagon getSuivant() {
+			return this.suivant;
+		}
+
+		public boolean getMarshall() {
+			return this.marshall;
+		}
+		
+		public Train getTrain() {
+			return train;
+		}
+>>>>>>> refs/remotes/origin/master
 		
 	}
 

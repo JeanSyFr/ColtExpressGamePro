@@ -2,6 +2,7 @@ package vue;
 
 import modele.Action;
 import modele.Bandit;
+import modele.Butin;
 import modele.Marshall;
 import modele.Personne;
 import modele.Train;
@@ -38,6 +39,7 @@ public class CEVue {
     static Bandit banditCourant; // pour les commandes
     static int numAction = 0;
     static int numBandit = 0;
+    static int compteurActions = 0;
      
     Train train;
 	static JTable tableau;
@@ -114,25 +116,13 @@ public class CEVue {
 		}
 		
 		this.tableau = new JTable();
-		dataTableau = new String[6][4];
-		for (int i=1; i<6; i++) {
-        	for (int j=1; j<4; j++){
-        		dataTableau[i][j] = " ";
-        	}
-        }
+		dataTableau = new String[6][3];
+		this.resetTableau();
 
 
 		//this.nomBandits = new String[train.MAX_NB_BANDITS];
 		
-		for (int i=0; i<train.MAX_NB_BANDITS; i++) {
-			try {
-				dataTableau[0][i] = train.getBandit().get(0).getName();
-	  	    } catch (NullPointerException e) {
-	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
-	  	    	dataTableau[0][i] = String.format("Bandit %d", i);
-	  	    } 
-			
-		}
+		
 		
 
         this.tableau = new JTable(this.dataTableau, this.nomBandits);
@@ -189,6 +179,23 @@ public class CEVue {
 		//frame.setBackground(Color.BLACK);
     }
 	
+    void resetTableau() {
+    	for (int i=1; i<6; i++) {
+        	for (int j=0; j<3; j++){
+        		dataTableau[i][j] = ".";
+        	}
+        }
+    	
+    	for (int i=0; i<train.MAX_NB_BANDITS; i++) {
+			try {
+				dataTableau[0][i] = train.getBandit().get(0).getName();
+	  	    } catch (NullPointerException e) {
+	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
+	  	    	dataTableau[0][i] = String.format("Bandit %d", i);
+	  	    } 
+			
+		}
+    }
 
 	public class VueTrain extends JPanel implements Observer {
 	    /** On maintient une référence vers le modèle. */
@@ -308,6 +315,39 @@ public class CEVue {
 		    	      Image img = ImageIO.read(new File(nomImage));
 		    	      
 		    	      g.drawImage(img, x + 25 + 40*id , y + 64 + etage, 40, 68, this);
+		    	      //Pour une image de fond
+		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+		  	    } catch (IOException e) {
+		  	      e.printStackTrace();
+		  	    } 
+	    		
+	    		//g.drawString(b.getName(), x + 15, ytemp);
+	    		ytemp += 15;
+	    		
+	    	}
+	    	
+	    	ytemp = 85;
+	    	
+	    	for (Butin b : w.getButins() ) {
+	    		
+	    		int id = b.getValeur() / 130;
+	    		if (b.getValeur() == 500) {
+	    			id = 4;
+	    		}
+	    		if (b.getValeur() == 1000) {
+	    			id = 5;
+	    		}
+	    		
+	    		String nomImage = String.format("butin%d.jpg", id);
+	    		System.out.println("valeur ; " + b.getValeur());
+	    		System.out.println("id ; " + id);
+	    		System.out.println(nomImage);
+	    		
+	    		try {
+	    			//System.out.println(nomImage);
+		    	      Image img = ImageIO.read(new File(nomImage));
+		    	      
+		    	      g.drawImage(img, x + 25 + 40*id , y + 10 , 20, 25, this);
 		    	      //Pour une image de fond
 		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 		  	    } catch (IOException e) {
@@ -441,13 +481,13 @@ public class CEVue {
 			
 			boutondort.addActionListener(new Dort(train));
 			
-			maj();
+			majBoutons();
 			//this.add(tableau.getTableHeader(), BorderLayout.NORTH);
 	        //this.add(tableau, BorderLayout.CENTER);
 		
 	    }
 	    
-	    public void maj() {
+	    public void majBoutons() {
 	    	if(CEVue.planification){
 				boutonAction.setEnabled(false);
 				for (JButton b : boutonsPlannification) {
@@ -486,19 +526,28 @@ public class CEVue {
 		    
 		    void actionSuivante() {
 		    	
-		    	System.out.println(CEVue.numBandit);
+		    	System.out.println("indice bandit avant : " + CEVue.numBandit);
+		    	System.out.println("indice action avant : " + CEVue.numAction);
+		    	
 		    	if (CEVue.numAction < train.MAX_N_ACTION - 1) {
 		    		
 		    		CEVue.numAction ++;
 		    	}
 		    	else {
+		    		
 		    		CEVue.numAction = 0;
 		    		CEVue.numBandit ++;
-		    		
+		    		//banditSuivant();
 		    		if (CEVue.numBandit == train.MAX_NB_BANDITS) {
+		    			
 		    			CEVue.planification = false;
-		    			maj();
+		    			majBoutons();
 		    		}
+		    		else {
+		    			CEVue.banditCourant = train.getBandit().get(CEVue.numBandit);
+		    		}
+			    	
+		    		
 		    	}
 		    }
 		    
@@ -605,9 +654,30 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	CEVue.banditCourant.executeAction();
-		    	//this.train.excuteTour();
+		    	//CEVue.banditCourant.executeAction();
+		    	this.train.excuteTour();
 		    	vueTrain.update();
+		    	CEVue.numAction ++;
+		    	
+		    	
+		    	
+		    	
+		    	//System.out.println("indice nouvelle action " + CEVue.numAction);
+		    	if (CEVue.numAction == train.MAX_N_ACTION) {
+		    		CEVue.planification = true;
+		    		resetTableau();
+		    		System.out.println("tableau reinitialisé");
+		    		CEVue.numAction = 0;
+		    		CEVue.numBandit = 0;
+		    		CEVue.banditCourant = train.getBandit().get(CEVue.numBandit);
+		    	}
+		    	else {
+		    		for (int i=0; i<3; i++) {
+		    			System.out.println("action effacée" + CEVue.numAction);
+			    		CEVue.dataTableau[CEVue.numAction][i] = " ";
+			    	}
+		    	}
+		    	majBoutons();
 		    }
 	    }
 		

@@ -3,7 +3,7 @@ package modele;
 import java.util.Random;
 
 
-abstract class Butin {
+public abstract class Butin {
 	protected int valeur;
 	protected String nom;
 	protected Train.Wagon wagon;
@@ -15,6 +15,9 @@ abstract class Butin {
 	public String toString() {
 		return nom+ "("+valeur+")$";
 	}
+	public int getValeur(){
+		return this.valeur;
+	}
 }
 
 class Bourse extends Butin {
@@ -22,7 +25,7 @@ class Bourse extends Butin {
 		super(wagon);
 		this.nom ="Bourse";
     	Random rnd = new Random();
-    	this.valeur = rnd.nextInt(501);
+    	this.valeur = rnd.nextInt(500);
 	}
 }
 

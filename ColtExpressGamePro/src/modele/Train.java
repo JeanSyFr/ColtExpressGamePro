@@ -389,8 +389,6 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			
 		}
 
-<<<<<<< HEAD
-=======
 		public Wagon getSuivant() {
 			return this.suivant;
 		}
@@ -402,11 +400,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		public Train getTrain() {
 			return train;
 		}
-<<<<<<< HEAD
->>>>>>> refs/remotes/origin/master
-=======
->>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
-		
+
 	}
 
 

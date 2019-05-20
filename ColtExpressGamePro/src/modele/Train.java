@@ -50,10 +50,11 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	public final int MAX_N_BUTIN = 5;
 	public final static int NB_WAGONS_MAX = 5;
 	private final double NERVOISITE_MARSHALL = 0.3;
-	Wagon locomotive;
-	private Wagon firstWagon;
-	private Marshall marshall;
-	private ArrayList<Bandit> joueurs;
+	private final boolean checkInvariants = true;
+	protected Wagon locomotive;
+	protected Wagon firstWagon;
+	protected Marshall marshall;
+	protected ArrayList<Bandit> joueurs;
 	/*
 	 * Constructeur 
 	 * @param n : int 
@@ -133,7 +134,13 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		return ForEachPredicat.forEach(t, w->t.checkWagonOrdre(w)) && 
 	}
 	
-	private boolean checkBanditsPalce() {
+	private boolean banditsPalce() {
+		return ForEachPredicat.forEach
+		(this.joueurs, b -> 
+		{ 
+			return b.wagon.bandits.contains(b);
+		}
+		);
 		
 	}
 	public void excuteTour() {

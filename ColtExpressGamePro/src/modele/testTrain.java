@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class testTrain {
+public class testTrain extends Train {
 
 
 	Train t;
@@ -39,7 +39,7 @@ public class testTrain {
 			}
 		}	
 				
-				) : "";			
+				) : "Test DLL failed 'suivant.prencedent == precedent.suivant'";			
 	}
 	
 	

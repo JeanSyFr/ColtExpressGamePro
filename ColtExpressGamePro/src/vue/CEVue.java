@@ -71,7 +71,7 @@ public class CEVue {
 		 */
 		frame.setSize(1200, 500);
 		frame.setLocationRelativeTo(null);
-		frame.setLayout(new FlowLayout());
+		frame.setLayout(new BorderLayout());
 		//frame.setBackground(Color.BLACK);
 	
 		/** Définition des deux vues et ajout à la fenêtre. */
@@ -130,13 +130,13 @@ public class CEVue {
 		
 		
 		vueTrain = new VueTrain();
-		frame.add(vueTrain);
+		frame.add(vueTrain, BorderLayout.NORTH);
 		vueCommandes = new VueCommandes();
-		frame.add(vueCommandes);
+		frame.add(vueCommandes, BorderLayout.WEST);
 		this.console = new JTextArea(7, 50);
 		this.console.setBackground(Color.YELLOW);
 		//frame.add(console);
-		this.frame.add(tableau);
+		this.frame.add(tableau, BorderLayout.EAST);
 		
         //this.frame.pack();
         //frame.add(this.tableau, BorderLayout.SOUTH);

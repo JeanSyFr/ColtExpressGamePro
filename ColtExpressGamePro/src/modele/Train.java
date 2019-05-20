@@ -130,9 +130,12 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		assert o <this.NB_WAGONS_MAX: "checking the order of wagon that does not exist in the train";
 		return o == w.ordre;		
 	}
+	
+	
 	public boolean checkInvariants() {
-		return ForEachPredicat.forEach(t, w->t.checkWagonOrdre(w)) && 
+		return ForEachPredicat.forEach(this, w->this.checkWagonOrdre(w));
 	}
+	
 	
 	private boolean banditsPalce() {
 		return ForEachPredicat.forEach
@@ -388,6 +391,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			return out;
 			
 		}
+<<<<<<< HEAD
 
 		public Wagon getSuivant() {
 			return this.suivant;
@@ -396,11 +400,17 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		public boolean getMarshall() {
 			return this.marshall;
 		}
+=======
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 		
 		public Train getTrain() {
 			return train;
 		}
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 	}
 
 
@@ -442,7 +452,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		
 		@Test
 		void testVariants() {
-			assert t.checkInvariants() : "Test of variants failed";
+			 assert t.checkInvariants() : "Test of variants failed";
 		}
 		@Test
 		void testInitialPlace() {

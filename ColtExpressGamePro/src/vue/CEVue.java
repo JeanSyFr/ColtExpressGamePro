@@ -6,6 +6,7 @@ import modele.Butin;
 import modele.Marshall;
 import modele.Personne;
 import modele.Train;
+import modele.Train.Wagon;
 import vue.Observer;
 
 import java.util.*;
@@ -33,20 +34,20 @@ public class CEVue {
      * nos deux parties de l'interface graphique.
      */
     private VueTrain vueTrain;
-    private static VueCommandes vueCommandes;
+    private VueCommandes vueCommandes;
     private JTextArea console;
 
-    static Bandit banditCourant; // pour les commandes
-    static int numAction = 0;
-    static int numBandit = 0;
-    static int compteurActions = 0;
+    Bandit banditCourant; // pour les commandes
+    int numAction = 0;
+    int numBandit = 0;
+    int compteurActions = 0;
      
     Train train;
-	static JTable tableau;
-	static Object[][] dataTableau;
+	JTable tableau;
+	Object[][] dataTableau;
 	String[] nomBandits;
 	
-	static boolean planification = true;
+	boolean planification = true;
 
     /** Construction d'une vue attachée au modèle, contenu dans la classe Train. */
     public CEVue(Train train) {
@@ -69,7 +70,7 @@ public class CEVue {
 		 *    même dimension. Cette dimension est calculée en fonction du
 		 *    nombre de cases à placer et de la dimension du contenant.
 		 */
-		frame.setSize(1200, 500);
+		frame.setSize(1400, 430);
 		frame.setLocationRelativeTo(null);
 		frame.setLayout(new BorderLayout());
 		//frame.setBackground(Color.BLACK);
@@ -188,7 +189,8 @@ public class CEVue {
     	
     	for (int i=0; i<train.MAX_NB_BANDITS; i++) {
 			try {
-				dataTableau[0][i] = train.getBandits().get(0).getName();
+				dataTableau[0][i] = train.getBandits().get(i).getName();
+				
 	  	    } catch (NullPointerException e) {
 	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
 	  	    	dataTableau[0][i] = String.format("Bandit %d", i);
@@ -196,6 +198,16 @@ public class CEVue {
 			
 		}
     }
+    
+    // TODO
+    void maj(){
+        this.console.repaint();
+        this.vueTrain.repaint();
+        this.vueCommandes.repaint();
+        this.frame.repaint();
+    }
+    
+
 
 	public class VueTrain extends JPanel implements Observer {
 	    /** On maintient une référence vers le modèle. */
@@ -252,7 +264,9 @@ public class CEVue {
 			
 			// affichage de la locomotive
 			//paint(g, currentWagon, x + NB_WAGONS*160, y);
-			paintLoco(g, x, y);
+			paintLoco(g, x, y, currentWagon);
+			x = (int) (largeurWagon * 0.5);
+			currentWagon = currentWagon.getSuivant();
 			
 			/** Pour chaque locomotive... */
 			while (currentWagon != null) {
@@ -264,7 +278,7 @@ public class CEVue {
 				 * coordonnées du coin en haut à gauche.
 				 */
 				
-				paintWagon(g, currentWagon, i*largeurWagon, y);
+				paintWagon(g, currentWagon, x + i*largeurWagon, y);
 				currentWagon = currentWagon.getSuivant();
 				
 				
@@ -290,9 +304,8 @@ public class CEVue {
 	  	      e.printStackTrace();
 	  	    } 
 	    	
-	    	int ytemp;
+	    	//int ytemp;
 	    	
-<<<<<<< HEAD
 	    	dessinerBandits(x, y, w, g);
 	    	dessinerButins(x, y, w, g);
 	    	dessinerMarshall(x, y, w, g);
@@ -343,9 +356,6 @@ public class CEVue {
 	    
 	    private void dessinerBandits(int x, int y, Wagon w, Graphics g) {
 	    	//int ytemp = 85;
-=======
-	    	ytemp = 85;
->>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 	    	
 	    	/*
 	    	if (w == null) {
@@ -374,13 +384,14 @@ public class CEVue {
 		  	      e.printStackTrace();
 		  	    } 
 	    		
-	    		//g.drawString(b.getName(), x + 15, ytemp);
-	    		ytemp += 15;
+	    		g.drawString(b.getName(), x + 38 + 40*id , y + 55 + etage);
+	    		//ytemp += 15;
 	    		
 	    	}
-	    	
-	    	ytemp = 85;
-	    	
+	    }
+	    
+	    private void dessinerButins(int x, int y, Wagon w, Graphics g) {
+	    	int decalage = 0;
 	    	for (Butin b : w.getButins() ) {
 	    		
 	    		int id = b.getValeur() / 130;
@@ -400,7 +411,7 @@ public class CEVue {
 	    			//System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
 		    	      
-		    	      g.drawImage(img, x + 25 + 40*id , y + 10 , 20, 25, this);
+		    	      g.drawImage(img, x + 25 + 40*decalage , y + 10 , 20, 25, this);
 		    	      //Pour une image de fond
 		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 		  	    } catch (IOException e) {
@@ -408,30 +419,11 @@ public class CEVue {
 		  	    } 
 	    		
 	    		//g.drawString(b.getName(), x + 15, ytemp);
-	    		ytemp += 15;
+	    		decalage += 1;
 	    		
 	    	}
-	    	
-	    	ytemp = 85;
-	    	
-	    	/*
-	    	if (w == null) {
-	    		System.out.println("ERROR Wagon !");
-	    	}
-	    	
-	    	if (w.getPossesseur() == null) {
-	    		System.out.println("ERROR Possesseur !");
-	    	}
-	    	
-	    	if (w.getPossesseur().getButins() == null) {
-	    		System.out.println("ERROR butins !");
-	    	}
-	    	
-	    	for (Butin b : w.getPossesseur().getButins()) {
-	    		g.drawString(b.getNom(), x + 55, ytemp);
-	    		ytemp += 10;
-	    	}
-	    	*/
+	    }
+	    private void dessinerMarshall(int x, int y, Wagon w, Graphics g) {
 	    	if (w.getMarshall()) {
 	    		try {
 		    	      Image img = ImageIO.read(new File("marshall.jpg"));
@@ -442,21 +434,6 @@ public class CEVue {
 	    	      e.printStackTrace();
 	    	    } 
 	    	}
-	    }
-	    
-	    private void paintLoco(Graphics g, int x, int y) {
-	    	//g.drawRoundRect(x, y + 10, 140, 90, 10, 10);
-	    	
-	    	try {
-	    	      Image img = ImageIO.read(new File("locomotive.jpg"));
-	    	      g.drawImage(img, x, y, largeurWagon, hauteurWagon, this);
-	    	      //Pour une image de fond
-	    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
-    	    } catch (IOException e) {
-    	      e.printStackTrace();
-    	    } 
-	    	
-	    	 
 	    }
 	}
 
@@ -486,7 +463,7 @@ public class CEVue {
 			this.setPreferredSize(dim);
 			this.setBackground(Color.BLACK);
 			
-			JButton boutonAvance = new JButton("LEFT");
+			JButton boutonAvance = new JButton("RIGHT");
 			this.add(boutonAvance);
 			this.boutonsPlannification.add(boutonAvance);
 			
@@ -499,7 +476,7 @@ public class CEVue {
 			
 			boutonDescend.addActionListener(new Descend(train));
 
-			JButton boutonRecule = new JButton("RIGHT");
+			JButton boutonRecule = new JButton("LEFT");
 			this.add(boutonRecule);
 			this.boutonsPlannification.add(boutonRecule);
 
@@ -541,7 +518,7 @@ public class CEVue {
 	    }
 	    
 	    public void majBoutons() {
-	    	if(CEVue.planification){
+	    	if(planification){
 				boutonAction.setEnabled(false);
 				for (JButton b : boutonsPlannification) {
 					b.setEnabled(true);
@@ -559,6 +536,8 @@ public class CEVue {
 	    
 	    abstract class Bouton implements ActionListener {
 		    Train train;
+		    VueCommandes vc;
+		    
 		    //int indiceBandit;
 		     
 		    Bouton(Train train){
@@ -573,31 +552,31 @@ public class CEVue {
 
 		    void banditSuivant() {
 		    	//this.indiceBandit = (this.indiceBandit + 1) % train.MAX_NB_BANDITS;
-		    	CEVue.numBandit = (CEVue.numBandit + 1) % train.MAX_NB_BANDITS;
-		    	CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
+		    	numBandit = (numBandit + 1) % train.MAX_NB_BANDITS;
+		    	banditCourant = train.getBandits().get(numBandit);
 		    }
 		    
 		    void actionSuivante() {
 		    	
-		    	System.out.println("indice bandit avant : " + CEVue.numBandit);
-		    	System.out.println("indice action avant : " + CEVue.numAction);
+		    	System.out.println("indice bandit avant : " + numBandit);
+		    	System.out.println("indice action avant : " + numAction);
 		    	
-		    	if (CEVue.numAction < train.MAX_N_ACTION - 1) {
+		    	if (numAction < train.MAX_N_ACTION - 1) {
 		    		
-		    		CEVue.numAction ++;
+		    		numAction ++;
 		    	}
 		    	else {
 		    		
-		    		CEVue.numAction = 0;
-		    		CEVue.numBandit ++;
+		    		numAction = 0;
+		    		numBandit ++;
 		    		//banditSuivant();
-		    		if (CEVue.numBandit == train.MAX_NB_BANDITS) {
+		    		if (numBandit == train.MAX_NB_BANDITS) {
 		    			
-		    			CEVue.planification = false;
+		    			planification = false;
 		    			majBoutons();
 		    		}
 		    		else {
-		    			CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
+		    			banditCourant = train.getBandits().get(numBandit);
 		    		}
 			    	
 		    		
@@ -618,8 +597,8 @@ public class CEVue {
 		    public void actionPerformed(ActionEvent e) {
 		    	banditCourant.addAction(Action.Braquer);
 		    	console.setText("braquage !");
-		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "$";
-		    	CEVue.tableau.repaint();
+		    	dataTableau[numAction + 1][numBandit] = "$";
+		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
 	    }
@@ -632,9 +611,9 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	CEVue.banditCourant.addAction(Action.Monter);
-		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "A";
-		    	CEVue.tableau.repaint();
+		    	banditCourant.addAction(Action.Monter);
+		    	dataTableau[numAction + 1][numBandit] = "A";
+		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
 	    }
@@ -647,9 +626,9 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	CEVue.banditCourant.addAction(Action.Descendre);
-		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "v";
-		    	CEVue.tableau.repaint();
+		    	banditCourant.addAction(Action.Descendre);
+		    	dataTableau[numAction + 1][numBandit] = "v";
+		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
 	    }
@@ -662,9 +641,9 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	CEVue.banditCourant.addAction(Action.Avance);
-		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "<";
-		    	CEVue.tableau.repaint();
+		    	banditCourant.addAction(Action.Avance);
+		    	dataTableau[numAction + 1][numBandit] = ">";
+		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
 	    }
@@ -677,9 +656,9 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	CEVue.banditCourant.addAction(Action.Recule);
-		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = ">";
-		    	CEVue.tableau.repaint();
+		    	banditCourant.addAction(Action.Recule);
+		    	dataTableau[numAction + 1][numBandit] = "<";
+		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
 	    }
@@ -692,9 +671,9 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	CEVue.banditCourant.addAction(Action.Tirer);
-		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "-";
-		    	CEVue.tableau.repaint();
+		    	banditCourant.addAction(Action.Tirer);
+		    	dataTableau[numAction + 1][numBandit] = "-";
+		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
 	    }
@@ -707,29 +686,31 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	//CEVue.banditCourant.executeAction();
+		    	//banditCourant.executeAction();
+		    	assert (train.getMarshall() != null) : "chiotte";
 		    	this.train.excuteTour();
 		    	vueTrain.update();
-		    	CEVue.numAction ++;
+		    	numAction ++;
 		    	
 		    	
 		    	
 		    	
-		    	//System.out.println("indice nouvelle action " + CEVue.numAction);
-		    	if (CEVue.numAction == train.MAX_N_ACTION) {
-		    		CEVue.planification = true;
+		    	//System.out.println("indice nouvelle action " + numAction);
+		    	if (numAction == train.MAX_N_ACTION) {
+		    		planification = true;
 		    		resetTableau();
 		    		System.out.println("tableau reinitialisé");
-		    		CEVue.numAction = 0;
-		    		CEVue.numBandit = 0;
-		    		CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
+		    		numAction = 0;
+		    		numBandit = 0;
+		    		banditCourant = train.getBandits().get(numBandit);
 		    	}
 		    	else {
 		    		for (int i=0; i<3; i++) {
-		    			System.out.println("action effacée" + CEVue.numAction);
-			    		CEVue.dataTableau[CEVue.numAction][i] = " ";
+		    			System.out.println("action effacée" + numAction);
+			    		dataTableau[numAction][i] = " ";
 			    	}
 		    	}
+		    	maj();
 		    	majBoutons();
 		    }
 	    }
@@ -742,8 +723,8 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	CEVue.dataTableau[CEVue.numAction + 1][CEVue.numBandit] = "Z";
-		    	CEVue.tableau.repaint();
+		    	dataTableau[numAction + 1][numBandit] = "Z";
+		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
 	    }

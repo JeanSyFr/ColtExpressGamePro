@@ -84,7 +84,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		}
 		
 		for(int i = 0 ; i < MAX_NB_BANDITS ; i++) {
-			joueurs.add(new Bandit(this, "Player"+(i+1)));
+			joueurs.add(new Bandit(this, "P"+(i+1)));
 		}
 		
 	}
@@ -111,12 +111,12 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		}
 		return out;
 	}
-	/*Wagon getLocomotive() {
+	public Wagon getLocomotive() {
 		return this.locomotive;
 	}
-	Wagon getFirstWagon() {
+	public Wagon getFirstWagon() {
 		return this.firstWagon;
-	}*/
+	}
 	
 	/** 
 	    * This method is used to find check if the wagon.ordre match with the calculated value . 
@@ -177,18 +177,24 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		Random rnd = new Random();
 		double p = rnd.nextDouble();
 		
-		if(true) {
+			//The marshal will check if there is a bandit in the next  
 			if(this.marshall.wagon.suivant!=null &&  !this.marshall.wagon.suivant.bandits.isEmpty()) {
 				this.marshall.addAction(Action.Avance);
+				
 			}else {
-				this.marshall.addAction(Action.Recule);
+				if(p<0.3) {
+					double newP = p/0.3;
+					if(newP>05)
+						this.marshall.addAction(Action.Recule);
+					else
+						this.marshall.addAction(Action.Avance);
+				}
 			}
 			this.marshall.executeAction();
 			if(!this.marshall.wagon.bandits.isEmpty()) {
 				this.marshall.addAction(Action.Tirer);
 				this.marshall.executeAction();
 				System.err.println("Yes marshal has shot !");
-			}
 			
 		}
 		this.notifyObservers();

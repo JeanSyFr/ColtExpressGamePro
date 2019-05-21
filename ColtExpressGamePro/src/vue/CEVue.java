@@ -76,7 +76,7 @@ public class CEVue {
 	
 		/** Définition des deux vues et ajout à la fenêtre. */
 		this.train = train;
-		//this.banditCourant = this.train.getBandit().get(0);
+		//this.banditCourant = this.train.getBandits().get(0);
 		//this.numAction = 0;
 		//this.numBandit = 0;
 		
@@ -94,7 +94,7 @@ public class CEVue {
 		
 		for (int i=0; i<train.MAX_NB_BANDITS; i++) {
 			try {
-				nomBandits[i] = train.getBandit().get(0).getName();
+				nomBandits[i] = train.getBandits().get(0).getName();
 	  	    } catch (NullPointerException e) {
 	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
 				nomBandits[i] = String.format("Bandit %d", i);
@@ -107,7 +107,7 @@ public class CEVue {
 		this.nomBandits = new String[train.MAX_NB_BANDITS];
 		for (int i=0; i<train.MAX_NB_BANDITS; i++) {
 			try {
-				nomBandits[i] = train.getBandit().get(0).getName();
+				nomBandits[i] = train.getBandits().get(0).getName();
 	  	    } catch (NullPointerException e) {
 	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
 				nomBandits[i] = String.format("Bandit %d", i);
@@ -153,7 +153,7 @@ public class CEVue {
      	
         		
 		this.vueTrain.repaint();
-		this.banditCourant = train.getBandit().get(0);
+		this.banditCourant = train.getBandits().get(0);
 
         //this.frame.pack();
 		
@@ -188,7 +188,7 @@ public class CEVue {
     	
     	for (int i=0; i<train.MAX_NB_BANDITS; i++) {
 			try {
-				dataTableau[0][i] = train.getBandit().get(0).getName();
+				dataTableau[0][i] = train.getBandits().get(0).getName();
 	  	    } catch (NullPointerException e) {
 	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
 	  	    	dataTableau[0][i] = String.format("Bandit %d", i);
@@ -302,7 +302,7 @@ public class CEVue {
 	    	
 	    	for (Bandit b : w.getBandits() ) {
 	    		
-	    		int id = train.getBandit().indexOf(b);
+	    		int id = train.getBandits().indexOf(b);
 	    		String nomImage = String.format("bandit%d.jpg", id + 1);
 	    		//System.out.println(id);
 	    		
@@ -511,17 +511,17 @@ public class CEVue {
 		    Bouton(Train train){
 		    	this.train = train;
 				//this.indiceBandit = idBandit;
-				//this.banditCourant = train.getBandit().get(this.indiceBandit);
+				//this.banditCourant = train.getBandits().get(this.indiceBandit);
 		    }
 		
 		    private int indiceBandit() {
-		    	return train.getBandit().indexOf(banditCourant);
+		    	return train.getBandits().indexOf(banditCourant);
 		    }
 
 		    void banditSuivant() {
 		    	//this.indiceBandit = (this.indiceBandit + 1) % train.MAX_NB_BANDITS;
 		    	CEVue.numBandit = (CEVue.numBandit + 1) % train.MAX_NB_BANDITS;
-		    	CEVue.banditCourant = train.getBandit().get(CEVue.numBandit);
+		    	CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
 		    }
 		    
 		    void actionSuivante() {
@@ -544,7 +544,7 @@ public class CEVue {
 		    			majBoutons();
 		    		}
 		    		else {
-		    			CEVue.banditCourant = train.getBandit().get(CEVue.numBandit);
+		    			CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
 		    		}
 			    	
 		    		
@@ -669,7 +669,7 @@ public class CEVue {
 		    		System.out.println("tableau reinitialisé");
 		    		CEVue.numAction = 0;
 		    		CEVue.numBandit = 0;
-		    		CEVue.banditCourant = train.getBandit().get(CEVue.numBandit);
+		    		CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
 		    	}
 		    	else {
 		    		for (int i=0; i<3; i++) {

@@ -312,6 +312,34 @@ public class CEVue {
 	    	
 	    	//ytemp = 85;
 	    	
+<<<<<<< HEAD
+	    	for (Bandit b : w.getBandits() ) {
+	    		
+	    		int id = train.getBandits().indexOf(b);
+	    		String nomImage = String.format("bandit%d.jpg", id + 1);
+	    		//System.out.println(id);
+	    		
+	    		int etage = 0;
+	    		if (!b.getInterieur()) { 
+	    			etage = -128;
+	    		}
+	    		try {
+	    			//System.out.println(nomImage);
+		    	      Image img = ImageIO.read(new File(nomImage));
+		    	      
+		    	      g.drawImage(img, x + 25 + 40*id , y + 64 + etage, 40, 68, this);
+		    	      //Pour une image de fond
+		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+		  	    } catch (IOException e) {
+		  	      e.printStackTrace();
+		  	    } 
+	    		
+	    		//g.drawString(b.getName(), x + 15, ytemp);
+	    		ytemp += 15;
+	    		
+	    	}
+=======
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 	    	
 	    	
 	    	//ytemp = 85;
@@ -552,8 +580,13 @@ public class CEVue {
 
 		    void banditSuivant() {
 		    	//this.indiceBandit = (this.indiceBandit + 1) % train.MAX_NB_BANDITS;
+<<<<<<< HEAD
+		    	CEVue.numBandit = (CEVue.numBandit + 1) % train.MAX_NB_BANDITS;
+		    	CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
+=======
 		    	numBandit = (numBandit + 1) % train.MAX_NB_BANDITS;
 		    	banditCourant = train.getBandits().get(numBandit);
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 		    }
 		    
 		    void actionSuivante() {
@@ -576,7 +609,11 @@ public class CEVue {
 		    			majBoutons();
 		    		}
 		    		else {
+<<<<<<< HEAD
+		    			CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
+=======
 		    			banditCourant = train.getBandits().get(numBandit);
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 		    		}
 			    	
 		    		
@@ -699,9 +736,15 @@ public class CEVue {
 		    		planification = true;
 		    		resetTableau();
 		    		System.out.println("tableau reinitialisé");
+<<<<<<< HEAD
+		    		CEVue.numAction = 0;
+		    		CEVue.numBandit = 0;
+		    		CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
+=======
 		    		numAction = 0;
 		    		numBandit = 0;
 		    		banditCourant = train.getBandits().get(numBandit);
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 		    	}
 		    	else {
 		    		for (int i=0; i<3; i++) {

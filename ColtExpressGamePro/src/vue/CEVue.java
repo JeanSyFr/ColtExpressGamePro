@@ -292,7 +292,60 @@ public class CEVue {
 	    	
 	    	int ytemp;
 	    	
+<<<<<<< HEAD
 	    	ytemp = 85;
+=======
+	    	dessinerBandits(x, y, w, g);
+	    	dessinerButins(x, y, w, g);
+	    	dessinerMarshall(x, y, w, g);
+	    	
+	    	//ytemp = 85;
+	    	
+	    	
+	    	
+	    	//ytemp = 85;
+	    	
+	    	/*
+	    	if (w == null) {
+	    		System.out.println("ERROR Wagon !");
+	    	}
+	    	
+	    	if (w.getPossesseur() == null) {
+	    		System.out.println("ERROR Possesseur !");
+	    	}
+	    	
+	    	if (w.getPossesseur().getButins() == null) {
+	    		System.out.println("ERROR butins !");
+	    	}
+	    	
+	    	for (Butin b : w.getPossesseur().getButins()) {
+	    		g.drawString(b.getNom(), x + 55, ytemp);
+	    		ytemp += 10;
+	    	}
+	    	*/
+	    	
+	    }
+	    
+	    private void paintLoco(Graphics g, int x, int y, Wagon loco) {
+	    	//g.drawRoundRect(x, y + 10, 140, 90, 10, 10);
+	    	
+	    	try {
+	    	      Image img = ImageIO.read(new File("locomotiveModif.jpg"));
+	    	      g.drawImage(img, x, y + (int) (hauteurWagon * 0.02), (int) (largeurWagon * 1.5), (int) (hauteurWagon * 0.98), this);
+	    	      //Pour une image de fond
+	    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+    	    } catch (IOException e) {
+    	      e.printStackTrace();
+    	    } 
+	    	x += (int) (largeurWagon * 0.5);
+	    	dessinerBandits(x, y, loco, g);
+	    	dessinerButins(x, y, loco, g);
+	    	dessinerMarshall(x, y, loco, g);
+	    }
+	    
+	    private void dessinerBandits(int x, int y, Wagon w, Graphics g) {
+	    	//int ytemp = 85;
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 	    	
 	    	/*
 	    	if (w == null) {
@@ -321,8 +374,13 @@ public class CEVue {
 		  	      e.printStackTrace();
 		  	    } 
 	    		
+<<<<<<< HEAD
 	    		//g.drawString(b.getName(), x + 15, ytemp);
 	    		ytemp += 15;
+=======
+	    		g.drawString(b.getName(), x + 38 + 40*id , y + 55 + etage);
+	    		//ytemp += 15;
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 	    		
 	    	}
 	    	
@@ -520,8 +578,13 @@ public class CEVue {
 
 		    void banditSuivant() {
 		    	//this.indiceBandit = (this.indiceBandit + 1) % train.MAX_NB_BANDITS;
+<<<<<<< HEAD
 		    	CEVue.numBandit = (CEVue.numBandit + 1) % train.MAX_NB_BANDITS;
 		    	CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
+=======
+		    	numBandit = (numBandit + 1) % train.MAX_NB_BANDITS;
+		    	banditCourant = train.getBandits().get(numBandit);
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 		    }
 		    
 		    void actionSuivante() {
@@ -544,7 +607,11 @@ public class CEVue {
 		    			majBoutons();
 		    		}
 		    		else {
+<<<<<<< HEAD
 		    			CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
+=======
+		    			banditCourant = train.getBandits().get(numBandit);
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 		    		}
 			    	
 		    		
@@ -654,7 +721,12 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
 		    	//CEVue.banditCourant.executeAction();
+=======
+		    	//banditCourant.executeAction();
+		    	assert (train.getMarshall() != null) : "chiotte";
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 		    	this.train.excuteTour();
 		    	vueTrain.update();
 		    	CEVue.numAction ++;
@@ -667,9 +739,15 @@ public class CEVue {
 		    		CEVue.planification = true;
 		    		resetTableau();
 		    		System.out.println("tableau reinitialisé");
+<<<<<<< HEAD
 		    		CEVue.numAction = 0;
 		    		CEVue.numBandit = 0;
 		    		CEVue.banditCourant = train.getBandits().get(CEVue.numBandit);
+=======
+		    		numAction = 0;
+		    		numBandit = 0;
+		    		banditCourant = train.getBandits().get(numBandit);
+>>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 		    	}
 		    	else {
 		    		for (int i=0; i<3; i++) {

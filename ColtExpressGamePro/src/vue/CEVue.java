@@ -383,7 +383,7 @@ public class CEVue {
 		  	      e.printStackTrace();
 		  	    } 
 	    		
-	    		//g.drawString(b.getName(), x + 15, ytemp);
+	    		g.drawString(b.getName(), x + 25 + 40*id , y + 50 + etage);
 	    		//ytemp += 15;
 	    		
 	    	}
@@ -462,7 +462,7 @@ public class CEVue {
 			this.setPreferredSize(dim);
 			this.setBackground(Color.BLACK);
 			
-			JButton boutonAvance = new JButton("LEFT");
+			JButton boutonAvance = new JButton("RIGHT");
 			this.add(boutonAvance);
 			this.boutonsPlannification.add(boutonAvance);
 			
@@ -475,7 +475,7 @@ public class CEVue {
 			
 			boutonDescend.addActionListener(new Descend(train));
 
-			JButton boutonRecule = new JButton("RIGHT");
+			JButton boutonRecule = new JButton("LEFT");
 			this.add(boutonRecule);
 			this.boutonsPlannification.add(boutonRecule);
 
@@ -641,7 +641,7 @@ public class CEVue {
 		
 		    public void actionPerformed(ActionEvent e) {
 		    	banditCourant.addAction(Action.Avance);
-		    	dataTableau[numAction + 1][numBandit] = "<";
+		    	dataTableau[numAction + 1][numBandit] = ">";
 		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
@@ -656,7 +656,7 @@ public class CEVue {
 		
 		    public void actionPerformed(ActionEvent e) {
 		    	banditCourant.addAction(Action.Recule);
-		    	dataTableau[numAction + 1][numBandit] = ">";
+		    	dataTableau[numAction + 1][numBandit] = "<";
 		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }

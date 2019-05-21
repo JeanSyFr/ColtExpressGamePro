@@ -177,7 +177,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		Random rnd = new Random();
 		double p = rnd.nextDouble();
 		
-		if(p<0.3) {
+		if(true) {
 			if(this.marshall.wagon.suivant!=null &&  !this.marshall.wagon.suivant.bandits.isEmpty()) {
 				this.marshall.addAction(Action.Avance);
 			}else {

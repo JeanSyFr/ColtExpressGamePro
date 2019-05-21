@@ -18,6 +18,9 @@ public abstract class Butin {
 	public int getValeur(){
 		return this.valeur;
 	}
+	public String getNom() {
+		return nom;
+	}
 }
 
 class Bourse extends Butin {

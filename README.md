@@ -8,7 +8,7 @@ Ce projet vous a comme objective  construire une version électronique et un peu
 Le jeu se déroule à bord d’un train, composé d’une locomotive et d’un certain nombre de wagons. Les
 joueurs incarnent des bandits qui ont sauté à bord pour détrousser les passagers. Objectif : récupérer le
 plus de butin possible, chacun pour soi. Il s’agit d’un jeu de programmation, dans lequel on alterne entre
-deux phases :
+deux phases :/n
 Planification : chaque joueur décide secrètement un certain nombres d’actions, que son personnage
 va effectuer dans l’ordre.
 Action : on effectue toutes les actions numéro 1, puis toutes les numéro 2, et ce jusqu’au bout.

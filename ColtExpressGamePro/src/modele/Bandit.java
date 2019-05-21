@@ -10,9 +10,8 @@ import modele.Train.Wagon;
 public class Bandit extends Personne
 {
 	private boolean interieur; //pour savoir s'il est sur le toit ou dans le wagon
-	private boolean joueur = false;
 	private  int bulits = 6;
-	private int bultisCount = 6;
+	//private int bultisCount = 6;
 
 	/*
 	 * Creer le bandit sur le toit de dernier wagon
@@ -20,7 +19,6 @@ public class Bandit extends Personne
 	public Bandit(Train t, String name, boolean j){
 		super(t,name);
 		interieur = false; // au debut il est sur le toit
-		joueur = j;
 	}
 	public Bandit(Train t, String name) {
 		this(t,name,false);

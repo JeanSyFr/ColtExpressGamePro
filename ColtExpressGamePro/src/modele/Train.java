@@ -3,15 +3,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
-import java.util.Arrays;
-import java.util.List;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.After;
 
-import org.junit.Ignore;
-import org.junit.Test;
 
 /*
 
@@ -34,32 +26,28 @@ import org.junit.Test;
  le train c'est une liste doublement chaine 
  Le modelisation a ete choisi comme ca car c'est plus proche de modele reel + conseil de prof
  Un train : un esemble de wagons connectes l'un et l'autre
+ 
+ 
  */
-import java.util.stream.Collectors;
-
 
 public class Train extends Observable implements Iterable<Train.Wagon>
 {
-	/*
-	 * Attributs
-	 */
-	//LE train est responsable de gerer le nbr de bandits + responsable de les creer
 	
 	
 	// **************************************************
     // Constants
     // **************************************************
 	public final int MAX_NB_BANDITS = 3 ;
-	private int NB_BANDITS =0 ;
 	public final int MAX_N_ACTION = 5;
 	public final int MAX_N_BUTIN = 5;
-	public final static int NB_WAGONS_MAX = 5;
+	public final int NB_WAGONS_MAX = 5;
 	private final double NERVOISITE_MARSHALL = 0.3;
 	private final boolean checkInvariants = true;
 	
 	// **************************************************
     // Fields
     // **************************************************
+	private int NB_BANDITS =0 ;
 	protected Wagon locomotive;
 	protected Wagon firstWagon;
 	protected Marshall marshall;
@@ -71,8 +59,10 @@ public class Train extends Observable implements Iterable<Train.Wagon>
     /**
     * Default constructor.
     * We creat a train with NB_WAGONS_MAX (locimotive inclus), with a MAX_NB_BANDITS bandits 
+    * 
     */
 	public Train(){
+		//LE train est responsable de gerer le nbr de bandits + responsable de les creer
 		int n = this.NB_WAGONS_MAX;
 		joueurs = new ArrayList<Bandit>();
 		locomotive = new Wagon(this,0);
@@ -95,6 +85,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			joueurs.add(new Bandit(this, "P"+(i+1)));
 		}
 		
+		if(this.checkInvariants) assert this.checkInvariants() : "checkInvariants failed in initialisation";
 	}
 	
 	
@@ -128,7 +119,9 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	}
 	
 	
-	
+	// **************************************************
+    // Gestion de jeu
+    // **************************************************
 	
 
 	/**
@@ -165,7 +158,10 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 				System.err.println("Yes marshal has shot !");
 			
 		}
+			
+		if(this.checkInvariants) assert this.checkInvariants() : "checkInvariants failed in Train::excuteTour()";
 		this.notifyObservers();
+		
 	}
 	/**
 	 * A useful function for testing it  initialize arbitrary the actions of bandits
@@ -185,7 +181,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	 * Cette fonction permet a un bandit de sauter sur le dernier wagon de train
 	 */
 	public Wagon banditLastWagon(Bandit b) {
-		assert this.NB_BANDITS <= this.MAX_NB_BANDITS ;
+		assert this.NB_BANDITS <= this.MAX_NB_BANDITS : "Number of bandits has depassed the limit "+MAX_NB_BANDITS;
 		Wagon out = this.getLastWagon();
 		out.bandits.add(b);
 		this.NB_BANDITS++;
@@ -199,6 +195,11 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		this.locomotive.marshall = true;
 		return this.locomotive;
 	}
+	
+	// **************************************************
+    // Polymorphisme
+    // **************************************************
+	@Override
 	public String toString() {
 		String out ="";
 		out += this.locomotive;
@@ -209,6 +210,11 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			out += curent;
 		}
 		return out;
+	}
+	@Override
+	public Iterator<Wagon> iterator() {
+		return new TrainIterator(this);
+		
 	}
 	
 
@@ -322,7 +328,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		print(ForEachPredicat.forEach(t, w->t.checkWagonOrdre(w)));
 		
 		/**
-		 * This could be decommented if necessary
+		 * This could be uncommented if necessary
 		 */
 		/*for(Wagon w : t) {
 			print(w.ordre);
@@ -362,9 +368,8 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	
 	
 	// **************************************************
-    // Inner classes
+    // Inner classe 1 - Train.Wagon
     // **************************************************
-
 
 	public class Wagon extends Possesseur
 	{
@@ -372,9 +377,9 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	    // Fields
 	    // **************************************************
 		private Train train;
-		private Wagon suivant;
-		private Wagon precedent;
-		private HashSet<Bandit> bandits;
+		protected Wagon suivant;
+		protected Wagon precedent;
+		protected HashSet<Bandit> bandits;
 		private boolean marshall;
 		private int ordre; //utile pour les test unitaire
 		
@@ -487,7 +492,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		 */
 		protected Bandit anotherBanditThan(Personne p) {
 			for(Bandit b2 : bandits) {
-				if(!b2.equals(p)) return b2;
+				if(!b2.equals(p) && b2.getInterieur()) return b2;
 			}
 			return null;
 		}
@@ -500,16 +505,12 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			out += "		"+super.toString() + "\n";
 			return out;	
 		}
-	}
-
-
-
-	@Override
-	public Iterator<Wagon> iterator() {
-		return new TrainIterator(this);
 		
 	}
-	
+
+	// **************************************************
+    // Inner class 2 - Train.TrainIterator
+    // **************************************************
 	class TrainIterator implements Iterator<Wagon>{
 		private Wagon current;
 		TrainIterator(Train t){
@@ -520,70 +521,12 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			// TODO Auto-generated method stub
 			return current !=null;
 		}
-
 		@Override
 		public Wagon next() {
 			Wagon w = current;
 			current = current.suivant;
 			return w ;
 		}
-	}
-	
-	class test{
-		
-		
-		
-		Train t;
-		@Before
-		void setUp() {
-			t = new Train();
-		}
-		
-		@Test
-		void testVariants() {
-			assert t.checkInvariants() : "Test of variants failed";
-		}
-		@Test
-		void testInitialPlace() {
-			assert ForEachPredicat.forEach(t.getBandits(), b -> t.getLastWagon().bandits.contains(b)) : "The initial place of bandits is flase";
-		}
-		@Test
-		void testDLL() {
-			boolean out;
-			out = t.locomotive.precedent ==null;
-			out &= t.locomotive.suivant.precedent == t.locomotive;
-			out &= t.getLastWagon().suivant ==null;
-			out &= t.getLastWagon() == t.getLastWagon().precedent.suivant;
-			
-			assert ForEachPredicat.forEach (
-					t , w -> 
-			{ //implementing the predicat function
-				if(w==t.locomotive || w==t.getLastWagon()) {
-					return true; //beacause we already tested it
-				}else {
-					return w ==w.suivant.precedent && w==w.precedent.suivant;
-				}
-			}	
-					
-					) : "";			
-		}
-		
-		
-		
-		
-		@After
-		void tearDown() {
-			t = null;
-		}
-		
-		public void main(String[] args) {
-			
-		}
-		
-		
-		
-		
-		
 	}
 	
 	

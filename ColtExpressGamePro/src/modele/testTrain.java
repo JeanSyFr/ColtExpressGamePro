@@ -43,6 +43,15 @@ public class testTrain extends Train {
 	}
 	
 	
+	@Test
+	public void testDeroulement() {
+		t.actionsPreDefini();
+		for(int i = 0; i<5; i++) {
+			t.excuteTour();
+			assert t.checkInvariants() : "testDeroulement failed in tour "+i;
+		}
+			
+	}
 	
 	@After
 	public void tearDown() {

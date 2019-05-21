@@ -4,23 +4,41 @@ import java.util.Random;
 
 
 public abstract class Butin {
+	// **************************************************
+    // Fields
+    // **************************************************
 	protected int valeur;
 	protected String nom;
 	protected Train.Wagon wagon;
 	
+	// **************************************************
+    // Constructors
+    // **************************************************
+	/**
+	 * 
+	 * @param wagon the wagon where to place this Butin
+	 */
 	public Butin(Train.Wagon wagon) {
 		this.wagon = wagon;
 		//this.wagon.addButin(this);
 	}
-	public String toString() {
-		return nom+ "("+valeur+")$";
-	}
+	
+	// **************************************************
+    // Getters
+    // **************************************************
 	public int getValeur(){
 		return this.valeur;
 	}
 	public String getNom() {
 		return nom;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return nom+ "("+valeur+")$";
+	}
+	
 }
 
 class Bourse extends Butin {

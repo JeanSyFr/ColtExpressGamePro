@@ -3,56 +3,88 @@ package modele;
 
 import modele.Train.Wagon;
 
-/*
- * Le class qui represente le bandit
- * 
- */
+
 public class Bandit extends Personne
 {
-	private boolean interieur; //pour savoir s'il est sur le toit ou dans le wagon
+	// **************************************************
+    // Fields
+    // **************************************************
+	protected boolean interieur; //pour savoir s'il est sur le toit ou dans le wagon
 	private  int bulits = 6;
-	//private int bultisCount = 6;
 
 	/*
 	 * Creer le bandit sur le toit de dernier wagon
 	 */
-	public Bandit(Train t, String name, boolean j){
-		super(t,name);
-		interieur = false; // au debut il est sur le toit
-	}
+	
+	
+
+	// **************************************************
+    // Constructors
+    // **************************************************
+	/**
+	 * 
+	 * @param t the model
+	 * @param name the bandit name
+	 * 
+	 * @see Personne::Personne(Train, String)
+	 */
 	public Bandit(Train t, String name) {
-		this(t,name,false);
+		super(t,name);
 	}
-
-	@Override
-	public Wagon mettrePersonneBonWagon(Train t, Personne p) {
-		return t.banditLastWagon(this);
-	}
-
-	// getter pour les autres classes
+	
+	// **************************************************
+    // Getters
+    // **************************************************
 	public boolean getInterieur() { 
 		return this.interieur;
 	}
 	public int getBullets() {
 		return this.bulits;
 	}
-	/*public int getMoney() {
-		int out = 0;
-		for()
-	}*/
-	public void addAction(Action a) {
+
+	/**
+	 * @see Personne::mettrePersonneBonWagon(Train, Personne)
+	 * 
+	 * This function will call the responsable function to put this bundit in the last wagon
+	 */
+	@Override
+	public Wagon mettrePersonneBonWagon(Train t, Personne p) {
+		return t.banditLastWagon(this);
+	}
+
+	
+
+	
+	@Override
+	public String toString() {
+		String pos = (this.interieur)? (" a l'interieur"):(" sur le toit") ;
+		return this.name + pos + " avec " +super.toString();
+	}
+	
+	
+	
+
+	// **************************************************
+    // Utilities functions for the game
+    // **************************************************
+	
+	
+	@Override
+	protected void addAction(Action a) {
 		super.addAction(a);
 		if(a==Action.Tirer)	bulits--;
 		super.train.notifyObservers();
 
 	}
-
+	/**
+	 * This function is in charge of execute the right action in the right order
+	 * 
+	 * @see Personne::executeAction()
+	 */
 	@Override
 	public void executeAction() {
-		//si cette action est nulle rien va etre executer
 		Action actionExcute = actions.actionToExecute();
-		if(actionExcute ==(null)) return;
-		//System.out.println("We are doing " + actionExcute);
+		if(actionExcute ==(null)) return; 	//si cette action est nulle rien va etre executer
 		if(bulits>=0 && interieur && actionExcute.equals(Action.Tirer)) {
 			this.tirer();
 			return;
@@ -97,32 +129,13 @@ public class Bandit extends Personne
 		System.out.println(name+ " tried to do "+actionExcute+" bu he couldnt");
 		this.wagon.getTrain().notifyObservers();
 	}
-	public void tirer() {
-		Bandit b2 = wagon.anotherBanditThan(this);
-		if(b2 == null) { 
-			System.out.println(this.name + " has shot no body");
-			return;
-		}	
-		if(!b2.isEmpty()) {
-			Butin out = b2.popButin();
-			System.out.println(name +" has shot "+b2.name+" who droped "+out + "in wagon ");
-			b2.interieur =false;
-			wagon.addButin(out);
-		}
-		else {
-			System.out.println(name +" has shot "+b2.name+" who has nothing to drop");
-		}
-	}
+	
+	
 
-
-	public String toString() {
-		String pos = (this.interieur)? (" a l'interieur"):(" sur le toit") ;
-		return this.name + pos + " avec " +super.toString();
-	}
-
-
-
-	public void braquer() {
+	// **************************************************
+    // Private functions
+    // **************************************************
+	private void braquer() {
 		if(wagon.isEmpty()) return;
 		this.addButin(wagon.popButin());
 	}

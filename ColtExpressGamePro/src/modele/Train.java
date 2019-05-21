@@ -151,11 +151,11 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 				}
 			}
 			this.marshall.executeAction();
-			//If he findes a bandit in his same wagon he will shot 
+			//If he findes a bandit in his same wagon he will shot
+			//The bandit will shot even if the bandits were on the top; he wants to disturb and scary them 
 			if(!this.marshall.wagon.bandits.isEmpty()) {
 				this.marshall.addAction(Action.Tirer);
 				this.marshall.executeAction();
-				System.err.println("Yes marshal has shot !");
 			
 		}
 			

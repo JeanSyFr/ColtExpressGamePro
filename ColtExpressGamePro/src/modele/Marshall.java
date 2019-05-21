@@ -4,16 +4,38 @@ import modele.Train.Wagon;
 
 public class Marshall extends Personne{
 
+	// **************************************************
+    // Constructors
+    // **************************************************
+    /**
+    * Parameterized constructor.
+    * 
+    * @param t the model
+    * 
+    * 
+    * @see Personne:Personne(Train, String)
+    * 
+    * */
 	public Marshall(Train t) {
 		super(t, "Marshall");
 	}
-
+	
+	
+	/**
+	 * @see Personne::mettrePersonneBonWagon(Train, Personne)
+	 * 
+	 * This function will call the responsable function to put this bundit in the last wagon
+	 */
 	@Override
-	Wagon mettrePersonneBonWagon(Train t, Personne p) {
+	protected Wagon mettrePersonneBonWagon(Train t, Personne p) {
 		return t.marshaLocomotive(this);
 
 	}
-	
+	/**
+	 * This function is in charge of execute the right action in the right order
+	 * 
+	 *  @see Personne::executeAction()
+	 */
 	@Override
 	public void executeAction() {
 		//si cette action est nulle rien va etre executer
@@ -40,25 +62,6 @@ public class Marshall extends Personne{
 		}
 		System.out.println(name+ " will do nothing now!");
 	}
-	
-	
-	public void tirer() {
-		Bandit b2 = wagon.anotherBanditThan(this);
-		if(b2 == null) { 
-			System.out.println(this.name + " has shot no body");
-			return;
-		}	
-		if(!b2.isEmpty()) {
-			Butin out = b2.popButin();
-			System.out.println(name +" has shot "+b2.name+" who droped "+out + "in wagon ");
-			wagon.addButin(out);
-		}
-		else {
-			System.out.println(name +" has shot "+b2.name+" who has nothing to drop");
-		}
-	}
-	
-
 
 
 }

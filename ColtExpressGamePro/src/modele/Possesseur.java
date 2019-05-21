@@ -28,6 +28,11 @@ public abstract class Possesseur {
 		MAX_CAPACITY = maxN;
 	}
 	
+	public HashSet<Butin> getButins() {
+		return butins;
+	}
+	
+	
 	// renvoit true si e butin a bien été ajouté
 	public boolean addButin(Butin b ) {
 		if(n>= this.MAX_CAPACITY) return false;
@@ -36,10 +41,11 @@ public abstract class Possesseur {
 		return true;
 	}
 	
+	
+	// On enlève un buin au hasard
 	public Butin popButin() {
 		if(butins.isEmpty()) return null ;
 		n--;
-		// On enlève un buin au hasard
 		int size = butins.size();
 		int item = new Random().nextInt(size); // In real life, the Random object should be rather more shared than this
 		int i = 0;
@@ -58,9 +64,7 @@ public abstract class Possesseur {
 		return butins.isEmpty();
 	}
 	
-	public HashSet<Butin> getButins() {
-		return butins;
-	}
+	
 	
 	public String toString() {
 		String out = "Butins : ";

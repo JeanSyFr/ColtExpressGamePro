@@ -9,11 +9,14 @@ public abstract class Personne extends Possesseur{
 	protected String name; // nom de bandit
 	protected Train.Wagon wagon; //Le wagon ou il existe
 	protected ActionList actions; //L'esemble des actions qui va prendre chaque tour max = 5
+	protected Train train;
+
 	//private static int tour;
 	
 	
 	public Personne(Train t, String name){
 		super(9);
+		train = t;
 		wagon = mettrePersonneBonWagon(t, this); //method de la classe wagon rdv sa propre description
 		actions = new ActionList(t.getMAX_N_ACTION()); //maximum  actions
 		this.name = name;

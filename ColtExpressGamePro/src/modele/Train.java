@@ -417,46 +417,75 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		public boolean isLoco() {
 			return this==(train.locomotive);
 		}
+		public Train getTrain() {
+			return train;
+		}
 		
 		
 		// **************************************************
-	    // Utulities functions for Personne
+	    // Utilities functions for Personne
+		// The Wagon class is responsible for the deplacement of Personne
+		// @see Bandit::executeAction() Marshal::executeAction()
 	    // **************************************************
 		
+		/**
+		 * If the marshal is inside this wagon he will be deplaced to the next wagon "if" possible
+		 * @return Wagon le wagon ou le Marshal a avance
+		 * 
+		 *  @see Bandit::executeAction() 
+		 *  @see Marshal::executeAction()
+		 */
 		protected Wagon avanceMarshall() {
 			if(!this.marshall) return null;
+			if(this.suivant==null) return this;
 			this.marshall = false;
 			this.suivant.marshall = true;	
 			return this.suivant;
 		}
 		protected Wagon reculeMarshall() {
-			if(!this.marshall) return null;//si le marshall n'est pas ici 
+			if(!this.marshall) return null;
+			if(this.precedent==null) return this;
 			this.marshall = false;
 			this.precedent.marshall = true;	
 			return this.precedent;
 		}
 		protected Wagon avanceBandit(Bandit bandit) {
+			if(this.suivant==null) return this;
 			bandits.remove(bandit);
 			this.suivant.bandits.add(bandit);	
 			return this.suivant;
 		}
 		protected Wagon reculeBandit(Bandit bandit) {
+			if(this.precedent==null) return this;
 			bandits.remove(bandit);
 			this.precedent.bandits.add(bandit);
 			return this.precedent;
 		}
 		
+		// **************************************************
+	    // Utilities functions for ActionList class
+		// The Wagon class is responsible for managing the procedure of shooting, stealing 
+		// @see Bandit::executeAction() Marshal::executeAction()
+	    // **************************************************
 		
 		
-		
-		public Butin stoleButin() {
+		/**
+		 * Get a random butin and remove it from the wagon
+		 * 
+		 * @return Butin a butin chosen in a random way
+		 * 
+		 * @see Possesseur::popButin()
+		 */
+		protected Butin stoleButin() {
 			return super.popButin();
 		}
-		public Bandit anotherBanditThan(Personne p) {
-			/*if(bandits.size()<=1) {
-				System.err.println("Wagon : nobody here");
-				return null;
-			}*/
+		/**
+		 * This function is very important for the Personne class when a Personne want to shoot another bandit ,
+		 * this function will return a Bandit in random way differnt from the one who has shot
+		 * @param p A personne who has taken the action "tirer"
+		 * @return Bandit a bandit that shoulb be affected by the shot if possible, if not we return null
+		 */
+		protected Bandit anotherBanditThan(Personne p) {
 			for(Bandit b2 : bandits) {
 				if(!b2.equals(p)) return b2;
 			}
@@ -469,16 +498,8 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			String out = "Wagon '"+ordre+"'"+ marsh +":\n"+
 					"		Bandits" + bandits + ".\n";
 			out += "		"+super.toString() + "\n";
-			return out;
-			
+			return out;	
 		}
-
-		
-		
-		public Train getTrain() {
-			return train;
-		}
-
 	}
 
 

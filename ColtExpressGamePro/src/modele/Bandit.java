@@ -12,7 +12,8 @@ public class Bandit extends Personne
 	private boolean interieur; //pour savoir s'il est sur le toit ou dans le wagon
 	private boolean joueur = false;
 	private  int bulits = 6;
-	
+	private int bultisCount = 6;
+
 	/*
 	 * Creer le bandit sur le toit de dernier wagon
 	 */
@@ -24,12 +25,12 @@ public class Bandit extends Personne
 	public Bandit(Train t, String name) {
 		this(t,name,false);
 	}
-	
+
 	@Override
 	public Wagon mettrePersonneBonWagon(Train t, Personne p) {
 		return t.banditLastWagon(this);
 	}
-	
+
 	// getter pour les autres classes
 	public boolean getInterieur() { 
 		return this.interieur;
@@ -44,9 +45,10 @@ public class Bandit extends Personne
 	public void addAction(Action a) {
 		super.addAction(a);
 		if(a==Action.Tirer)	bulits--;
+		super.train.notifyObservers();
 
 	}
-		
+
 	@Override
 	public void executeAction() {
 		//si cette action est nulle rien va etre executer
@@ -65,7 +67,7 @@ public class Bandit extends Personne
 				System.out.println(name+" n'a pas braquer il est sur le toit");
 			}
 			return;
-			
+
 		}
 		if(interieur && !wagon.isLoco() && actionExcute.equals(Action.Monter)) {
 			interieur = false;
@@ -73,7 +75,7 @@ public class Bandit extends Personne
 			System.out.println(wagon);
 			return;
 		}
-		
+
 		if( !interieur  && !wagon.isLoco() && actionExcute.equals(Action.Descendre)) {
 			interieur = true;
 			System.out.println(name+" descend a l'interieur");
@@ -113,20 +115,20 @@ public class Bandit extends Personne
 			System.out.println(name +" has shot "+b2.name+" who has nothing to drop");
 		}
 	}
-	
-	
+
+
 	public String toString() {
 		String pos = (this.interieur)? (" a l'interieur"):(" sur le toit") ;
 		return this.name + pos + " avec " +super.toString();
 	}
-	
-	
-	
+
+
+
 	public void braquer() {
 		if(wagon.isEmpty()) return;
 		this.addButin(wagon.popButin());
 	}
-	
-	
+
+
 }
 

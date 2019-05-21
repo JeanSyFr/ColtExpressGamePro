@@ -9,12 +9,12 @@ Le jeu se déroule à bord d’un train, composé d’une locomotive et d’un c
 joueurs incarnent des bandits qui ont sauté à bord pour détrousser les passagers. Objectif : récupérer le
 plus de butin possible, chacun pour soi. Il s’agit d’un jeu de programmation, dans lequel on alterne entre
 deux phases :\
-Planification : chaque joueur décide secrètement un certain nombres d’actions, que son personnage
+**Planification** : chaque joueur décide secrètement un certain nombres d’actions, que son personnage
 va effectuer dans l’ordre.
-Action : on effectue toutes les actions numéro 1, puis toutes les numéro 2, et ce jusqu’au bout.
+**Action** : on effectue toutes les actions numéro 1, puis toutes les numéro 2, et ce jusqu’au bout.
 Les bandits peuvent se trouver dans les wagons ou la locomotive, et pour chacun de ces éléments soit à
 l’intérieur soit sur le toit. Dans cet énoncé, par abus de langage on désignera par « wagon » un élément
-quelconque du train, qui peut être la locomotive. Les actions possibles pour les bandits sont :
+quelconque du train, qui peut être la locomotive. Les actions possibles pour les bandits sont :\
 — Se déplacer d’un wagon en avant ou en arrière, en restant au même étage.
 — Aller à l’intérieur ou grimper sur le toit de leur wagon actuel.
 — Braquer un voyageur pour récupérer du butin (ou simplement récupérer un butin qui a été

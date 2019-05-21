@@ -19,6 +19,7 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -132,10 +133,14 @@ public class CEVue {
 		
      	VueSac vueSac = new VueSac();
 		frame.add(vueSac, BorderLayout.CENTER);
+		
 		vueTrain = new VueTrain();
 		frame.add(vueTrain, BorderLayout.NORTH);
+		
 		vueCommandes = new VueCommandes();
 		frame.add(vueCommandes, BorderLayout.WEST);
+		this.tableau.setBorder(BorderFactory.createEtchedBorder());
+		
 		this.console = new JTextArea(7, 50);
 		this.console.setBackground(Color.YELLOW);
 		//frame.add(console);
@@ -265,7 +270,17 @@ public class CEVue {
 	    		
 	    		//g.drawString(b.getName(), x + 300*id , y + 55);
 	    		//ytemp += 15;
-	    		dessinerButins(x, y, b, g);
+	    		dessinerButins(x + 65 + 300 * id, y + 30, b, g);
+	    		
+	    		int total = 0;
+	    		for (Butin but : b.getButins()) {
+	    			total += but.getValeur();
+	    		}
+	    		
+	    		int fontSize = 20;
+	    	    g.setFont(new Font("TimesRoman", Font.PLAIN, fontSize));
+	    	    g.setColor(Color.RED);
+	    		g.drawString(String.format(" %d $", total), x + 60 + 300*id, y + 20);
 	    		
 	    	}
 	    }
@@ -288,7 +303,7 @@ public class CEVue {
 	    			////System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
 		    	      
-		    	      g.drawImage(img, x + 40*decalage , y + 10 , 20, 25, this);
+		    	      g.drawImage(img, x + 25*decalage , y , 20, 25, this);
 		    	      //Pour une image de fond
 		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 		  	    } catch (IOException e) {

@@ -122,6 +122,7 @@ public class CEVue {
 		this.resetTableau();
 
 
+		this.banditCourant = train.getBandits().get(0);
 		//this.nomBandits = new String[train.MAX_NB_BANDITS];
 		
 		
@@ -161,7 +162,7 @@ public class CEVue {
      	
         		
 		this.vueTrain.repaint();
-		this.banditCourant = train.getBandits().get(0);
+		
 
         //this.frame.pack();
 		
@@ -271,6 +272,7 @@ public class CEVue {
 	    		//g.drawString(b.getName(), x + 300*id , y + 55);
 	    		//ytemp += 15;
 	    		dessinerButins(x + 65 + 300 * id, y + 30, b, g);
+	    		dessinerBalles(x + 65 + 300 * id, y + 70, b, g);
 	    		
 	    		int total = 0;
 	    		for (Butin but : b.getButins()) {
@@ -318,10 +320,10 @@ public class CEVue {
 	    
 	    private void dessinerBalles(int x, int y, Bandit bandit, Graphics g) {
 	    	int decalage = 0;
-	    	for (bandit) {
+	    	for (int i=0; i<bandit.getBullets(); i++) {
 	    		
 	    		
-	    		String nomImage = String.format("butin%d.jpg", id);
+	    		String nomImage = String.format("bullet.png");
 	    		
 	    		try {
 	    			////System.out.println(nomImage);
@@ -578,6 +580,7 @@ public class CEVue {
 	    //private Train train;
 		HashSet<JButton> boutonsPlannification;
 		JButton boutonAction;
+		JButton boutonTire;
 
 	    
 	    /** Constructeur. */
@@ -626,7 +629,7 @@ public class CEVue {
 			
 			boutonMonte.addActionListener(new Monte(train));
 
-			JButton boutonTire = new JButton("PAN!");
+			this.boutonTire = new JButton("PAN!");
 			this.add(boutonTire);
 			this.boutonsPlannification.add(boutonTire);
 			
@@ -664,7 +667,12 @@ public class CEVue {
 					b.setEnabled(false);
 				}
 			}
-				
+	    	
+	    	
+	    	if (banditCourant.getBullets() <= 0) {
+	    		System.out.println("plus de balles !");
+	    		boutonAction.setEnabled(false);;
+	    	}
 	    }
 	    
 	    abstract class Bouton implements ActionListener {
@@ -808,6 +816,7 @@ public class CEVue {
 		    	dataTableau[numAction + 1][numBandit] = "-";
 		    	tableau.repaint();
 		    	this.actionSuivante();
+		    	System.out.println("nb balles : " + banditCourant.getBullets());;
 		    }
 	    }
 		

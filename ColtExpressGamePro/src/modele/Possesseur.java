@@ -7,10 +7,21 @@ import java.util.Random;
 
 public abstract class Possesseur {
 	
+	// **************************************************
+    // Fields
+    // **************************************************
 	private HashSet<Butin> butins;
 	private final int MAX_CAPACITY;
 	private int n ;
 	
+	
+	// **************************************************
+    // Constructors
+    // **************************************************
+	/**
+	 * 
+	 * @param maxN nombre de butin mximum
+	 */
 	Possesseur(int maxN){
 		butins = new HashSet<Butin>();
 		n= 0;
@@ -40,8 +51,6 @@ public abstract class Possesseur {
 		    i++;
 		}
 		butins.remove(enleve);
-		//System.err.println("size is "+size+"    the "+i+" element to remove  " + enleve+"\n");
-
 		return enleve;	
 	}
 	

@@ -17,10 +17,14 @@ public class testTrain extends Train {
 	public void testVariants() {
 		assert t.checkInvariants() : "Test of variants failed";
 	}
+	
+	
 	@Test
 	public void testInitialPlace() {
 		assert ForEachPredicat.forEach(t.getBandits(), b -> t.getLastWagon().bandits.contains(b)) : "The initial place of bandits is flase";
 	}
+	
+
 	@Test
 	public void testDLL() {
 		boolean out;

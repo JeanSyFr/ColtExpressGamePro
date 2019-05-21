@@ -44,7 +44,9 @@ Notre Class train est en effait le model principale de jeu. C'est un list dounle
 
 Il consite d'une DLL de wagon commencent par la *locomotive* suive par *firstwagon* qui son de type Train.Wagon. Il contient aussi un *marshall* et une liste des *joueurs* qui sont les bandirs.
 
-Il contient un ensemble des constantes qui seront utile pour l'initialisations et
+Il contient un ensemble des constantes qui seront utile pour l'initialisations, les invariants et les tests.
+
+Le train c'est notre modele prncipale, pour cela c'est grace a ce classe qu'on peut controler
 
 
 

@@ -19,7 +19,7 @@ public class testTrain extends Train {
 	}
 	@Test
 	public void testInitialPlace() {
-		assert ForEachPredicat.forEach(t.getBandit(), b -> t.getLastWagon().bandits.contains(b)) : "The initial place of bandits is flase";
+		assert ForEachPredicat.forEach(t.getBandits(), b -> t.getLastWagon().bandits.contains(b)) : "The initial place of bandits is flase";
 	}
 	@Test
 	public void testDLL() {

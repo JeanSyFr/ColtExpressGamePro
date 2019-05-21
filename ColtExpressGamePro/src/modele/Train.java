@@ -95,7 +95,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	public Marshall getMarshall() {
 		return this.marshall;
 	}
-	public ArrayList<Bandit> getBandit() {
+	public ArrayList<Bandit> getBandits() {
 		return joueurs;
 	}
 	public int getMAX_N_ACTION() {
@@ -118,8 +118,13 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		return this.firstWagon;
 	}*/
 	
-	
+	/** 
+	    * This method is used to find check if the wagon.ordre match with the calculated value . 
+	    * @param w This is the wagon that we want to test
+	    * @return boolean This returns true if the test succeed, false in the other case or if wagom==null
+	    */
 	private boolean checkWagonOrdre(Wagon w) {
+		if(w==null) return false;
 		int o = 0;
 		Wagon current = this.locomotive;
 		while(w!=current && o <this.NB_WAGONS_MAX) {
@@ -130,12 +135,23 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		assert o <this.NB_WAGONS_MAX: "checking the order of wagon that does not exist in the train";
 		return o == w.ordre;		
 	}
-	
-	
-	public boolean checkInvariants() {
-		return ForEachPredicat.forEach(this, w->this.checkWagonOrdre(w));
+	private boolean checkBanditPlacement(Bandit b) {
+		if (b == null) return false;
+		return b.wagon.bandits.contains(b);
+	}
+	private boolean checkButinPlacement(Wagon w) {
+		if (w == null) return false;
+		HashSet<Butin> butins = w.getButins();
+		return ForEachPredicat.forEach(butins, b ->b.wagon==w);
 	}
 	
+	
+	protected boolean checkInvariants() {
+		return ForEachPredicat.forEach(this, w->this.checkWagonOrdre(w)) && 
+				ForEachPredicat.forEach(this.joueurs, b -> this.checkBanditPlacement(b)) &&
+				ForEachPredicat.forEach(this, w -> this.checkButinPlacement(w));
+				
+	}
 	
 	private boolean banditsPalce() {
 		return ForEachPredicat.forEach
@@ -391,26 +407,13 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			return out;
 			
 		}
-<<<<<<< HEAD
 
-		public Wagon getSuivant() {
-			return this.suivant;
-		}
-
-		public boolean getMarshall() {
-			return this.marshall;
-		}
-=======
->>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
+		
 		
 		public Train getTrain() {
 			return train;
 		}
-<<<<<<< HEAD
 
-=======
-		
->>>>>>> branch 'master' of https://gitlab.u-psud.fr/jean.arbache/coltexpressgamepro.git
 	}
 
 
@@ -452,11 +455,11 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		
 		@Test
 		void testVariants() {
-			 assert t.checkInvariants() : "Test of variants failed";
+			assert t.checkInvariants() : "Test of variants failed";
 		}
 		@Test
 		void testInitialPlace() {
-			assert ForEachPredicat.forEach(t.getBandit(), b -> t.getLastWagon().bandits.contains(b)) : "The initial place of bandits is flase";
+			assert ForEachPredicat.forEach(t.getBandits(), b -> t.getLastWagon().bandits.contains(b)) : "The initial place of bandits is flase";
 		}
 		@Test
 		void testDLL() {

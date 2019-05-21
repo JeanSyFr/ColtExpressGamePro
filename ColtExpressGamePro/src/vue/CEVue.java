@@ -70,7 +70,7 @@ public class CEVue {
 		 *    même dimension. Cette dimension est calculée en fonction du
 		 *    nombre de cases à placer et de la dimension du contenant.
 		 */
-		frame.setSize(1400, 500);
+		frame.setSize(1400, 430);
 		frame.setLocationRelativeTo(null);
 		frame.setLayout(new BorderLayout());
 		//frame.setBackground(Color.BLACK);
@@ -189,7 +189,8 @@ public class CEVue {
     	
     	for (int i=0; i<train.MAX_NB_BANDITS; i++) {
 			try {
-				dataTableau[0][i] = train.getBandits().get(0).getName();
+				dataTableau[0][i] = train.getBandits().get(i).getName();
+				
 	  	    } catch (NullPointerException e) {
 	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
 	  	    	dataTableau[0][i] = String.format("Bandit %d", i);
@@ -275,7 +276,7 @@ public class CEVue {
 				 * ... Appeler une fonction d'affichage auxiliaire.
 				 * On lui fournit les informations de dessin [g] et les
 				 * coordonnées du coin en haut à gauche.
-				 */
+				 */ 
 				
 				paintWagon(g, currentWagon, x + i*largeurWagon, y);
 				currentWagon = currentWagon.getSuivant();

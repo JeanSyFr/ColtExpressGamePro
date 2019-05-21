@@ -276,7 +276,7 @@ public class CEVue {
 				 * ... Appeler une fonction d'affichage auxiliaire.
 				 * On lui fournit les informations de dessin [g] et les
 				 * coordonnées du coin en haut à gauche.
-				 */
+				 */ 
 				
 				paintWagon(g, currentWagon, x + i*largeurWagon, y);
 				currentWagon = currentWagon.getSuivant();

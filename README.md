@@ -34,7 +34,7 @@ se retrancher sur le toit.
 On a reussi a repondre a tous les besoin de projet et de fonctionalite demande.
 Ce jeu peut se jouer a 3 personne, en alternant entre les deux phases principales : *Panification et Action*\
 On est quand meme alle plus loin et ajuote quelques details vu la liberte donne par l'enonce. \
-On surtout essaye d'implementer ce qu'on a fait en cours avec M. Balabonski 
+On a surtout essaye d'implementer ce qu'on a fait en cours avec M. Balabonski (Classe interne, LambdaExpression, Interface fonctionelle, Iterors, Observers, ForEach ...etc) 
 
 ## Architecture de projt
 

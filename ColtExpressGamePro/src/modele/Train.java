@@ -44,6 +44,11 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	 * Attributs
 	 */
 	//LE train est responsable de gerer le nbr de bandits + responsable de les creer
+	
+	
+	// **************************************************
+    // Constants
+    // **************************************************
 	public final int MAX_NB_BANDITS = 3 ;
 	private int NB_BANDITS =0 ;
 	public final int MAX_N_ACTION = 5;
@@ -51,15 +56,22 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	public final static int NB_WAGONS_MAX = 5;
 	private final double NERVOISITE_MARSHALL = 0.3;
 	private final boolean checkInvariants = true;
+	
+	// **************************************************
+    // Fields
+    // **************************************************
 	protected Wagon locomotive;
 	protected Wagon firstWagon;
 	protected Marshall marshall;
 	protected ArrayList<Bandit> joueurs;
-	/*
-	 * Constructeur 
-	 * @param n : int 
-	 * le nombre de wagon dans ce train il y aura au moins un locomotive et un wagon
-	 */
+	
+	// **************************************************
+    // Constructors
+    // **************************************************
+    /**
+    * Default constructor.
+    * We creat a train with NB_WAGONS_MAX (locimotive inclus), with a MAX_NB_BANDITS bandits 
+    */
 	public Train(){
 		int n = this.NB_WAGONS_MAX;
 		joueurs = new ArrayList<Bandit>();
@@ -67,10 +79,6 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		firstWagon = new Wagon(this,1);
 		locomotive.suivant = firstWagon;
 		firstWagon.precedent = locomotive;
-		//n -= 1;
-		/*
-		 * pourquoi tu as mis 
-		 */
 		Wagon current = firstWagon;
 		this.addButins(current);
 		this.addButins(locomotive);
@@ -90,8 +98,9 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	}
 	
 	
-	
-
+	// **************************************************
+    // Getters
+    // **************************************************
 	public Marshall getMarshall() {
 		return this.marshall;
 	}
@@ -104,7 +113,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	public int getMAX_N_BUTIN() {
 		return this.MAX_N_BUTIN;
 	}
-	Wagon getLastWagon() {
+	public Wagon getLastWagon() {
 		Wagon out = this.locomotive;
 		while(out.suivant!=(null)) {
 			out = out.suivant;
@@ -118,6 +127,127 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		return this.firstWagon;
 	}
 	
+	
+	
+	
+
+	/**
+	 * This is a function that could be used publicly
+	 * It represents a round of the game; it will execute the first action to do by all the players
+	 * 									  and then the marshal will take actions using a specific strategy explained in the function
+	 */
+	public void excuteTour() {		
+		for(Bandit b : joueurs) {
+			b.executeAction();
+			this.notifyObservers();
+		}
+		Random rnd = new Random();
+		double p = rnd.nextDouble();
+		
+			//The marshal will check if there is a bandit in the next  
+			if(this.marshall.wagon.suivant!=null &&  !this.marshall.wagon.suivant.bandits.isEmpty()) {
+				this.marshall.addAction(Action.Avance); // If the next wagon contains a bandit he will move forward
+			}else {
+				//in the other case in function of his nervosity he will move forward or backward
+				if(p<NERVOISITE_MARSHALL) {
+					double newP = p/NERVOISITE_MARSHALL; //A new variable to detrmine wither he moves g=forward or backward
+					if(newP>05)
+						this.marshall.addAction(Action.Recule);
+					else
+						this.marshall.addAction(Action.Avance);
+				}
+			}
+			this.marshall.executeAction();
+			//If he findes a bandit in his same wagon he will shot 
+			if(!this.marshall.wagon.bandits.isEmpty()) {
+				this.marshall.addAction(Action.Tirer);
+				this.marshall.executeAction();
+				System.err.println("Yes marshal has shot !");
+			
+		}
+		this.notifyObservers();
+	}
+	/**
+	 * A useful function for testing it  initialize arbitrary the actions of bandits
+	 */
+	public void actionsPreDefini() {
+		for(Bandit b : joueurs) {
+			b.addAction(Action.Descendre);
+			b.addAction(Action.Braquer);
+			b.addAction(Action.Recule);
+			b.addAction(Action.Braquer);
+			b.addAction(Action.Tirer);
+		}
+		
+	}
+
+	/**
+	 * Cette fonction permet a un bandit de sauter sur le dernier wagon de train
+	 */
+	public Wagon banditLastWagon(Bandit b) {
+		assert this.NB_BANDITS <= this.MAX_NB_BANDITS ;
+		Wagon out = this.getLastWagon();
+		out.bandits.add(b);
+		this.NB_BANDITS++;
+		return out;
+	}
+	
+	/**
+	 * Cette fonction permet a un Marshall de monter sur le locomotive de train
+	 */
+	public Wagon marshaLocomotive(Marshall b) {
+		this.locomotive.marshall = true;
+		return this.locomotive;
+	}
+	public String toString() {
+		String out ="";
+		out += this.locomotive;
+		out += this.firstWagon;
+		Wagon curent = this.firstWagon;
+		while(curent.suivant!=(null)) {
+			curent = curent.suivant;
+			out += curent;
+		}
+		return out;
+	}
+	
+
+	// **************************************************
+    // Private methods
+    // **************************************************
+	
+	// ***********************
+    // Gestion des butins
+    // ***********************
+	
+	/**
+	 * Ajouter des butins au hasard entre 1 et 4
+	 * @param w le Wagon dans lequel on va ajouter des butins
+	 * @see Train::Train() c'est utilse uniquement ici
+	 */
+	private void addButins(Wagon w) {
+		if(w==this.locomotive) {
+			Butin b = new Magot(locomotive);
+			w.addButin(b);
+			return;
+		}
+		Random rnd = new Random();
+		int butinNbr = rnd.nextInt(MAX_N_BUTIN );
+		Butin b = new Bourse(w);
+		w.addButin(b);
+		for(int i = 0; i< butinNbr; i++) {
+			int butinType = rnd.nextInt(2);
+			b = (butinType ==0 )?  new Bijou(w) : new Bourse(w);
+			w.addButin(b);
+		}
+		 
+	}
+	
+	
+	
+	// **************************************************
+    // Invariants
+    // **************************************************
 	/** 
 	    * This method is used to find check if the wagon.ordre match with the calculated value . 
 	    * @param w This is the Trian.Wagon that we want to test
@@ -164,118 +294,11 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 				ForEachPredicat.forEach(this, w -> this.checkButinPlacement(w));
 				
 	}
-	/*
-	 * This is a function that could be used publicly
-	 * It represents a round of the game; it will execute the first action to do by all the players
-	 * 									  and then the marshal will take actions using a specific strategy explained in the function
-	 */
-	public void excuteTour() {		
-		for(Bandit b : joueurs) {
-			b.executeAction();
-			this.notifyObservers();
-		}
-		Random rnd = new Random();
-		double p = rnd.nextDouble();
-		
-			//The marshal will check if there is a bandit in the next  
-			if(this.marshall.wagon.suivant!=null &&  !this.marshall.wagon.suivant.bandits.isEmpty()) {
-				this.marshall.addAction(Action.Avance); // If the next wagon contains a bandit he will move forward
-			}else {
-				//in the other
-				if(p<0.3) {
-					double newP = p/0.3;
-					if(newP>05)
-						this.marshall.addAction(Action.Recule);
-					else
-						this.marshall.addAction(Action.Avance);
-				}
-			}
-			assert (this.marshall != null);
-			this.marshall.executeAction();
-			if(!this.marshall.wagon.bandits.isEmpty()) {
-				this.marshall.addAction(Action.Tirer);
-				this.marshall.executeAction();
-				System.err.println("Yes marshal has shot !");
-			
-		}
-		this.notifyObservers();
-	}
-	public void actionsPreDefini() {
-		//joueurs.get(0).addAction(Action.Tirer);
-
-		for(Bandit b : joueurs) {
-			b.addAction(Action.Descendre);
-			b.addAction(Action.Braquer);
-			b.addAction(Action.Recule);
-			b.addAction(Action.Braquer);
-			b.addAction(Action.Tirer);
-			//b.addAction(Action.Descendre);
-			//b.addAction(Action.Braquer);
-			//b.addAction(Action.Tirer);
-			/*b.addAction(Action.Recule);
-			b.addAction(Action.Braquer);
-			b.addAction(Action.Tirer);*/
-		}
-		
-	}
-
-	/*
-	 * Cette fonction permet a un bandit de sauter sur le dernier wagon de train
-	 */
-	public Wagon banditLastWagon(Bandit b) {
-		assert this.NB_BANDITS <= this.MAX_NB_BANDITS ;
-		Wagon out = this.getLastWagon();
-		out.bandits.add(b);
-		this.NB_BANDITS++;
-		return out;
-	}
 	
 	/*
-	 * Cette fonction permet a un Marshall de monter sur le locomotive de train
+	 * TO facilate printing
 	 */
-	public Wagon marshaLocomotive(Marshall b) {
-		this.locomotive.marshall = true;
-		return this.locomotive;
-	}
-	public String toString() {
-		String out ="";
-		out += this.locomotive;
-		out += this.firstWagon;
-		Wagon curent = this.firstWagon;
-		while(curent.suivant!=(null)) {
-			curent = curent.suivant;
-			out += curent;
-		}
-		return out;
-	}
-	
-
-	
-	
-	/*
-	 * Gestion butin
-	 */
-	
-	/*
-	 * Ajouter des butins au hasard entre 1 et 4
-	 */
-	private void addButins(Wagon w) {
-		if(w==this.locomotive) {
-			Butin b = new Magot(locomotive);
-			w.addButin(b);
-			return;
-		}
-		Random rnd = new Random();
-		int butinNbr = rnd.nextInt(MAX_N_BUTIN );
-		Butin b = new Bourse(w);
-		w.addButin(b);
-		for(int i = 0; i< butinNbr; i++) {
-			int butinType = rnd.nextInt(2);
-			b = (butinType ==0 )?  new Bijou(w) : new Bourse(w);
-			w.addButin(b);
-		}
-		 
-	}
+	public static void print(Object o) { System.out.println(o);}
 	
 /*
 ^
@@ -289,7 +312,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 |____________Direction(wagon.suivant, Action.avancer) ______________>
 
  */
-	public static void print(Object o) { System.out.println(o);}
+	
 	
 	
 	public static void main(String args[]) {
@@ -298,7 +321,9 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		//ForEach.forEach(t, w -> print(t.checkWagonOrdre(w)));
 		print(ForEachPredicat.forEach(t, w->t.checkWagonOrdre(w)));
 		
-		
+		/**
+		 * This could be decommented if necessary
+		 */
 		/*for(Wagon w : t) {
 			print(w.ordre);
 		}
@@ -334,7 +359,11 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	
 	
 }
-
+	
+	
+	// **************************************************
+    // Inner classes
+    // **************************************************
 
 
 	public class Wagon extends Possesseur

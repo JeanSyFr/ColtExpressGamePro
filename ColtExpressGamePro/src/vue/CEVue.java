@@ -14,10 +14,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.print.PrinterException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
@@ -36,7 +39,9 @@ public class CEVue {
      */
     private VueTrain vueTrain;
     private VueCommandes vueCommandes;
+    private VueSac vueSac;
     private JTextArea console;
+    //private Clavier clavier;
 
     Bandit banditCourant; // pour les commandes
     int numAction = 0;
@@ -48,7 +53,10 @@ public class CEVue {
 	Object[][] dataTableau;
 	String[] nomBandits;
 	
+	boolean couleur;
 	boolean planification = true;
+	boolean Arbash = false;
+	boolean Gardille = false;
 
     /** Construction d'une vue attachée au modèle, contenu dans la classe Train. */
     public CEVue(Train train) {
@@ -56,21 +64,7 @@ public class CEVue {
     	
 		frame = new JFrame();
 		frame.setTitle("Colt Express");
-		/**
-		 * On précise un mode pour disposer les différents éléments à
-		 * l'intérieur de la fenêtre. Quelques possibilités sont :
-		 *  - BorderLayout (défaut pour la classe JFrame) : chaque élément est
-		 *    disposé au centre ou le long d'un bord.
-		 *  - FlowLayout (défaut pour un JPanel) : les éléments sont disposés
-		 *    l'un à la suite de l'autre, dans l'ordre de leur ajout, les lignes
-		 *    se formant de gauche à droite et de haut en bas. Un élément peut
-		 *    passer à la ligne lorsque l'on redimensionne la fenêtre.
-		 *  - GridLayout : les éléments sont disposés l'un à la suite de
-		 *    l'autre sur une grille avec un nombre de lignes et un nombre de
-		 *    colonnes définis par le programmeur, dont toutes les cases ont la
-		 *    même dimension. Cette dimension est calculée en fonction du
-		 *    nombre de cases à placer et de la dimension du contenant.
-		 */
+
 		frame.setSize(1400, 430);
 		frame.setLocationRelativeTo(null);
 		frame.setLayout(new BorderLayout());
@@ -78,33 +72,10 @@ public class CEVue {
 	
 		/** Définition des deux vues et ajout à la fenêtre. */
 		this.train = train;
+		this.couleur = true;
 		//this.banditCourant = this.train.getBandits().get(0);
 		//this.numAction = 0;
 		//this.numBandit = 0;
-		
-		/*
-		this.tableau = new JTable();
-		dataTableau = new String[5][3];
-		for (int i=0; i<5; i++) {
-        	for (int j=0; j<3; j++){
-        		dataTableau[i][j] = "z";
-        	}
-        }
-
-
-		this.nomBandits = new String[train.MAX_NB_BANDITS];
-		
-		for (int i=0; i<train.MAX_NB_BANDITS; i++) {
-			try {
-				nomBandits[i] = train.getBandits().get(0).getName();
-	  	    } catch (NullPointerException e) {
-	  	    	//System.out.println(String.format("Bandit %d n'a pas de nom", i));
-				nomBandits[i] = String.format("Bandit %d", i);
-	  	    } 
-			
-		}
-		
-		*/
 		
 		this.nomBandits = new String[train.MAX_NB_BANDITS];
 		for (int i=0; i<train.MAX_NB_BANDITS; i++) {
@@ -123,16 +94,12 @@ public class CEVue {
 
 
 		this.banditCourant = train.getBandits().get(0);
-		//this.nomBandits = new String[train.MAX_NB_BANDITS];
-		
-		
-		
 
         this.tableau = new JTable(this.dataTableau, this.nomBandits);
      	this.tableau.setAutoResizeMode(this.tableau.AUTO_RESIZE_ALL_COLUMNS);
 		
 		
-     	VueSac vueSac = new VueSac();
+     	vueSac = new VueSac();
 		frame.add(vueSac, BorderLayout.CENTER);
 		
 		vueTrain = new VueTrain();
@@ -146,35 +113,8 @@ public class CEVue {
 		this.console.setBackground(Color.YELLOW);
 		//frame.add(console);
 		this.frame.add(tableau, BorderLayout.EAST);
-		
-        //this.frame.pack();
-        //frame.add(this.tableau, BorderLayout.SOUTH);
-        
-		//JPanel table = new JPanel();
-		//table.add(tableau.getTableHeader(), BorderLayout.NORTH);
-		//table.add(tableau, BorderLayout.CENTER);
-		//table.setPreferredSize(new Dimension(500, 500));
-		//this.frame.add(table);
-		//this.frame.add(comp, index)
-        //this.frame.add(tableau.getTableHeader(), 2);
-        //this.frame.add(tableau);
-        //frame.add(tableau, );
-     	
-        		
-		this.vueTrain.repaint();
-		
 
-        //this.frame.pack();
-		
-		/**
-		 * Remarque : on peut passer à la méthode [add] des paramètres
-		 * supplémentaires indiquant où placer l'élément. Par exemple, si on
-		 * avait conservé la disposition par défaut [BorderLayout], on aurait
-		 * pu écrire le code suivant pour placer la grille à gauche et les
-		 * commandes à droite.
-		 *     frame.add(grille, BorderLayout.WEST);
-		 *     frame.add(commandes, BorderLayout.EAST);
-		 */
+		this.vueTrain.repaint();
 	
 		/**
 		 * Fin de la plomberie :
@@ -182,10 +122,11 @@ public class CEVue {
 		 *  - Indiquer qu'on quitte l'application si la fenêtre est fermée.
 		 *  - Préciser que la fenêtre doit bien apparaître à l'écran.
 		 */
-		//frame.pack();
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		//frame.setBackground(Color.BLACK);
+		
+		
     }
 	
     void resetTableau() {
@@ -200,14 +141,13 @@ public class CEVue {
 				dataTableau[0][i] = train.getBandits().get(i).getName();
 				
 	  	    } catch (NullPointerException e) {
-	  	    	//System.out.println(String.format("Bandit %d n'a pas de nom", i));
+	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
 	  	    	dataTableau[0][i] = String.format("Bandit %d", i);
 	  	    } 
 			
 		}
     }
     
-    // TODO
     void maj(){
         this.console.repaint();
         this.vueTrain.repaint();
@@ -218,14 +158,10 @@ public class CEVue {
     public class VueSac extends JPanel implements Observer {
 
     	public VueSac() {
-			//this.train = train;
+
 			/** On enregistre la vue [this] en tant qu'observateur de [modele]. */
 			train.addObserver(this);
-			/**
-			 * Définition et application d'une taille fixe pour cette zone de
-			 * l'interface, calculée en fonction du nombre de cellules et de la
-			 * taille d'affichage.
-			 */
+
 			Dimension dim = new Dimension(train.MAX_NB_BANDITS * 50 + train.getMAX_N_BUTIN() * 30, 100);
 			this.setPreferredSize(dim);
 			this.setBackground(Color.LIGHT_GRAY);
@@ -244,33 +180,19 @@ public class CEVue {
 		}
 		
 		private void dessinerBandits(int x, int y, Graphics g) {
-	    	//int ytemp = 85;
-	    	
-	    	/*
-	    	if (w == null) {
-	    		//System.out.println("ERROR WAGON");
-	    	}
-	    	*/
 	    	
 	    	for (Bandit b : train.getBandits()) {
 	    		
 	    		int id = train.getBandits().indexOf(b);
-	    		String nomImage = String.format("bandit%d.jpg", id + 1);
-	    		////System.out.println(id);
+	    		String nomImage = String.format("bandit%dbis.png", id + 1);
 	    		
 	    		try {
-	    			////System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
-		    	      
 		    	      g.drawImage(img, x + 300*id , y, 60, 110, this);
-		    	      //Pour une image de fond
-		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 		  	    } catch (IOException e) {
 		  	      e.printStackTrace();
 		  	    } 
 	    		
-	    		//g.drawString(b.getName(), x + 300*id , y + 55);
-	    		//ytemp += 15;
 	    		dessinerButins(x + 65 + 300 * id, y + 30, b, g);
 	    		dessinerBalles(x + 65 + 300 * id, y + 70, b, g);
 	    		
@@ -284,6 +206,34 @@ public class CEVue {
 	    	    g.setColor(Color.RED);
 	    		g.drawString(String.format(" %d $", total), x + 60 + 300*id, y + 20);
 	    		
+	    	}
+	    	
+	    	// easter eggs
+	    	if (Arbash) {
+	    		try {
+		    		String nom = "JeanArbash.jpg";
+		    		
+		    	      Image img = ImageIO.read(new File(nom));
+		    	      g.drawImage(img, x + 300 , y, 60, 110, this);
+		    	      //Pour une image de fond
+		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	    	    } catch (IOException e) {
+	    	      e.printStackTrace();
+	    	    } 
+	    	}
+	    	
+	    	// easter eggs
+	    	if (Gardille) {
+	    		try {
+		    		String nom = "ArnaudGardille.jpg";
+		    		
+		    	      Image img = ImageIO.read(new File(nom));
+		    	      g.drawImage(img, x, y, 60, 110, this);
+		    	      //Pour une image de fond
+		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	    	    } catch (IOException e) {
+	    	      e.printStackTrace();
+	    	    } 
 	    	}
 	    }
 	    
@@ -299,20 +249,15 @@ public class CEVue {
 	    			id = 5;
 	    		}
 	    		
-	    		String nomImage = String.format("butin%d.jpg", id);
+	    		String nomImage = String.format("butin%dbis.png", id);
 	    		
 	    		try {
-	    			////System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
-		    	      
 		    	      g.drawImage(img, x + 25*decalage , y , 20, 25, this);
-		    	      //Pour une image de fond
-		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 		  	    } catch (IOException e) {
 		  	      e.printStackTrace();
 		  	    } 
-	    		
-	    		//g.drawString(b.getName(), x + 15, ytemp);
+
 	    		decalage += 1;
 	    		
 	    	}
@@ -326,17 +271,12 @@ public class CEVue {
 	    		String nomImage = String.format("bullet.png");
 	    		
 	    		try {
-	    			////System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
-		    	      
 		    	      g.drawImage(img, x + 25*decalage , y , 20, 25, this);
-		    	      //Pour une image de fond
-		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 		  	    } catch (IOException e) {
 		  	      e.printStackTrace();
 		  	    } 
-	    		
-	    		//g.drawString(b.getName(), x + 15, ytemp);
+
 	    		decalage += 1;
 	    		
 	    	}
@@ -345,10 +285,8 @@ public class CEVue {
     }
 
 	public class VueTrain extends JPanel implements Observer {
-	    /** On maintient une référence vers le modèle. */
-	    //Train train;
 	    
-	    // dimention d'une position en nombre de pixels 
+	    // dimention d'un wagon en nombre de pixels 
 	    private final static int largeurWagon = 220;
 	    private final static int hauteurWagon = 200;
 	    
@@ -358,15 +296,12 @@ public class CEVue {
 			//this.train = train;
 			/** On enregistre la vue [this] en tant qu'observateur de [modele]. */
 			train.addObserver(this);
-			/**
-			 * Définition et application d'une taille fixe pour cette zone de
-			 * l'interface, calculée en fonction du nombre de cellules et de la
-			 * taille d'affichage.
-			 */
+
 			Dimension dim = new Dimension(this.largeurWagon * train.NB_WAGONS_MAX,
 						      this.hauteurWagon + 100);
 			this.setPreferredSize(dim);
 			this.setBackground(Color.WHITE);
+			
 	    }
 	
 	    /**
@@ -390,6 +325,16 @@ public class CEVue {
 	    public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			
+			Image img;
+			try {
+				img = ImageIO.read(new File("ciel.png"));
+				g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			
+			
 			Train.Wagon currentWagon = train.getLocomotive();
 			
 			final int NB_WAGONS = train.NB_WAGONS_MAX; 
@@ -398,28 +343,22 @@ public class CEVue {
 			int i = 0;
 			
 			// affichage de la locomotive
-			//paint(g, currentWagon, x + NB_WAGONS*160, y);
 			paintLoco(g, x, y, currentWagon);
 			x = (int) (largeurWagon * 0.5);
 			currentWagon = currentWagon.getSuivant();
 			
-			/** Pour chaque locomotive... */
+			/** Pour chaque wagon... */
 			while (currentWagon != null) {
 				i += 1;
-			    //for(int j=1; j<=1; j++) {
+
 				/**
-				 * ... Appeler une fonction d'affichage auxiliaire.
+				 * ... Appel d'une fonction d'affichage auxiliaire.
 				 * On lui fournit les informations de dessin [g] et les
 				 * coordonnées du coin en haut à gauche.
 				 */
 				
 				paintWagon(g, currentWagon, x + i*largeurWagon, y);
 				currentWagon = currentWagon.getSuivant();
-				
-				
-				
-			    
-				//}
 			}
 	    }
 	    /**
@@ -431,58 +370,42 @@ public class CEVue {
 	     */
 	    private void paintWagon(Graphics g, Train.Wagon w, int x, int y) {
 	    	try {
-	    	      Image img = ImageIO.read(new File("wagon.jpg"));
-	    	      g.drawImage(img, x, y, largeurWagon, hauteurWagon, this);
-	    	      //Pour une image de fond
-	    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	    		String nom;
+	    		if (couleur) {
+	    			nom = "wagonCouleur.png";
+	    		} else {
+	    			nom = "wagon.jpg";
+	    		}
+	    		
+	    		Image img = ImageIO.read(new File(nom));
+	    	    g.drawImage(img, x, y, largeurWagon, hauteurWagon, this);
+
 	  	    } catch (IOException e) {
 	  	      e.printStackTrace();
 	  	    } 
 	    	
-	    	//int ytemp;
-	    	
 	    	dessinerBandits(x, y, w, g);
 	    	dessinerButins(x, y, w, g);
 	    	dessinerMarshall(x, y, w, g);
-	    	
-	    	//ytemp = 85;
-	    	
-	    	
-	    	
-	    	//ytemp = 85;
-	    	
-	    	/* 
-	    	if (w == null) {
-	    		//System.out.println("ERROR Wagon !");
-	    	}
-	    	
-	    	if (w.getPossesseur() == null) {
-	    		//System.out.println("ERROR Possesseur !");
-	    	}
-	    	
-	    	if (w.getPossesseur().getButins() == null) {
-	    		//System.out.println("ERROR butins !");
-	    	}
-	    	
-	    	for (Butin b : w.getPossesseur().getButins()) {
-	    		g.drawString(b.getNom(), x + 55, ytemp);
-	    		ytemp += 10;
-	    	}
-	    	*/
-	    	
+
 	    }
 	    
 	    private void paintLoco(Graphics g, int x, int y, Wagon loco) {
-	    	//g.drawRoundRect(x, y + 10, 140, 90, 10, 10);
-	    	
+  	
 	    	try {
-	    	      Image img = ImageIO.read(new File("locomotiveModif.jpg"));
-	    	      g.drawImage(img, x, y + (int) (hauteurWagon * 0.02), (int) (largeurWagon * 1.5), (int) (hauteurWagon * 0.98), this);
-	    	      //Pour une image de fond
-	    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	    		String nom;
+	    		if (couleur) {
+	    			nom = "locomotiveModifCouleur.png";
+	    		} else {
+	    			nom = "locomotiveModif.jpg";
+	    		}
+	    	      Image img = ImageIO.read(new File(nom));
+	    	      g.drawImage(img, x, y + (int) (hauteurWagon * 0.02), 
+	    	    		  (int) (largeurWagon * 1.5), (int) (hauteurWagon * 0.98), this);
     	    } catch (IOException e) {
     	      e.printStackTrace();
     	    } 
+	    	
 	    	x += (int) (largeurWagon * 0.5);
 	    	dessinerBandits(x, y, loco, g);
 	    	dessinerButins(x, y, loco, g);
@@ -490,37 +413,25 @@ public class CEVue {
 	    }
 	    
 	    private void dessinerBandits(int x, int y, Wagon w, Graphics g) {
-	    	//int ytemp = 85;
-	    	
-	    	/*
-	    	if (w == null) {
-	    		//System.out.println("ERROR WAGON");
-	    	}
-	    	*/
-	    	
+
 	    	for (Bandit b : w.getBandits() ) {
 	    		
 	    		int id = train.getBandits().indexOf(b);
-	    		String nomImage = String.format("bandit%d.jpg", id + 1);
-	    		////System.out.println(id);
+	    		String nomImage = String.format("bandit%dbis.png", id + 1);
 	    		
 	    		int etage = 0;
 	    		if (!b.getInterieur()) { 
 	    			etage = -128;
 	    		}
 	    		try {
-	    			////System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
 		    	      
 		    	      g.drawImage(img, x + 25 + 40*id , y + 64 + etage, 40, 68, this);
-		    	      //Pour une image de fond
-		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 		  	    } catch (IOException e) {
 		  	      e.printStackTrace();
 		  	    } 
 	    		
 	    		g.drawString(b.getName(), x + 38 + 40*id , y + 55 + etage);
-	    		//ytemp += 15;
 	    		
 	    	}
 	    }
@@ -537,34 +448,24 @@ public class CEVue {
 	    			id = 5;
 	    		}
 	    		
-	    		String nomImage = String.format("butin%d.jpg", id);
-	    		//System.out.println("valeur ; " + b.getValeur());
-	    		//System.out.println("id ; " + id);
-	    		//System.out.println(nomImage);
+	    		String nomImage = String.format("butin%dbis.png", id);
 	    		
 	    		try {
-	    			////System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
 		    	      
 		    	      g.drawImage(img, x + 25 + 40*decalage , y + 10 , 20, 25, this);
-		    	      //Pour une image de fond
-		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 		  	    } catch (IOException e) {
 		  	      e.printStackTrace();
 		  	    } 
-	    		
-	    		//g.drawString(b.getName(), x + 15, ytemp);
+
 	    		decalage += 1;
-	    		
 	    	}
 	    }
 	    private void dessinerMarshall(int x, int y, Wagon w, Graphics g) {
 	    	if (w.getMarshall()) {
 	    		try {
-		    	      Image img = ImageIO.read(new File("marshall.jpg"));
+		    	      Image img = ImageIO.read(new File("marshallbis.png"));
 		    	      g.drawImage(img, x +150, y + 64, 40, 68, this);
-		    	      //Pour une image de fond
-		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 	    	    } catch (IOException e) {
 	    	      e.printStackTrace();
 	    	    } 
@@ -572,85 +473,104 @@ public class CEVue {
 	    }
 	}
 
-	public class VueCommandes extends JPanel {
-	    /**
-	     * Pour que le bouton puisse transmettre ses ordres, on garde une
-	     * référence au modèle.
-	     */
-	    //private Train train;
+	public class VueCommandes extends JPanel implements KeyListener {
+
 		HashSet<JButton> boutonsPlannification;
 		JButton boutonAction;
 		JButton boutonTire;
+		JButton boutonMonte;
+		JButton boutonDescend;
+		JButton boutonAvance;
+		JButton boutonRecule;
+		JButton boutonDors;
+		JButton boutonBraque;
+		
+		Act Ac;
+		Tire T;
+		Monte M;
+		Descend De;
+		Avance Av;
+		Recule R;
+		Dort Do;
+		Braque B;
+		
+		
+		
 
 	    
 	    /** Constructeur. */
 	    public VueCommandes() {
-			//this.train = train;
-			//this.banditCourant = new Bandit(train, "test"); // a modifier
-			
 			/**
 			 * On crée un nouveau bouton, de classe [JButton], en précisant le
 			 * texte qui doit l'étiqueter.
 			 * Puis on ajoute ce bouton au panneau [this]. 
 			 */
+	    	setFocusable(true);
+	    	
 	    	boutonsPlannification = new HashSet<JButton>();
 	    	
 			Dimension dim = new Dimension(300, 100);
 			this.setPreferredSize(dim);
 			this.setBackground(Color.BLACK);
 			
-			JButton boutonAvance = new JButton("RIGHT");
+			boutonAvance = new JButton("RIGHT");
 			this.add(boutonAvance);
 			this.boutonsPlannification.add(boutonAvance);
 			
 			// classe interne anonyme.
-			boutonAvance.addActionListener(new Avance(train));
+			Av = new Avance(train);
+			boutonAvance.addActionListener(Av);
 
-			JButton boutonDescend = new JButton("DOWN");
+			boutonDescend = new JButton("DOWN");
 			this.add(boutonDescend);
 			this.boutonsPlannification.add(boutonDescend);
-			
-			boutonDescend.addActionListener(new Descend(train));
+			De = new Descend(train);
+			boutonDescend.addActionListener(De);
 
-			JButton boutonRecule = new JButton("LEFT");
+			boutonRecule = new JButton("LEFT");
 			this.add(boutonRecule);
 			this.boutonsPlannification.add(boutonRecule);
 
-			boutonRecule.addActionListener(new Recule(train));
+			R = new Recule(train);
+			boutonRecule.addActionListener(R);
 
 			boutonAction = new JButton("ACTION");
 			this.add(boutonAction);
 
-			boutonAction.addActionListener(new Act(train));
+			Ac = new Act(train);
+			boutonAction.addActionListener(Ac);
 			
-			JButton boutonMonte = new JButton("UP");
+			boutonMonte = new JButton("UP");
 			this.add(boutonMonte);
 			this.boutonsPlannification.add(boutonMonte);
 			
-			boutonMonte.addActionListener(new Monte(train));
+			M = new Monte(train);
+			boutonMonte.addActionListener(M);
 
 			this.boutonTire = new JButton("PAN!");
 			this.add(boutonTire);
 			this.boutonsPlannification.add(boutonTire);
 			
-			boutonTire.addActionListener(new Tire(train));
+			T = new Tire(train);
+			boutonTire.addActionListener(T);
 			
-			JButton boutonBraque = new JButton("$$$"); 
+			boutonBraque = new JButton("$$$"); 
 			this.add(boutonBraque);
 			this.boutonsPlannification.add(boutonBraque);
 			
-			boutonBraque.addActionListener(new Braque(train));
+			B = new Braque(train);
+			boutonBraque.addActionListener(B);
 			
-			JButton boutondort = new JButton("Zzz");
-			this.add(boutondort);
-			this.boutonsPlannification.add(boutondort);
+			boutonDors = new JButton("Zzz");
+			this.add(boutonDors);
+			this.boutonsPlannification.add(boutonDors);
 			
-			boutondort.addActionListener(new Dort(train));
+			Do = new Dort(train);
+			boutonDors.addActionListener(Do);
 			
 			majBoutons();
-			//this.add(tableau.getTableHeader(), BorderLayout.NORTH);
-	        //this.add(tableau, BorderLayout.CENTER);
 		
+			this.addKeyListener(this);
 	    }
 	    
 	    public void majBoutons() {
@@ -671,20 +591,16 @@ public class CEVue {
 	    	
 	    	if (banditCourant.getBullets() <= 0) {
 	    		System.out.println("plus de balles !");
-	    		boutonAction.setEnabled(false);;
+	    		boutonTire.setEnabled(false);;
 	    	}
 	    }
 	    
 	    abstract class Bouton implements ActionListener {
 		    Train train;
 		    VueCommandes vc;
-		    
-		    //int indiceBandit;
 		     
 		    Bouton(Train train){
 		    	this.train = train;
-				//this.indiceBandit = idBandit;
-				//this.banditCourant = train.getBandits().get(this.indiceBandit);
 		    }
 		
 		    private int indiceBandit() {
@@ -692,15 +608,11 @@ public class CEVue {
 		    }
 
 		    void banditSuivant() {
-		    	//this.indiceBandit = (this.indiceBandit + 1) % train.MAX_NB_BANDITS;
 		    	numBandit = (numBandit + 1) % train.MAX_NB_BANDITS;
 		    	banditCourant = train.getBandits().get(numBandit);
 		    }
 		    
-		    void actionSuivante() {
-		    	
-		    	//System.out.println("indice bandit avant : " + numBandit);
-		    	//System.out.println("indice action avant : " + numAction);
+		    public void actionSuivante() {
 		    	
 		    	if (numAction < train.MAX_N_ACTION - 1) {
 		    		
@@ -710,7 +622,7 @@ public class CEVue {
 		    		
 		    		numAction = 0;
 		    		numBandit ++;
-		    		//banditSuivant();
+
 		    		if (numBandit == train.MAX_NB_BANDITS) {
 		    			
 		    			planification = false;
@@ -736,9 +648,13 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
+		    	braque();
+		    }
+		    
+		    private void braque() {
 		    	banditCourant.addAction(Action.Braquer);
 		    	console.setText("braquage !");
-		    	dataTableau[numAction + 1][numBandit] = "$";
+		    	dataTableau[numAction + 1][numBandit] = "Rob";
 		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
@@ -752,8 +668,12 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
+		    	monte();
+		    }
+		    
+		    private void monte() {
 		    	banditCourant.addAction(Action.Monter);
-		    	dataTableau[numAction + 1][numBandit] = "A";
+		    	dataTableau[numAction + 1][numBandit] = "Up";
 		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
@@ -767,8 +687,12 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
+		    	descend();
+		    }
+		    
+		    private void descend() {
 		    	banditCourant.addAction(Action.Descendre);
-		    	dataTableau[numAction + 1][numBandit] = "v";
+		    	dataTableau[numAction + 1][numBandit] = "Down";
 		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
@@ -782,8 +706,12 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
+		    	avance();
+		    }
+		    
+		    private void avance() {
 		    	banditCourant.addAction(Action.Avance);
-		    	dataTableau[numAction + 1][numBandit] = ">";
+		    	dataTableau[numAction + 1][numBandit] = "Right";
 		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
@@ -797,8 +725,12 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
+		    	recule();
+		    }
+		    
+		    private void recule() {
 		    	banditCourant.addAction(Action.Recule);
-		    	dataTableau[numAction + 1][numBandit] = "<";
+		    	dataTableau[numAction + 1][numBandit] = "Left";
 		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
@@ -812,11 +744,16 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
+		    	tirer();
+		    }
+		    
+		    private void tirer() {
 		    	banditCourant.addAction(Action.Tirer);
-		    	dataTableau[numAction + 1][numBandit] = "-";
+		    	dataTableau[numAction + 1][numBandit] = "Shoot";
 		    	tableau.repaint();
 		    	this.actionSuivante();
 		    	System.out.println("nb balles : " + banditCourant.getBullets());;
+		    	majBoutons();
 		    }
 	    }
 		
@@ -828,27 +765,26 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	//banditCourant.executeAction();
-		    	assert (train.getMarshall() != null) : "chiotte";
+		    	act();
+		    }
+		    
+		    private void act() {
+
+		    	assert (train.getMarshall() != null);
 		    	this.train.excuteTour();
 		    	vueTrain.update();
 		    	numAction ++;
 		    	
-		    	
-		    	
-		    	
-		    	////System.out.println("indice nouvelle action " + numAction);
 		    	if (numAction == train.MAX_N_ACTION) {
 		    		planification = true;
 		    		resetTableau();
-		    		//System.out.println("tableau reinitialisé");
+
 		    		numAction = 0;
 		    		numBandit = 0;
 		    		banditCourant = train.getBandits().get(numBandit);
 		    	}
 		    	else {
 		    		for (int i=0; i<3; i++) {
-		    			//System.out.println("action effacée" + numAction);
 			    		dataTableau[numAction][i] = " ";
 			    	}
 		    	}
@@ -865,37 +801,104 @@ public class CEVue {
 		    }
 		
 		    public void actionPerformed(ActionEvent e) {
-		    	dataTableau[numAction + 1][numBandit] = "Z";
+		    	dort();
+		    }
+		    
+		    private void dort() {
+		    	dataTableau[numAction + 1][numBandit] = "Do nothing";
 		    	tableau.repaint();
 		    	this.actionSuivante();
 		    }
 	    }
-	}
 
-	/*
-	public class Console extends JTextArea {
-		 
-		
-		public Console(int x, int y) {
-			 super();
-			 this.setPreferredSize(new Dimension(x, y));
-		}
-
-		public void ecrire(String text) {
+		@Override
+		public void keyTyped(KeyEvent e) {
 			
-			this.removeAll();
-			this.setText(text);
-			this.repaint();
 		}
-		
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode() == KeyEvent.VK_T){
+				if (vueCommandes.boutonTire.isEnabled())
+					vueCommandes.T.tirer();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_DOWN){
+				if (vueCommandes.boutonDescend.isEnabled())
+					vueCommandes.De.descend();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_LEFT){
+				if (vueCommandes.boutonRecule.isEnabled())
+					vueCommandes.R.recule();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_UP){
+				if (vueCommandes.boutonMonte.isEnabled())
+					vueCommandes.M.monte();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == 39){
+				if (vueCommandes.boutonAvance.isEnabled())
+					vueCommandes.Av.avance();
+				System.out.print("avance connard !");
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_R || e.getKeyCode() == KeyEvent.VK_B){
+				if (vueCommandes.boutonBraque.isEnabled())
+					vueCommandes.B.braque();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_N){
+				if (vueCommandes.boutonDors.isEnabled())
+					vueCommandes.Do.dort();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_ENTER){
+				if (vueCommandes.boutonAction.isEnabled())
+					vueCommandes.Ac.act();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_A){
+				Arbash = !Arbash;
+				vueSac.repaint();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_G){
+				Gardille = !Gardille;
+				vueSac.repaint();
+	        }
+			
+			
+			repaint();
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			
+		}
 	}
-	*/
+	
 	public static void main(String[] args) {
 		Train t = new Train();
 		//System.out.println(t.MAX_NB_BANDITS);
 		CEVue affichage = new CEVue(t);
 		
+		/*
+		String nom = "";
+		try {
+			FileInputStream fis = new FileInputStream(nom);
+			TargerDataLine tdl = new TargerDataLine(nom);
+			//BufferedInputStream bis = new BufferedInputStream(fis);
+			AudioInputStream player = new AudioInputStream(fis);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 		
 	}
+	
+	
 
 }

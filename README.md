@@ -32,8 +32,9 @@ se retrancher sur le toit.
 ## Parties de sujets traites
 
 On a reussi a repondre a tous les besoin de projet et de fonctionalite demande.
-Ce jeu peut se jouer a 3 personne, en alternant entre les deux phases principales : *Panification et Action*
-On est quand meme alle plus loin et ajuote quelques details vu la liberte donne par l'enonce. \On surtout essaye d'implementer ce qu'on a fait en cours avec M. Balabonski 
+Ce jeu peut se jouer a 3 personne, en alternant entre les deux phases principales : *Panification et Action*\
+On est quand meme alle plus loin et ajuote quelques details vu la liberte donne par l'enonce. \
+On surtout essaye d'implementer ce qu'on a fait en cours avec M. Balabonski 
 
 ## Architecture de projt
 

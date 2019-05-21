@@ -40,13 +40,21 @@ On a surtout essaye d'implementer ce qu'on a fait en cours avec M. Balabonski (C
 
 ### Train
 
-Notre Class train est en effait le model principale de jeu. C'est un list dounlement chaine **DLL** , *Iterable*  et **Observable**.
+Notre Class train est en effait le model principale de jeu. C'est un list dounlement chaine **DLL** , *Iterable*  et *Observable*.
 
-Il consite d'une DLL de wagon commencent par la *locomotive* suive par *firstwagon* qui son de type Train.Wagon. Il contient aussi un *marshall* et une liste des *joueurs* qui sont les bandirs.
+Il consite d'une DLL de wagon commencent par la *locomotive* suive par *firstwagon* qui son de type Train.Wagon. Il contient aussi un *marshall* et une liste des *joueurs* qui sont les bandirs.\
+Il contient un ensemble des constantes qui seront utile pour l'initialisations, les invariants et les tests.\
+Le train c'est notre modele prncipale, pour cela c'est grace a ce classe qu'on peut controler le jeu. La classe train contient tous ce qu'on a besoin des methodes en visibiite *public* pour qu'on puisse joue avec. Cela sera utile notament pour le *Vue* dans notre Design Patern utilise **MVC**.\
+Rdv dans le codes \
+```java
+    // **************************************************
+    // Gestion de jeu
+    // **************************************************
+```
 
-Il contient un ensemble des constantes qui seront utile pour l'initialisations, les invariants et les tests.
+	
 
-Le train c'est notre modele prncipale, pour cela c'est grace a ce classe qu'on peut controler
+
 
 
 

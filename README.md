@@ -32,4 +32,12 @@ se retrancher sur le toit.
 ## Parties de sujets traites
 
 On a reussi a repondre a tous les besoin de projet et de fonctionalite demande.
-Ce jeu peut se jouer a 3 personne, en alternant entre les deux phases principales : Panification et Action
+Ce jeu peut se jouer a 3 personne, en alternant entre les deux phases principales : **Panification et Action**
+
+## Architecture de projt
+
+### Train
+
+Notre Class train est en effait le model principale de jeu. C'est un list dounlement chaine *DLL* , **Iterable**  et **Observable**.\
+
+Il consite d'une DLL de wagon commencent par la locomotive suive par firstwagon

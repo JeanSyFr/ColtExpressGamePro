@@ -18,7 +18,7 @@ public class Marshall extends Personne{
 	public void executeAction() {
 		//si cette action est nulle rien va etre executer
 		Action actionExcute = actions.actionToExecute();
-		if(actionExcute ==(null)) return;
+		if(actionExcute ==(null)) return; 
 		if(actionExcute.equals(Action.Tirer)) {
 			this.tirer();
 		}

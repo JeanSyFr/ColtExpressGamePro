@@ -190,6 +190,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 						this.marshall.addAction(Action.Avance);
 				}
 			}
+			assert (this.marshall != null);
 			this.marshall.executeAction();
 			if(!this.marshall.wagon.bandits.isEmpty()) {
 				this.marshall.addAction(Action.Tirer);

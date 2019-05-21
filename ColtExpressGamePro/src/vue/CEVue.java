@@ -315,6 +315,30 @@ public class CEVue {
 	    		
 	    	}
 	    }
+	    
+	    private void dessinerBalles(int x, int y, Bandit bandit, Graphics g) {
+	    	int decalage = 0;
+	    	for (bandit) {
+	    		
+	    		
+	    		String nomImage = String.format("butin%d.jpg", id);
+	    		
+	    		try {
+	    			////System.out.println(nomImage);
+		    	      Image img = ImageIO.read(new File(nomImage));
+		    	      
+		    	      g.drawImage(img, x + 25*decalage , y , 20, 25, this);
+		    	      //Pour une image de fond
+		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+		  	    } catch (IOException e) {
+		  	      e.printStackTrace();
+		  	    } 
+	    		
+	    		//g.drawString(b.getName(), x + 15, ytemp);
+	    		decalage += 1;
+	    		
+	    	}
+	    }
     	
     }
 

@@ -179,8 +179,9 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		
 			//The marshal will check if there is a bandit in the next  
 			if(this.marshall.wagon.suivant!=null &&  !this.marshall.wagon.suivant.bandits.isEmpty()) {
-				this.marshall.addAction(Action.Avance);
+				this.marshall.addAction(Action.Avance); // If the next wagon contains a bandit he will move forward
 			}else {
+				//in the other
 				if(p<0.3) {
 					double newP = p/0.3;
 					if(newP>05)

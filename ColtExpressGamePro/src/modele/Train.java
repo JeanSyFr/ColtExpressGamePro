@@ -172,9 +172,11 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	public void excuteTour() {		
 		for(Bandit b : joueurs) {
 			b.executeAction();
+			this.notifyObservers();
 		}
 		Random rnd = new Random();
 		double p = rnd.nextDouble();
+		
 		if(p>0.3) {
 			if(this.marshall.wagon.suivant!=null &&  !this.marshall.wagon.suivant.bandits.isEmpty()) {
 				this.marshall.addAction(Action.Avance);
@@ -187,6 +189,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 				this.marshall.executeAction();
 				System.err.println("Yes marshal has shot !");
 			}
+			
 		}
 		this.notifyObservers();
 	}

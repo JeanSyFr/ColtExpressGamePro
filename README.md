@@ -15,15 +15,16 @@ va effectuer dans l’ordre.
 Les bandits peuvent se trouver dans les wagons ou la locomotive, et pour chacun de ces éléments soit à
 l’intérieur soit sur le toit. Dans cet énoncé, par abus de langage on désignera par « wagon » un élément
 quelconque du train, qui peut être la locomotive. Les actions possibles pour les bandits sont :\
-— Se déplacer d’un wagon en avant ou en arrière, en restant au même étage.
-— Aller à l’intérieur ou grimper sur le toit de leur wagon actuel.
-— Braquer un voyageur pour récupérer du butin (ou simplement récupérer un butin qui a été
+* Se déplacer d’un wagon en avant ou en arrière, en restant au même étage.
+* Aller à l’intérieur ou grimper sur le toit de leur wagon actuel.
+* Braquer un voyageur pour récupérer du butin (ou simplement récupérer un butin qui a été
 abandonné là).
-— Tirer sur un autre bandit proche pour lui faire lâcher son butin.
+* Tirer sur un autre bandit proche pour lui faire lâcher son butin.
 Les butins récupérables à bord du train sont :
-— Des bourses valant entre 0 et 500$, auprès des passagers, à l’intérieur des wagons.
-— Des bijoux valant 500$, auprès des passagers, à l’intérieur des wagons.
-— Un magot valant 1000$, à l’intérieur de la locomotive, sous la garde du Marshall.
+* Des bourses valant entre 0 et 500$, auprès des passagers, à l’intérieur des wagons.
+* Des bijoux valant 500$, auprès des passagers, à l’intérieur des wagons.
+* Un magot valant 1000$, à l’intérieur de la locomotive, sous la garde du Marshall. 
+
 Un Marshall est présent à bord du train et peut se déplacer entre la locomotive et les wagons, en restant
 toujours à l’intérieur. Il tire sur tous les bandits qui se trouvent à la même position que lui et les force à
 se retrancher sur le toit.

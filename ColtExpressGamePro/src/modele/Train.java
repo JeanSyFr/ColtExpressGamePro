@@ -95,7 +95,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	public Marshall getMarshall() {
 		return this.marshall;
 	}
-	public ArrayList<Bandit> getBandit() {
+	public ArrayList<Bandit> getBandits() {
 		return joueurs;
 	}
 	public int getMAX_N_ACTION() {
@@ -118,8 +118,13 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		return this.firstWagon;
 	}
 	
-	
+	/** 
+	    * This method is used to find check if the wagon.ordre match with the calculated value . 
+	    * @param w This is the Trian.Wagon that we want to test
+	    * @return boolean This returns true if the test succeed, false in the other case or if w==null
+	    */
 	private boolean checkWagonOrdre(Wagon w) {
+		if(w==null) return false;
 		int o = 0;
 		Wagon current = this.locomotive;
 		while(w!=current && o <this.NB_WAGONS_MAX) {
@@ -130,32 +135,50 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		assert o <this.NB_WAGONS_MAX: "checking the order of wagon that does not exist in the train";
 		return o == w.ordre;		
 	}
-	
-	
-	public boolean checkInvariants() {
-		return ForEachPredicat.forEach(this, w->this.checkWagonOrdre(w));
+	/** 
+	    * This method is used to find check if the place of the bandit, from his perspective, match with his right place from the perspective of the train. 
+	    * @param b This is the Bandit that we want to test
+	    * @return boolean This returns true if the test succeed, false in the other case or if b==null
+	    */
+	private boolean checkBanditPlacement(Bandit b) {
+		if (b == null) return false;
+		return b.wagon.bandits.contains(b);
 	}
-	
-	
-	private boolean banditsPalce() {
-		return ForEachPredicat.forEach
-		(this.joueurs, b -> 
-		{ 
-			return b.wagon.bandits.contains(b);
-		}
-		);
-		
+	/** 
+	    * This method is used to find check if the place of the butin, from its perspective, match with its right place from the perspective of the train. 
+	    * @param b This is the Butin that we want to test
+	    * @return boolean This returns true if the test succeed, false in the other case or if b==null
+	    */
+	private boolean checkButinPlacement(Wagon w) {
+		if (w == null) return false;
+		HashSet<Butin> butins = w.getButins();
+		return ForEachPredicat.forEach(butins, b ->b.wagon==w);
 	}
-	public void excuteTour() {
-		//this.joueurs.stream().map(x -> x.executeAction()).collect(Collectors.toList());
-		
+	/** 
+	    * This method is used to find check all the possible variants of the model 
+	    * @return boolean This returns true if all the variants are correct, false if one failed
+	    */
+	protected boolean checkInvariants() {
+		return ForEachPredicat.forEach(this, w->this.checkWagonOrdre(w)) && 
+				ForEachPredicat.forEach(this.joueurs, b -> this.checkBanditPlacement(b)) &&
+				ForEachPredicat.forEach(this, w -> this.checkButinPlacement(w));
+				
+	}
+	/*
+	 * This is a function that could be used publicly
+	 * It represents a round of the game; it will execute the first action to do by all the players
+	 * 									  and then the marshal will take actions using a specific strategy explained in the function
+	 */
+	public void excuteTour() {		
 		for(Bandit b : joueurs) {
 			b.executeAction();
+			this.notifyObservers();
 		}
 		Random rnd = new Random();
 		double p = rnd.nextDouble();
-		if(p>0.3) {
-			if(this.marshall.wagon.suivant!=null &&  this.marshall.wagon.suivant.bandits.isEmpty()) {
+		
+		if(p<0.3) {
+			if(this.marshall.wagon.suivant!=null &&  !this.marshall.wagon.suivant.bandits.isEmpty()) {
 				this.marshall.addAction(Action.Avance);
 			}else {
 				this.marshall.addAction(Action.Recule);
@@ -166,6 +189,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 				this.marshall.executeAction();
 				System.err.println("Yes marshal has shot !");
 			}
+			
 		}
 		this.notifyObservers();
 	}
@@ -391,11 +415,13 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			return out;
 			
 		}
+
+		
 		
 		public Train getTrain() {
 			return train;
 		}
-		
+
 	}
 
 
@@ -437,11 +463,11 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		
 		@Test
 		void testVariants() {
-			 assert t.checkInvariants() : "Test of variants failed";
+			assert t.checkInvariants() : "Test of variants failed";
 		}
 		@Test
 		void testInitialPlace() {
-			assert ForEachPredicat.forEach(t.getBandit(), b -> t.getLastWagon().bandits.contains(b)) : "The initial place of bandits is flase";
+			assert ForEachPredicat.forEach(t.getBandits(), b -> t.getLastWagon().bandits.contains(b)) : "The initial place of bandits is flase";
 		}
 		@Test
 		void testDLL() {

@@ -70,7 +70,7 @@ public class Bandit extends Personne
 	
 	
 	@Override
-	protected void addAction(Action a) {
+	public void addAction(Action a) {
 		super.addAction(a);
 		if(a==Action.Tirer)	bulits--;
 		super.train.notifyObservers();

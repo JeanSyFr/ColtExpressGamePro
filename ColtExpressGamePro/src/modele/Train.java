@@ -368,12 +368,26 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 
 	public class Wagon extends Possesseur
 	{
+		// **************************************************
+	    // Fields
+	    // **************************************************
 		private Train train;
-		Wagon suivant;
-		Wagon precedent;
-		HashSet<Bandit> bandits;
+		private Wagon suivant;
+		private Wagon precedent;
+		private HashSet<Bandit> bandits;
 		private boolean marshall;
 		private int ordre; //utile pour les test unitaire
+		
+		// **************************************************
+	    // Constructors
+	    // **************************************************
+		
+		/**
+		    * Parameterized constructor.
+		    * 
+		    * @param t the Train of the Wagon
+		    * @param o l'ordre de wagon de train
+		    */
 		public Wagon(Train t, int o){
 			super(t.getMAX_N_BUTIN());
 			train =t;
@@ -381,18 +395,19 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			ordre = o;
 		}
 		
+		
+		// **************************************************
+	    // Getters
+	    // **************************************************
 		public HashSet<Bandit> getBandits() {
 			return this.bandits;
 		}
-
 		public Wagon getSuivant() {
 			return this.suivant;
 		}
-
 		public boolean getMarshall() {
 			return this.marshall;
 		}
-		
 		public boolean isLastWagon() {
 			return  this.suivant==(null);
 		}
@@ -402,24 +417,30 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 		public boolean isLoco() {
 			return this==(train.locomotive);
 		}
-		public Wagon avanceMarshall() {
+		
+		
+		// **************************************************
+	    // Utulities functions for Personne
+	    // **************************************************
+		
+		protected Wagon avanceMarshall() {
 			if(!this.marshall) return null;
 			this.marshall = false;
 			this.suivant.marshall = true;	
 			return this.suivant;
 		}
-		public Wagon reculeMarshall() {
+		protected Wagon reculeMarshall() {
 			if(!this.marshall) return null;//si le marshall n'est pas ici 
 			this.marshall = false;
 			this.precedent.marshall = true;	
 			return this.precedent;
 		}
-		public Wagon avanceBandit(Bandit bandit) {
+		protected Wagon avanceBandit(Bandit bandit) {
 			bandits.remove(bandit);
 			this.suivant.bandits.add(bandit);	
 			return this.suivant;
 		}
-		public Wagon reculeBandit(Bandit bandit) {
+		protected Wagon reculeBandit(Bandit bandit) {
 			bandits.remove(bandit);
 			this.precedent.bandits.add(bandit);
 			return this.precedent;

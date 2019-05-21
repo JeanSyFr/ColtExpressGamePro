@@ -19,7 +19,7 @@ public abstract class Possesseur {
 	
 	// renvoit true si e butin a bien été ajouté
 	public boolean addButin(Butin b ) {
-		if(n>= this.MAX_CAPACITY) return false;
+		if(n>= this.MAX_CAPACITY) {return false;
 		butins.add(b);
 		n++;
 		return true;

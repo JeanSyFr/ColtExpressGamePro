@@ -13,7 +13,7 @@ public abstract class Personne extends Possesseur{
 	
 	
 	public Personne(Train t, String name){
-		super(t.getMAX_N_BUTIN());
+		super(9);
 		wagon = mettrePersonneBonWagon(t, this); //method de la classe wagon rdv sa propre description
 		actions = new ActionList(t.getMAX_N_ACTION()); //maximum  actions
 		this.name = name;

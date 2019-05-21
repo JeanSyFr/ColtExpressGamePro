@@ -34,6 +34,13 @@ public class Bandit extends Personne
 	public boolean getInterieur() { 
 		return this.interieur;
 	}
+	public int getBullets() {
+		return this.bulits;
+	}
+	/*public int getMoney() {
+		int out = 0;
+		for()
+	}*/
 	public void addAction(Action a) {
 		super.addAction(a);
 		if(a==Action.Tirer)	bulits--;

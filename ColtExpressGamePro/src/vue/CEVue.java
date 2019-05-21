@@ -97,7 +97,7 @@ public class CEVue {
 			try {
 				nomBandits[i] = train.getBandits().get(0).getName();
 	  	    } catch (NullPointerException e) {
-	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
+	  	    	//System.out.println(String.format("Bandit %d n'a pas de nom", i));
 				nomBandits[i] = String.format("Bandit %d", i);
 	  	    } 
 			
@@ -110,7 +110,7 @@ public class CEVue {
 			try {
 				nomBandits[i] = train.getBandits().get(0).getName();
 	  	    } catch (NullPointerException e) {
-	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
+	  	    	//System.out.println(String.format("Bandit %d n'a pas de nom", i));
 				nomBandits[i] = String.format("Bandit %d", i);
 	  	    } 
 			
@@ -130,6 +130,8 @@ public class CEVue {
      	this.tableau.setAutoResizeMode(this.tableau.AUTO_RESIZE_ALL_COLUMNS);
 		
 		
+     	VueSac vueSac = new VueSac();
+		frame.add(vueSac, BorderLayout.CENTER);
 		vueTrain = new VueTrain();
 		frame.add(vueTrain, BorderLayout.NORTH);
 		vueCommandes = new VueCommandes();
@@ -192,7 +194,7 @@ public class CEVue {
 				dataTableau[0][i] = train.getBandits().get(i).getName();
 				
 	  	    } catch (NullPointerException e) {
-	  	    	System.out.println(String.format("Bandit %d n'a pas de nom", i));
+	  	    	//System.out.println(String.format("Bandit %d n'a pas de nom", i));
 	  	    	dataTableau[0][i] = String.format("Bandit %d", i);
 	  	    } 
 			
@@ -207,7 +209,99 @@ public class CEVue {
         this.frame.repaint();
     }
     
+    public class VueSac extends JPanel implements Observer {
 
+    	public VueSac() {
+			//this.train = train;
+			/** On enregistre la vue [this] en tant qu'observateur de [modele]. */
+			train.addObserver(this);
+			/**
+			 * Définition et application d'une taille fixe pour cette zone de
+			 * l'interface, calculée en fonction du nombre de cellules et de la
+			 * taille d'affichage.
+			 */
+			Dimension dim = new Dimension(train.MAX_NB_BANDITS * 50 + train.getMAX_N_BUTIN() * 30, 100);
+			this.setPreferredSize(dim);
+			this.setBackground(Color.LIGHT_GRAY);
+	    }
+    	
+		@Override
+		public void update() {
+			repaint();
+			
+		}
+		
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			
+			dessinerBandits(0, 0, g);
+		}
+		
+		private void dessinerBandits(int x, int y, Graphics g) {
+	    	//int ytemp = 85;
+	    	
+	    	/*
+	    	if (w == null) {
+	    		//System.out.println("ERROR WAGON");
+	    	}
+	    	*/
+	    	
+	    	for (Bandit b : train.getBandits()) {
+	    		
+	    		int id = train.getBandits().indexOf(b);
+	    		String nomImage = String.format("bandit%d.jpg", id + 1);
+	    		////System.out.println(id);
+	    		
+	    		try {
+	    			////System.out.println(nomImage);
+		    	      Image img = ImageIO.read(new File(nomImage));
+		    	      
+		    	      g.drawImage(img, x + 300*id , y, 60, 110, this);
+		    	      //Pour une image de fond
+		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+		  	    } catch (IOException e) {
+		  	      e.printStackTrace();
+		  	    } 
+	    		
+	    		//g.drawString(b.getName(), x + 300*id , y + 55);
+	    		//ytemp += 15;
+	    		dessinerButins(x, y, b, g);
+	    		
+	    	}
+	    }
+	    
+	    private void dessinerButins(int x, int y, Bandit bandit, Graphics g) {
+	    	int decalage = 0;
+	    	for (Butin b : bandit.getButins() ) {
+	    		
+	    		int id = b.getValeur() / 130;
+	    		if (b.getValeur() == 500) {
+	    			id = 4;
+	    		}
+	    		if (b.getValeur() == 1000) {
+	    			id = 5;
+	    		}
+	    		
+	    		String nomImage = String.format("butin%d.jpg", id);
+	    		
+	    		try {
+	    			////System.out.println(nomImage);
+		    	      Image img = ImageIO.read(new File(nomImage));
+		    	      
+		    	      g.drawImage(img, x + 40*decalage , y + 10 , 20, 25, this);
+		    	      //Pour une image de fond
+		    	      //g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+		  	    } catch (IOException e) {
+		  	      e.printStackTrace();
+		  	    } 
+	    		
+	    		//g.drawString(b.getName(), x + 15, ytemp);
+	    		decalage += 1;
+	    		
+	    	}
+	    }
+    	
+    }
 
 	public class VueTrain extends JPanel implements Observer {
 	    /** On maintient une référence vers le modèle. */
@@ -318,15 +412,15 @@ public class CEVue {
 	    	
 	    	/* 
 	    	if (w == null) {
-	    		System.out.println("ERROR Wagon !");
+	    		//System.out.println("ERROR Wagon !");
 	    	}
 	    	
 	    	if (w.getPossesseur() == null) {
-	    		System.out.println("ERROR Possesseur !");
+	    		//System.out.println("ERROR Possesseur !");
 	    	}
 	    	
 	    	if (w.getPossesseur().getButins() == null) {
-	    		System.out.println("ERROR butins !");
+	    		//System.out.println("ERROR butins !");
 	    	}
 	    	
 	    	for (Butin b : w.getPossesseur().getButins()) {
@@ -359,7 +453,7 @@ public class CEVue {
 	    	
 	    	/*
 	    	if (w == null) {
-	    		System.out.println("ERROR WAGON");
+	    		//System.out.println("ERROR WAGON");
 	    	}
 	    	*/
 	    	
@@ -367,14 +461,14 @@ public class CEVue {
 	    		
 	    		int id = train.getBandits().indexOf(b);
 	    		String nomImage = String.format("bandit%d.jpg", id + 1);
-	    		//System.out.println(id);
+	    		////System.out.println(id);
 	    		
 	    		int etage = 0;
 	    		if (!b.getInterieur()) { 
 	    			etage = -128;
 	    		}
 	    		try {
-	    			//System.out.println(nomImage);
+	    			////System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
 		    	      
 		    	      g.drawImage(img, x + 25 + 40*id , y + 64 + etage, 40, 68, this);
@@ -403,12 +497,12 @@ public class CEVue {
 	    		}
 	    		
 	    		String nomImage = String.format("butin%d.jpg", id);
-	    		System.out.println("valeur ; " + b.getValeur());
-	    		System.out.println("id ; " + id);
-	    		System.out.println(nomImage);
+	    		//System.out.println("valeur ; " + b.getValeur());
+	    		//System.out.println("id ; " + id);
+	    		//System.out.println(nomImage);
 	    		
 	    		try {
-	    			//System.out.println(nomImage);
+	    			////System.out.println(nomImage);
 		    	      Image img = ImageIO.read(new File(nomImage));
 		    	      
 		    	      g.drawImage(img, x + 25 + 40*decalage , y + 10 , 20, 25, this);
@@ -558,8 +652,8 @@ public class CEVue {
 		    
 		    void actionSuivante() {
 		    	
-		    	System.out.println("indice bandit avant : " + numBandit);
-		    	System.out.println("indice action avant : " + numAction);
+		    	//System.out.println("indice bandit avant : " + numBandit);
+		    	//System.out.println("indice action avant : " + numAction);
 		    	
 		    	if (numAction < train.MAX_N_ACTION - 1) {
 		    		
@@ -695,18 +789,18 @@ public class CEVue {
 		    	
 		    	
 		    	
-		    	//System.out.println("indice nouvelle action " + numAction);
+		    	////System.out.println("indice nouvelle action " + numAction);
 		    	if (numAction == train.MAX_N_ACTION) {
 		    		planification = true;
 		    		resetTableau();
-		    		System.out.println("tableau reinitialisé");
+		    		//System.out.println("tableau reinitialisé");
 		    		numAction = 0;
 		    		numBandit = 0;
 		    		banditCourant = train.getBandits().get(numBandit);
 		    	}
 		    	else {
 		    		for (int i=0; i<3; i++) {
-		    			System.out.println("action effacée" + numAction);
+		    			//System.out.println("action effacée" + numAction);
 			    		dataTableau[numAction][i] = " ";
 			    	}
 		    	}
@@ -750,7 +844,7 @@ public class CEVue {
 	*/
 	public static void main(String[] args) {
 		Train t = new Train();
-		System.out.println(t.MAX_NB_BANDITS);
+		//System.out.println(t.MAX_NB_BANDITS);
 		CEVue affichage = new CEVue(t);
 		
 		

@@ -35,7 +35,7 @@ public abstract class Possesseur {
 		Butin enleve = null;
 		for(Butin butin : butins) {
 		    if (i == item) {
-		    	enleve = butin; 
+		    	enleve = butin;
 		    }
 		    i++;
 		}

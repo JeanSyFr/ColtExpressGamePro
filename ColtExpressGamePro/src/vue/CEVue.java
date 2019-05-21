@@ -316,7 +316,7 @@ public class CEVue {
 	    	
 	    	//ytemp = 85;
 	    	
-	    	/*
+	    	/* 
 	    	if (w == null) {
 	    		System.out.println("ERROR Wagon !");
 	    	}

@@ -731,7 +731,7 @@ public class CEVue {
 			
 			repaint();
 		}
-
+ 
 		@Override
 		public void keyReleased(KeyEvent e) {
 			

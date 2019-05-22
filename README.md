@@ -66,17 +66,17 @@ Vu que Wagon est une classe interne de Train, notre modele, elle a certain respo
 > *Rdv dans le codes*   dans **Utilities functions for Personne** et ** Utilities functions for ActionList class**\
 ```java
         // **************************************************
-	    // Utilities functions for Personne
-		// The Wagon class is responsible for the deplacement of Personne
-		// @see Bandit::executeAction() Marshal::executeAction()
-	    // **************************************************
+        // Utilities functions for Personne
+        // The Wagon class is responsible for the deplacement of Personne
+        // @see Bandit::executeAction() Marshal::executeAction()
+        // **************************************************
 ```
 ```java
         // **************************************************
-	    // Utilities functions for ActionList class
-		// The Wagon class is responsible for managing the procedure of shooting, stealing 
-		// @see Bandit::executeAction() Marshal::executeAction()
-	    // **************************************************
+        // Utilities functions for ActionList class
+        // The Wagon class is responsible for managing the procedure of shooting, stealing 
+        // @see Bandit::executeAction() Marshal::executeAction()
+        // **************************************************
 ```
 
 

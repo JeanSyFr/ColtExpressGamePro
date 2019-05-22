@@ -114,7 +114,11 @@ Dans la fonction **mettrePersonneBonWagon**  a utilise les notins de polymorphis
 #### Personne.ActionList
 
 L'objective de cette classe interne est de gerer les prises des actions sans mettre trop de code dans les autre classes.\
-ActionList fonction exactement comme la structure de donnee *Queue* (FIFO). L'action a excuter (out) c'est le premier action qu'on a ajoute.
+ActionList fonction exactement comme la structure de donnee *Queue* (FIFO). L'action a excuter (out) c'est le premier action qu'on a ajoute. Cette structure de donne repond exactement a notre besoin.\
+On a essaye d'utiliser la structure de file donnee par java, mais cela n'a pas marche parfaitement.
+
+
+
 
 
 

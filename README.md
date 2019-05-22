@@ -1,13 +1,13 @@
 # ColtExpressGamePro
 
-Ce projet vous a comme objective  construire une version électronique et un peu simplifiée du jeu Colt Express.
+Ce projet vous a comme objectif de construire une version simplifiée du jeu Colt Express.
 
 
 ## Aperçu des règles du jeu
 
 Le jeu se déroule à bord d’un train, composé d’une locomotive et d’un certain nombre de wagons. Les
 joueurs incarnent des bandits qui ont sauté à bord pour détrousser les passagers. Objectif : récupérer le
-plus de butin possible, chacun pour soi. Il s’agit d’un jeu de programmation, dans lequel on alterne entre
+plus de butins possible, chacun pour soi. Il s’agit d’un jeu dans lequel on alterne entre
 deux phases :\
 **Planification** : chaque joueur décide secrètement un certain nombres d’actions, que son personnage
 va effectuer dans l’ordre.
@@ -31,21 +31,21 @@ se retrancher sur le toit.
 
 ## Parties de sujets traites
 
-On a reussi a repondre a tous les besoin de projet et de fonctionalite demande.
-Ce jeu peut se jouer a 3 personne, en alternant entre les deux phases principales : *Panification et Action*\
-On est quand meme alle plus loin et ajuote quelques details vu la liberte donne par l'enonce. \
-On a surtout essaye d'implementer ce qu'on a fait en cours avec [M. Balabonski](https://www.lri.fr/~blsk/POGL/) (Classe interne, LambdaExpression, Interface fonctionelle, Iterors, Observers, ForEach ...etc)
-Chaque classe de notre modele a redefine la fonction toString() qui affiche l'etat detaille de chaque instance. Cela etati tres eficase pour tester le modele avant faire kes junit test et l'affichage.
+On a reussi a implémenter toutes les fonctionalités demandées.
+Ce jeu peut se jouer à 3 personnes, en alternant entre les deux phases principales : *Panification et Action*\
+Nous avons ajouté quelques details vu la liberte donne par l'enonce. \
+On a surtout essaye d'implementer ce que nous avons fait en cours avec [M. Balabonski](https://www.lri.fr/~blsk/POGL/) (Classe interne, LambdaExpression, Interface fonctionelle, Iterors, Observers, ForEach ...etc)
+Chaque classe de notre modele a redéfinit la fonction toString() qui affiche l'etat detaillé de chaque instance. Cela a permit de tester le modele avant faire les tests junit et l'affichage.
 
 ## Architecture de projt
 
 ### Train
 
-Notre Class train est en effait le model principale de jeu. C'est un list dounlement chaine **DLL** , *Iterable*  et *Observable*.
+Notre Class train représente le model principale de jeu. C'est une liste dounlement chainée  **DLL** , *Iterable*  et *Observable*.
 
-Il consite d'une DLL de wagon commencent par la *locomotive* suive par *firstwagon* qui son de type Train.Wagon. Il contient aussi un *marshall* et une liste des *joueurs* qui sont les bandirs.\
-Il contient un ensemble des constantes qui seront utile pour l'initialisations, les invariants et les tests.\
-Le train c'est notre modele prncipale, pour cela c'est grace a ce classe qu'on peut controler le jeu. La classe train contient tous ce qu'on a besoin des methodes en visibiite *public* pour qu'on puisse joue avec. Cela sera utile notament pour le *Vue* dans notre Design Patern utilise **MVC**.\
+Il consite d'une DLL de wagons commencent par la *locomotive* suive par *firstwagon* qui son de type Train.Wagon. Il contient aussi un *marshall* et une liste des *joueurs*, qui sont les bandits.\
+Il contient l'ensemble des constantes qui seront utile pour l'initialisations, les invariants et les tests.\
+Le train est notre modele prncipale. La classe train contient certaines methodes en visibiite *public* pour que l'affichage et le controleur puissent l'utiliser, conformément au Design Patern **MVC**.\
 
 > *Rdv dans le codes*   dans **Gestion de jeu**
 ```java
@@ -56,13 +56,13 @@ Le train c'est notre modele prncipale, pour cela c'est grace a ce classe qu'on p
 
 #### Train.Wagon
 
-Les wagon sont des classe internes de train ce qui permet des accebilites tres utiles aux attributs et aux methodes sans casser l'encapsulation.\
-Cette classe est aussi une sous-classe de classe abstrait *Possesseur*, decrit plus bas, car dans les wagons on trouve les butins. 
-Comme chaque wagon est un element de DLL Train, il a accesibilte au wagon *suivant* et *precedent*.\
-Il est egalemt stocke dans un ensemble '*HashSet*' les pointeurs vers les bandits dans ce wagon. Le choix de HashSet est fait car l'ordre n'a pas d'importance.
-Chaque wagon a un ordre dont il apparatit dans le train est stocke comme attribut, mais il peut etre egalement calculer depuis le train. Cela est tres utile pour les tests; on peut verifier si les deux valeurs correspend.
-On sait que dans notre jeu il y a un *marshal* qui se deplace dans les wagon, dans ce cas soit le marshal est dans ce wagon soit non. Pour cela on a choisit de mettre un *boolean* qui sera = true si le marshal est dans ce wagon.\
-Vu que Wagon est une classe interne de Train, notre modele, elle a certain resposabite dans la gestion de deroulement de jeu. Elle le responsable pinsipale pour le deplacement des personnages e tpour le tirage de feu.
+Wagon est une classe interne de train. Cela permet d'acceder aux attributs et aux methodes sans casser l'encapsulation.\
+Cette classe est aussi une sous-classe de classe abstrait *Possesseur*, decrite plus bas, car dans les wagons on trouve les butins. 
+Comme chaque wagon est un element de la DLL Train, il a accesibilte au wagon *suivant* et *precedent*.\
+Il possède un ensemble '*HashSet*' des pointeurs vers les bandits dans ce wagon. Le choix de HashSet est justifiée car l'ordre n'a pas d'importance.
+Chaque wagon a un ordre d'apparition dans le train comme attribut, mais il peut etre egalement etre calculé depuis le train. Cela est tres utile pour les tests; on peut verifier si les deux valeurs correspondent.
+On sait que dans notre jeu il y a un *marshal* qui se déplace dans les wagons. Soit le marshal est dans ce wagon soit non. Pour cela on a choisit de mettre un *boolean* qui sera = true si le marshal est dans ce wagon.\
+Vu que Wagon est une classe interne de Train, notre modele, elle a une certain responsabilité dans la gestion du deroulement du jeu. Elle est la responsable pinsipale pour le deplacement des personnages et pour les tires.
 
 > *Rdv dans le codes*   dans **Utilities functions for Personne** et **Utilities functions for ActionList class**
 
@@ -85,7 +85,7 @@ Vu que Wagon est une classe interne de Train, notre modele, elle a certain respo
 
 ### ForEach
 
-Cette classe utilise les notions des interface fonction est lambda expression vue en cour avec [M.Balabonski](https://www.lri.fr/~blsk/POGL/LambdaExpressions.java).
+Cette classe utilise les notions d'interface fonctionelles est de lambda expression vue en cour avec [M.Balabonski](https://www.lri.fr/~blsk/POGL/LambdaExpressions.java).
 ```java
 
 
@@ -149,19 +149,18 @@ Cela etait tres utile pour parcourir les wagons, bandits et les butins est reali
 
 C'est une classe de test pour le modèle. Il s'agit bien à la fois d'un test unitaire pour le train et un test d'integralité pour le modèle.
 
-
-
 ### Possesseur
 
-C'est une classe abstrait qui represente les element de notre modele qui peuvent posseder des Butins. Elle a deux sous classe Personne et Train.Wagon.\
-Elle fonction comme la structure de donnee *HashSet* dont le nombre des elements est limite. Ajouter des elememts quand c'est rempli n'a pas d'effet. Enlever des elements se fait par un tirage aleatoire de l'ensemble.\
-les deux fonctions *Possesseur::popButin()* et  *Possesseur::addButin()* sont utilsees pendant l'initialisation dans la calsse *Train* et  Action.Tirer et Action.Braquer dans la classe *Train.Wagon* lors de deroulement de jeu.\
-Au debut pour cette classe on a utilise la structure de donne *Stack* (FILO). Le but estait de faire tomber le dernier butin recuperer par les bandits quand on tire. Cela a ete change a un *HashSet* qui corresspond bien a l'enonce de projet.
+C'est une classe abstraite qui represente les elements de notre modele qui peuvent posseder des Butins. Elle a deux sous-classes Personne et Train.Wagon.\
+Elle fonctionne comme la structure de donnée *HashSet* dont le nombre d'élements est limité. Ajouter des élements quand c'est rempli n'a pas d'effet. Enlever des elements se fait par un tirage aleatoire sur l'ensemble.\
+les deux fonctions *Possesseur::popButin()* et  *Possesseur::addButin()* sont utilsées pendant l'initialisation dans la calsse *Train* et  Action.Tirer et Action.Braquer dans la classe *Train.Wagon* lors du deroulement du jeu.\
+Au debut pour cette classe on a utilise la structure de donne *Stack* (FILO). Le but etait de faire tomber le dernier butin recuperer par les bandits quand on tire. Cela a ete change a un *HashSet* qui corresspond bien a l'enonce du projet.
 
 ### Personne
 
-Une personne c'est un possesseur aussi. Son etat est determine par son *nom*, *wagon* ou il est , l'ensemble des *action* qui peut le prendre de type Personne.ActionList et le modele Train.\
-Dans la fonction **mettrePersonneBonWagon**  a utilise les notins de polymorphisme et l'interpretation dynamique de java vu en cours avec [M. Balabonski](https://www.lri.fr/~blsk/POGL/) pour mettre la personnage en bon endroit dans  les deux differents sous-classe *Bandit* et *Marshal*.
+Une personne est un possesseur aussi. Son etat est determine par son *nom*, le *wagon* où il est , l'ensemble des *actions* qu'il peut prendre sont de type Personne.ActionList et le modele Train.\
+La fonction **mettrePersonneBonWagon**  utilise les notions de polymorphisme et l'interpretation dynamique de java vu en cours avec [M. Balabonski](https://www.lri.fr/~blsk/POGL/) pour mettre la personnage en bon endroit. 
+Cette fonction est implémentée dans les sous-classe *Bandit* et *Marshal*.
 
 ```java
 	//this method will be used in contructor and we will redefine it in each sub-class 
@@ -182,9 +181,9 @@ Dans la fonction **mettrePersonneBonWagon**  a utilise les notins de polymorphis
 
 #### Personne.ActionList
 
-L'objective de cette classe interne est de gerer les prises des actions sans mettre trop de code dans les autre classes.\
-ActionList fonction exactement comme la structure de donnee *Queue* (FIFO). L'action a excuter (out) c'est le premier action qu'on a ajoute. Cette structure de donne repond exactement a notre besoin.\
-On a essaye d'utiliser la structure de file donnee par java, mais cela n'a pas marche parfaitement.
+L'objectif de cette classe interne est de gérer les actions sans mettre trop de code dans les autre classes.\
+ActionList fonctionne exactement comme la structure de donnée *Queue* (FIFO). L'action à executer (out) est la premier action qu'on a ajouté. Cette structure de données repond exactement a notre besoin.\
+On a essayé d'utiliser la structure de file donnee par java, mais cela foctionnait mal.
 
 
 

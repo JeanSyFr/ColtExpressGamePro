@@ -63,7 +63,8 @@ Chaque wagon a un ordre dont il apparatit dans le train est stocke comme attribu
 On sait que dans notre jeu il y a un *marshal* qui se deplace dans les wagon, dans ce cas soit le marshal est dans ce wagon soit non. Pour cela on a choisit de mettre un *boolean* qui sera = true si le marshal est dans ce wagon.\
 Vu que Wagon est une classe interne de Train, notre modele, elle a certain resposabite dans la gestion de deroulement de jeu. Elle le responsable pinsipale pour le deplacement des personnages e tpour le tirage de feu.
 
-> *Rdv dans le codes*   dans **Utilities functions for Personne** et ** Utilities functions for ActionList class**\
+> *Rdv dans le codes*   dans **Utilities functions for Personne** et ** Utilities functions for ActionList class**
+
 ```java
         // **************************************************
         // Utilities functions for Personne

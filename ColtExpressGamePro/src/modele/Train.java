@@ -48,6 +48,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
     // Fields
     // **************************************************
 	private int NB_BANDITS =0 ;
+	private double pM = 0.0;
 	protected Wagon locomotive;
 	protected Wagon firstWagon;
 	protected Marshall marshall;
@@ -143,11 +144,18 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 			}else {
 				//in the other case in function of his nervosity he will move forward or backward
 				if(p<NERVOISITE_MARSHALL) {
-					double newP = p/NERVOISITE_MARSHALL; //A new variable to detrmine wither he moves g=forward or backward
-					if(newP>05)
+					double newP = this.pM + p/NERVOISITE_MARSHALL; //A new variable to detrmine wither he moves g=forward or backward
+					if(newP>05) {
 						this.marshall.addAction(Action.Recule);
-					else
+						this.pM = -0.1;
+					}
+						
+					else {
 						this.marshall.addAction(Action.Avance);
+						this.pM = 0.1;
+					}
+						
+					
 				}
 			}
 			this.marshall.executeAction();

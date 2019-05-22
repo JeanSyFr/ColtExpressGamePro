@@ -22,7 +22,6 @@ import java.lang.Boolean;
  */
 class ForEach<T> {
 	public static <T> void forEach(Iterable<T> c, FProvider<T> f) {
-		Boolean b = new Boolean(true);
 		for(T e: c) f.f(e);
 	}
 	

@@ -30,14 +30,14 @@ public class testTrain extends Train {
 	@Test
 	public void testDLL() {
 		boolean out;
-		out = t.locomotive.precedent == null;
+		out = (t.locomotive.precedent == null);
 		out &= t.locomotive.suivant.precedent == t.locomotive;
 		out &= t.getLastWagon().suivant == null;
 		out &= t.getLastWagon() == t.getLastWagon().precedent.suivant;
 
-		assert ForEachPredicat.forEach(t, w -> { // implementing the predicat function
+		assert ForEachPredicat.forEach(t, w -> { // implementing the predicate function
 			if (w == t.locomotive || w == t.getLastWagon()) {
-				return true; // beacause we already tested it
+				return true; // Because we already tested it
 			} else {
 				return w == w.suivant.precedent && w == w.precedent.suivant;
 			}

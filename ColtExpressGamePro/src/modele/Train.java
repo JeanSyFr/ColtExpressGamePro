@@ -180,7 +180,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	/**
 	 * Cette fonction permet a un bandit de sauter sur le dernier wagon de train
 	 */
-	public Wagon banditLastWagon(Bandit b) {
+	protected Wagon banditLastWagon(Bandit b) {
 		assert this.NB_BANDITS <= this.MAX_NB_BANDITS : "Number of bandits has depassed the limit "+MAX_NB_BANDITS;
 		Wagon out = this.getLastWagon();
 		out.bandits.add(b);
@@ -191,7 +191,7 @@ public class Train extends Observable implements Iterable<Train.Wagon>
 	/**
 	 * Cette fonction permet a un Marshall de monter sur le locomotive de train
 	 */
-	public Wagon marshaLocomotive(Marshall b) {
+	protected Wagon marshaLocomotive(Marshall b) {
 		this.locomotive.marshall = true;
 		return this.locomotive;
 	}

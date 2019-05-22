@@ -1,7 +1,8 @@
-package modele;
+package jouer;
 
 import java.awt.EventQueue;
 
+import modele.Train;
 import vue.CEVue;
 
 

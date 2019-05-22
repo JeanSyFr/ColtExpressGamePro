@@ -82,6 +82,70 @@ Vu que Wagon est une classe interne de Train, notre modele, elle a certain respo
 ```
 
 
+
+### ForEach
+
+Cette classe utilise les notions des interface fonction est lambda expression vue en cour avec [M.Balabonski](https://www.lri.fr/~blsk/POGL/LambdaExpressions.java).
+```java
+
+
+/** Passer une méthode en paramètre. 
+ *  On cherche à définir une méthode [forEach] attendant deux paramètres : 
+ * - une collection d'objets de type [T], implémentant [Iterable<T>] 
+ * - une méthode [void f(T elt)] à appliquer à chaque élément de la collection 
+ * 
+ * 
+ * Comme on ne peut pas passer de méthode en paramètre à une autre méthode, 
+ * on peut à la place utiliser un objet possédant la méthode [f] souhaitée.
+ * 
+ *  Nous définissons ci-dessous une interface fonctionelle [FProvider<T>] qui caractérise les classes fournissant une méthode [f] avec la bonne signature. 
+ *  */
+
+/**
+ * 
+ * @author arbache
+ *
+ * @param <T>
+ */
+class ForEach<T> {
+	public static <T> void forEach(Iterable<T> c, FProvider<T> f) {
+		Boolean b = new Boolean(true);
+		for(T e: c) f.f(e);
+	}
+	
+	interface FProvider <T>{
+		void f (T elt);
+	}
+}
+
+```
+Cela etait tres utile pour parcourir les wagons, bandits et les butins est realiser des tests.\
+> Exemple
+
+```java
+/** 
+	    * This method is used to find check all the possible variants of the model 
+	    * @return boolean This returns true if all the variants are correct, false if one failed
+	    */
+	protected boolean checkInvariants() {
+		return ForEachPredicat.forEach(this, w->this.checkWagonOrdre(w)) && 
+				ForEachPredicat.forEach(this.joueurs, b -> this.checkBanditPlacement(b)) &&
+				ForEachPredicat.forEach(this, w -> this.checkButinPlacement(w));
+				
+	}
+
+```
+
+```java
+@Test
+	public void testInitialPlace() {
+		assert ForEachPredicat.forEach(t.getBandits(), b -> t.getLastWagon().bandits.contains(b)) : "The initial place of bandits is flase";
+	}
+
+```
+
+
+
 ### Possesseur
 
 C'est une classe abstrait qui represente les element de notre modele qui peuvent posseder des Butins. Elle a deux sous classe Personne et Train.Wagon.\
@@ -116,6 +180,8 @@ Dans la fonction **mettrePersonneBonWagon**  a utilise les notins de polymorphis
 L'objective de cette classe interne est de gerer les prises des actions sans mettre trop de code dans les autre classes.\
 ActionList fonction exactement comme la structure de donnee *Queue* (FIFO). L'action a excuter (out) c'est le premier action qu'on a ajoute. Cette structure de donne repond exactement a notre besoin.\
 On a essaye d'utiliser la structure de file donnee par java, mais cela n'a pas marche parfaitement.
+
+
 
 
 

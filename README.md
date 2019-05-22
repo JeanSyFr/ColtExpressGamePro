@@ -145,6 +145,11 @@ Cela etait tres utile pour parcourir les wagons, bandits et les butins est reali
 ```
 
 
+### TrainTest
+
+C'est une classe de test pour le modèle. Il s'agit bien à la fois d'un test unitaire pour le train et un test d'integralité pour le modèle.
+
+
 
 ### Possesseur
 

@@ -485,14 +485,14 @@ public class CEVue {
 		JButton boutonDors;
 		JButton boutonBraque;
 		
-		Act Ac;
-		Tire T;
-		Monte M;
-		Descend De;
-		Avance Av;
-		Recule R;
-		Dort Do;
-		Braque B;
+		SendAction Ac;
+		SendAction T;
+		SendAction M;
+		SendAction De;
+		SendAction Av;
+		SendAction R;
+		SendAction Do;
+		SendAction B;
 		
 		
 		
@@ -518,54 +518,128 @@ public class CEVue {
 			this.boutonsPlannification.add(boutonAvance);
 			
 			// classe interne anonyme.
-			Av = new Avance(train);
+			Av = new SendAction(train) {
+				void execution() {
+					banditCourant.addAction(Action.Avance);
+			    	dataTableau[numAction + 1][numBandit] = "Right";
+			    	tableau.repaint();
+			    	this.actionSuivante();
+				};
+			};
 			boutonAvance.addActionListener(Av);
 
 			boutonDescend = new JButton("DOWN");
 			this.add(boutonDescend);
 			this.boutonsPlannification.add(boutonDescend);
-			De = new Descend(train);
+			De = new SendAction(train) {
+				void execution() {
+					banditCourant.addAction(Action.Descendre);
+			    	dataTableau[numAction + 1][numBandit] = "Down";
+			    	tableau.repaint();
+			    	this.actionSuivante();
+				};
+			};
 			boutonDescend.addActionListener(De);
 
 			boutonRecule = new JButton("LEFT");
 			this.add(boutonRecule);
 			this.boutonsPlannification.add(boutonRecule);
 
-			R = new Recule(train);
+			R = new SendAction(train) {
+				void execution() {
+					banditCourant.addAction(Action.Recule);
+			    	dataTableau[numAction + 1][numBandit] = "Left";
+			    	tableau.repaint();
+			    	this.actionSuivante();
+				};
+			};
 			boutonRecule.addActionListener(R);
 
 			boutonAction = new JButton("ACTION");
 			this.add(boutonAction);
 
-			Ac = new Act(train);
+			Ac = new SendAction(train) {
+				void execution() {
+					assert (train.getMarshall() != null);
+			    	this.train.excuteTour();
+			    	vueTrain.update();
+			    	numAction ++;
+			    	
+			    	if (numAction == train.MAX_N_ACTION) {
+			    		planification = true;
+			    		resetTableau();
+
+			    		numAction = 0;
+			    		numBandit = 0;
+			    		banditCourant = train.getBandits().get(numBandit);
+			    	}
+			    	else {
+			    		for (int i=0; i<3; i++) {
+				    		dataTableau[numAction][i] = " ";
+				    	}
+			    	}
+			    	maj();
+			    	majBoutons();
+				};
+			};
 			boutonAction.addActionListener(Ac);
 			
 			boutonMonte = new JButton("UP");
 			this.add(boutonMonte);
 			this.boutonsPlannification.add(boutonMonte);
 			
-			M = new Monte(train);
+			M = new SendAction(train) {
+				void execution() {
+					banditCourant.addAction(Action.Monter);
+			    	dataTableau[numAction + 1][numBandit] = "Up";
+			    	tableau.repaint();
+			    	this.actionSuivante();
+				};
+			};
 			boutonMonte.addActionListener(M);
 
 			this.boutonTire = new JButton("PAN!");
 			this.add(boutonTire);
 			this.boutonsPlannification.add(boutonTire);
 			
-			T = new Tire(train);
+			T = new SendAction(train) {
+				void execution() {
+					banditCourant.addAction(Action.Tirer);
+			    	dataTableau[numAction + 1][numBandit] = "Shoot";
+			    	tableau.repaint();
+			    	this.actionSuivante();
+			    	System.out.println("nb balles : " + banditCourant.getBullets());;
+			    	majBoutons();
+				};
+			};
 			boutonTire.addActionListener(T);
 			
 			boutonBraque = new JButton("$$$"); 
 			this.add(boutonBraque);
 			this.boutonsPlannification.add(boutonBraque);
 			
-			B = new Braque(train);
+			B = new SendAction(train) {
+				void execution() {
+			    	banditCourant.addAction(Action.Braquer);
+			    	console.setText("braquage !");
+			    	dataTableau[numAction + 1][numBandit] = "Rob";
+			    	tableau.repaint();
+			    	this.actionSuivante();
+				};
+			};
 			boutonBraque.addActionListener(B);
 			
 			boutonDors = new JButton("Zzz");
 			this.add(boutonDors);
 			this.boutonsPlannification.add(boutonDors);
 			
-			Do = new Dort(train);
+			Do = new SendAction(train) {
+					void execution() {
+						dataTableau[numAction + 1][numBandit] = "Do nothing";
+				    	tableau.repaint();
+				    	this.actionSuivante();
+				};
+			};
 			boutonDors.addActionListener(Do);
 			
 			majBoutons();
@@ -595,11 +669,79 @@ public class CEVue {
 	    	}
 	    }
 	    
-	    abstract class Bouton implements ActionListener {
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode() == KeyEvent.VK_T){
+				if (vueCommandes.boutonTire.isEnabled())
+					vueCommandes.T.execution();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_DOWN){
+				if (vueCommandes.boutonDescend.isEnabled())
+					vueCommandes.De.execution();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_LEFT){
+				if (vueCommandes.boutonRecule.isEnabled())
+					vueCommandes.R.execution();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_UP){
+				if (vueCommandes.boutonMonte.isEnabled())
+					vueCommandes.M.execution();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == 39){
+				if (vueCommandes.boutonAvance.isEnabled())
+					vueCommandes.Av.execution();
+				System.out.print("avance connard !");
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_R || e.getKeyCode() == KeyEvent.VK_B){
+				if (vueCommandes.boutonBraque.isEnabled())
+					vueCommandes.B.execution();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_N){
+				if (vueCommandes.boutonDors.isEnabled())
+					vueCommandes.Do.execution();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_ENTER){
+				if (vueCommandes.boutonAction.isEnabled())
+					vueCommandes.Ac.execution();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_A){
+				Arbash = !Arbash;
+				vueSac.repaint();
+	        }
+			
+			if(e.getKeyCode() == KeyEvent.VK_G){
+				Gardille = !Gardille;
+				vueSac.repaint();
+	        }
+			
+			
+			repaint();
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			
+		}
+	    
+	    abstract class SendAction implements ActionListener {
 		    Train train;
 		    VueCommandes vc;
 		     
-		    Bouton(Train train){
+		    SendAction(Train train){
 		    	this.train = train;
 		    }
 		
@@ -637,9 +779,14 @@ public class CEVue {
 		    }
 		    
 		    
-		    abstract public void actionPerformed(ActionEvent e);
+		    public void actionPerformed(ActionEvent e) {
+		    	execution();
+		    };
+		    
+		    abstract void execution();
 		}
-		
+	}
+	    /*
 		class Braque extends Bouton {
 		
 		    public Braque(Train train){
@@ -878,7 +1025,7 @@ public class CEVue {
 			
 		}
 	}
-	
+	*/
 	public static void main(String[] args) {
 		Train t = new Train();
 		//System.out.println(t.MAX_NB_BANDITS);

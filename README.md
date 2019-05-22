@@ -34,7 +34,8 @@ se retrancher sur le toit.
 On a reussi a repondre a tous les besoin de projet et de fonctionalite demande.
 Ce jeu peut se jouer a 3 personne, en alternant entre les deux phases principales : *Panification et Action*\
 On est quand meme alle plus loin et ajuote quelques details vu la liberte donne par l'enonce. \
-On a surtout essaye d'implementer ce qu'on a fait en cours avec M. Balabonski (Classe interne, LambdaExpression, Interface fonctionelle, Iterors, Observers, ForEach ...etc) 
+On a surtout essaye d'implementer ce qu'on a fait en cours avec M. Balabonski (Classe interne, LambdaExpression, Interface fonctionelle, Iterors, Observers, ForEach ...etc)
+Chaque classe de notre modele a redefine la fonction toString() qui affiche l'etat detaille de chaque instance. Cela etati tres eficase pour tester le modele avant faire kes junit test et l'affichage.
 
 ## Architecture de projt
 
@@ -45,15 +46,17 @@ Notre Class train est en effait le model principale de jeu. C'est un list dounle
 Il consite d'une DLL de wagon commencent par la *locomotive* suive par *firstwagon* qui son de type Train.Wagon. Il contient aussi un *marshall* et une liste des *joueurs* qui sont les bandirs.\
 Il contient un ensemble des constantes qui seront utile pour l'initialisations, les invariants et les tests.\
 Le train c'est notre modele prncipale, pour cela c'est grace a ce classe qu'on peut controler le jeu. La classe train contient tous ce qu'on a besoin des methodes en visibiite *public* pour qu'on puisse joue avec. Cela sera utile notament pour le *Vue* dans notre Design Patern utilise **MVC**.\
-Rdv dans le codes \
+Rdv dans le codes   dans **Gestion de jeu**
 ```java
     // **************************************************
     // Gestion de jeu
     // **************************************************
 ```
 
-	
+#### Train.Wagon
 
+Les wagon sont des classe internes de train ce qui permet des accebilites tres utiles aux attributs et aux methodes sans casser l'encapsulation.
+Chaque wagon a un ordre dont il apparatit dans le train ()
 
 
 

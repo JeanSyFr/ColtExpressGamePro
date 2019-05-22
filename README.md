@@ -46,7 +46,8 @@ Notre Class train est en effait le model principale de jeu. C'est un list dounle
 Il consite d'une DLL de wagon commencent par la *locomotive* suive par *firstwagon* qui son de type Train.Wagon. Il contient aussi un *marshall* et une liste des *joueurs* qui sont les bandirs.\
 Il contient un ensemble des constantes qui seront utile pour l'initialisations, les invariants et les tests.\
 Le train c'est notre modele prncipale, pour cela c'est grace a ce classe qu'on peut controler le jeu. La classe train contient tous ce qu'on a besoin des methodes en visibiite *public* pour qu'on puisse joue avec. Cela sera utile notament pour le *Vue* dans notre Design Patern utilise **MVC**.\
-Rdv dans le codes   dans **Gestion de jeu**
+
+> *Rdv dans le codes*   dans **Gestion de jeu**
 ```java
     // **************************************************
     // Gestion de jeu
@@ -59,9 +60,17 @@ Les wagon sont des classe internes de train ce qui permet des accebilites tres u
 Comme chaque wagon est un element de DLL Train, il a accesibilte au wagon *suivant* et *precedent*.\
 Il est egalemt stocke dans un ensemble '*HashSet*' les pointeurs vers les bandits dans ce wagon. Le choix de HashSet est fait car l'ordre n'a pas d'importance.
 Chaque wagon a un ordre dont il apparatit dans le train est stocke comme attribut, mais il peut etre egalement calculer depuis le train. Cela est tres utile pour les tests; on peut verifier si les deux valeurs correspend.
-On sait que dans notre jeu il y a un *marshal* qui se deplace dans les wagon, dans ce cas soit le marshal est dans ce wagon soit non. Pour cela on a choisit de mettre un *boolean* qui sera = true si le marshla est dans ce wagon
+On sait que dans notre jeu il y a un *marshal* qui se deplace dans les wagon, dans ce cas soit le marshal est dans ce wagon soit non. Pour cela on a choisit de mettre un *boolean* qui sera = true si le marshal est dans ce wagon.\
+Vu que Wagon est une classe interne de Train, notre modele, elle a certain resposabite dans la gestion de deroulement de jeu. Elle le responsable pinsipale pour le deplacement des personnages e tpour le tirage de feu.
 
-
+> *Rdv dans le codes*   dans **Utilities functions for Personne**
+```java
+        // **************************************************
+	    // Utilities functions for Personne
+		// The Wagon class is responsible for the deplacement of Personne
+		// @see Bandit::executeAction() Marshal::executeAction()
+	    // **************************************************
+```
 
 
 

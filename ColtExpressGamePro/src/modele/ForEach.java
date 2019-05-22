@@ -3,7 +3,7 @@ import java.lang.Boolean;
 
 
 /** Passer une méthode en paramètre. 
- * On cherche à définir une méthode [forEach] attendant deux paramètres : 
+ *  On cherche à définir une méthode [forEach] attendant deux paramètres : 
  * - une collection d'objets de type [T], implémentant [Iterable<T>] 
  * - une méthode [void f(T elt)] à appliquer à chaque élément de la collection 
  * 

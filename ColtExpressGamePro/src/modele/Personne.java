@@ -99,6 +99,9 @@ public abstract class Personne extends Possesseur{
 	/*
 	 * The object of this class is to simulate the work of the queue data structure (FIFO)
 	 * The queue data structure of java caused problems
+	 * 
+	 * Every action has an index the action to execute next is the one who has the smallest index; it is the action that we 
+	 * 
 	 */
 	protected class ActionList {
 		private Hashtable<Integer, Action> actions;

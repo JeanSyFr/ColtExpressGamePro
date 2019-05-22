@@ -34,7 +34,7 @@ se retrancher sur le toit.
 On a reussi a repondre a tous les besoin de projet et de fonctionalite demande.
 Ce jeu peut se jouer a 3 personne, en alternant entre les deux phases principales : *Panification et Action*\
 On est quand meme alle plus loin et ajuote quelques details vu la liberte donne par l'enonce. \
-On a surtout essaye d'implementer ce qu'on a fait en cours avec M. Balabonski (Classe interne, LambdaExpression, Interface fonctionelle, Iterors, Observers, ForEach ...etc)
+On a surtout essaye d'implementer ce qu'on a fait en cours avec [M. Balabonski](https://www.lri.fr/~blsk/POGL/) (Classe interne, LambdaExpression, Interface fonctionelle, Iterors, Observers, ForEach ...etc)
 Chaque classe de notre modele a redefine la fonction toString() qui affiche l'etat detaille de chaque instance. Cela etati tres eficase pour tester le modele avant faire kes junit test et l'affichage.
 
 ## Architecture de projt
@@ -55,8 +55,11 @@ Rdv dans le codes   dans **Gestion de jeu**
 
 #### Train.Wagon
 
-Les wagon sont des classe internes de train ce qui permet des accebilites tres utiles aux attributs et aux methodes sans casser l'encapsulation.
-Chaque wagon a un ordre dont il apparatit dans le train ()
+Les wagon sont des classe internes de train ce qui permet des accebilites tres utiles aux attributs et aux methodes sans casser l'encapsulation.\
+Comme chaque wagon est un element de DLL Train, il a accesibilte au wagon *suivant* et *precedent*.\
+Il est egalemt stocke dans un ensemble '*HashSet*' les pointeurs vers les bandits dans ce wagon. Le choix de HashSet est fait car l'ordre n'a pas d'importance.
+Chaque wagon a un ordre dont il apparatit dans le train est stocke comme attribut, mais il peut etre egalement calculer depuis le train. Cela est tres utile pour les tests; on peut verifier si les deux valeurs correspend.
+On sait que dans notre jeu il y a un *marshal* qui se deplace dans les wagon, dans ce cas soit le marshal est dans ce wagon soit non. Pour cela on a choisit de mettre un *boolean* qui sera = true si le marshla est dans ce wagon
 
 
 

@@ -82,14 +82,14 @@ Vu que Wagon est une classe interne de Train, notre modele, elle a certain respo
 ```
 
 
-## Possesseur
+### Possesseur
 
 C'est une classe abstrait qui represente les element de notre modele qui peuvent posseder des Butins. Elle a deux sous classe Personne et Train.Wagon.\
 Elle fonction comme la structure de donnee *HashSet* dont le nombre des elements est limite. Ajouter des elememts quand c'est rempli n'a pas d'effet. Enlever des elements se fait par un tirage aleatoire de l'ensemble.\
 les deux fonctions *Possesseur::popButin()* et  *Possesseur::addButin()* sont utilsees pendant l'initialisation dans la calsse *Train* et  Action.Tirer et Action.Braquer dans la classe *Train.Wagon* lors de deroulement de jeu.\
 Au debut pour cette classe on a utilise la structure de donne *Stack* (FILO). Le but estait de faire tomber le dernier butin recuperer par les bandits quand on tire. Cela a ete change a un *HashSet* qui corresspond bien a l'enonce de projet.
 
-##Personne
+### Personne
 
 Une personne c'est un possesseur aussi. Son etat est determine par son *nom*, *wagon* ou il est , l'ensemble des *action* qui peut le prendre de type Personne.ActionList et le modele Train.\
 Dans la fonction **mettrePersonneBonWagon**  a utilise les notins de polymorphisme et l'interpretation dynamique de java vu en cours avec [M. Balabonski](https://www.lri.fr/~blsk/POGL/) pour mettre la personnage en bon endroit dans  les deux differents sous-classe *Bandit* et *Marshal*.
@@ -111,7 +111,7 @@ Dans la fonction **mettrePersonneBonWagon**  a utilise les notins de polymorphis
 
 
 
-###Personne.ActionList
+#### Personne.ActionList
 
 L'objective de cette classe interne est de gerer les prises des actions sans mettre trop de code dans les autre classes.\
 ActionList fonction exactement comme la structure de donnee *Queue* (FIFO). L'action a excuter (out) c'est le premier action qu'on a ajoute.

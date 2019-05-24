@@ -80,12 +80,17 @@ Le train est notre modele prncipale. La classe train contient certaines methodes
 		print(t);
 		//Cette fonction creer des actions deja defini a l'avance 
 		t.actionsPreDefini();
+		print("\n\nAfter action 1\n\n " + t);
 		t.excuteTour();
+		print("\n\nAfter action 2\n\n " + t);
 		t.excuteTour();
+		print("\n\nAfter action 3\n\n " + t);
 		t.excuteTour();
+		print("\n\nAfter action 4\n\n " + t);
 		t.excuteTour();
+		print("\n\nAfter action 5\n\n " + t);
 		t.excuteTour();
-		print("\n\nafter actions \n\n" + t);
+		print("\n\nafter all actions \n\n" + t);
 	}
 ```
 
@@ -235,14 +240,11 @@ Les attributs numAction et numBandit permettent au sous classe de savoir de quel
 
 J’ai choisis de placer 4 JPanel au sein de ma JFrame:
 
-    • vueSac : décrit les butins possédés par chaque bandit, la somme de leurs valeurs, ainsi que le nombre de balles qui lui restent. Instancie la classe VueSac qui hérite de JPanel.
-
-    • vueCommande : Ensemble de JBouton qui permettent au banditCourrant de planifier ses actions, puis d’effectuer les action planifiées. Instancie la classe VueCommande qui hérite de JPanel, et qui implémente l’interface KeyListener afin de pouvoir réarige aux touches du clavier.
-
-    • vueTrain : affichage du train, c’est à dire de la locomotive et des wagons, ainsi que des personnages et des butins. 
+- vueSac : décrit les butins possédés par chaque bandit, la somme de leurs valeurs, ainsi que le nombre de balles qui lui restent. Instancie la classe VueSac qui hérite de JPanel.
+- vueCommande : Ensemble de JBouton qui permettent au banditCourrant de planifier ses actions, puis d’effectuer les action planifiées. Instancie la classe VueCommande qui hérite de JPanel, et qui implémente l’interface KeyListener afin de pouvoir réarige aux touches du clavier.
+- vueTrain : affichage du train, c’est à dire de la locomotive et des wagons, ainsi que des personnages et des butins. 
     Instancie la classe VueTrain qui hérite de JPanel, et qui implémente l’interface Observer, afin de réagir aux notifications envoyées par le modèle.
-
-    • Tableau: un JTable qui représente l’objet dataTableau. Permet l’affichage des action planifiées pour chaque joueur.
+- Tableau: un JTable qui représente l’objet dataTableau. Permet l’affichage des action planifiées pour chaque joueur.
 
 ---
 

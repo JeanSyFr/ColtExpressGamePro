@@ -66,22 +66,38 @@ Il consite d'une DLL de wagons commencent par la *locomotive* suive par *firstwa
 Il contient l'ensemble des constantes qui seront utile pour l'initialisations, les invariants et les tests.\
 Le train est notre modele prncipale. La classe train contient certaines methodes en visibiite *public* pour que l'affichage et le controleur puissent l'utiliser, conformément au Design Patern **MVC**.\
 
-> *Rdv dans le codes*   dans **Gestion de jeu**
+> *Rdv dans le codes*   dans **Gestion de jeu** pour regarder en detailles ces fonctions
 ```java
     // **************************************************
     // Gestion de jeu
     // **************************************************
 ```
 
+> Vous pouvez regarder la deroulement du jeu en excutant la fonction main de ce classe et en regardant la console.
+```java
+    public static void main(String args[]) {
+		Train t = new Train();
+		print(t);
+		//Cette fonction creer des actions deja defini a l'avance 
+		t.actionsPreDefini();
+		t.excuteTour();
+		t.excuteTour();
+		t.excuteTour();
+		t.excuteTour();
+		t.excuteTour();
+		print("\n\nafter actions \n\n" + t);
+	}
+```
+
 #### Train.Wagon
 
-Wagon est une classe interne de train. Cela permet d'acceder aux attributs et aux methodes sans casser l'encapsulation.\
-Cette classe est aussi une sous-classe de classe abstrait *Possesseur*, decrite plus bas, car dans les wagons on trouve les butins. 
+Wagon est une classe interne de train. Cela permet l'acces aux attributs et aux methodes depuis ces deux classes sans casser l'encapsulation.\
+Cette classe est aussi une sous-classe de classe abstrait *Possesseur*, carecterise les elements qui peuvent contenir des burins decrite plus bas, car dans les wagons on trouve les butins. 
 Comme chaque wagon est un element de la DLL Train, il a accesibilte au wagon *suivant* et *precedent*.\
 Il possède un ensemble '*HashSet*' des pointeurs vers les bandits dans ce wagon. Le choix de HashSet est justifiée car l'ordre n'a pas d'importance.
-Chaque wagon a un ordre d'apparition dans le train comme attribut, mais il peut etre egalement etre calculé depuis le train. Cela est tres utile pour les tests; on peut verifier si les deux valeurs correspondent.
+Chaque wagon a un ordre d'apparition dans le train comme attribut, mais il peut etre egalement calculé depuis le train. Cela est tres utile pour les tests; on peut verifier si les deux valeurs correspondent bien.
 On sait que dans notre jeu il y a un *marshal* qui se déplace dans les wagons. Soit le marshal est dans ce wagon soit non. Pour cela on a choisit de mettre un *boolean* qui sera = true si le marshal est dans ce wagon.\
-Vu que Wagon est une classe interne de Train, notre modele, elle a une certain responsabilité dans la gestion du deroulement du jeu. Elle est la responsable pinsipale pour le deplacement des personnages et pour les tires.
+Vu que Wagon est une classe interne de Train, notre modele, elle a une certain responsabilité dans la gestion du deroulement du jeu. Elle est la responsable pincipale pour le deplacement des personnages et pour gerer les tires.
 
 > *Rdv dans le codes*   dans **Utilities functions for Personne** et **Utilities functions for ActionList class**
 
@@ -171,7 +187,7 @@ C'est une classe de test pour le modèle. Il s'agit bien à la fois d'un test un
 ### Possesseur
 
 C'est une classe abstraite qui represente les elements de notre modele qui peuvent posseder des Butins. Elle a deux sous-classes Personne et Train.Wagon.\
-Elle fonctionne comme la structure de donnée *HashSet* dont le nombre d'élements est limité. Ajouter des élements quand c'est rempli n'a pas d'effet. Enlever des elements se fait par un tirage aleatoire sur l'ensemble.\
+Elle fonctionne comme la structure de donnée *HashSet* dont le nombre d'élements est limité. Ajouter des élements quand l'ensemble est rempli n'a pas d'effet. Enlever des elements se fait par un tirage aleatoire sur l'ensemble.\
 les deux fonctions *Possesseur::popButin()* et  *Possesseur::addButin()* sont utilsées pendant l'initialisation dans la calsse *Train* et  Action.Tirer et Action.Braquer dans la classe *Train.Wagon* lors du deroulement du jeu.\
 Au debut pour cette classe on a utilise la structure de donne *Stack* (FILO). Le but etait de faire tomber le dernier butin recuperer par les bandits quand on tire. Cela a ete change a un *HashSet* qui corresspond bien a l'enonce du projet.
 
@@ -204,7 +220,48 @@ L'objectif de cette classe interne est de gérer les actions sans mettre trop de
 ActionList fonctionne exactement comme la structure de donnée *Queue* (FIFO). L'action à executer (out) est la premier action qu'on a ajouté. Cette structure de données repond exactement a notre besoin.\
 On a essayé d'utiliser la structure de file donnee par java, mais cela foctionnait mal.
 
+### Marshall et Bandit
 
+Deux sous-classe de personne. Elle implemente les fonctions d'une facon differente chaque une en fonction de son role dans le jeu.
+
+
+
+
+# Vue et Contouleur
+
+La classe CEVue s’occupe de l’affichage et du contrôleur relatifs à la classe Train.
+
+Les attributs numAction et numBandit permettent au sous classe de savoir de quelle action et de quel bandit on est en train de s’occuper, tant pendant la planification que pendant l’exécution.
+
+J’ai choisis de placer 4 JPanel au sein de ma JFrame:
+
+    • vueSac : décrit les butins possédés par chaque bandit, la somme de leurs valeurs, ainsi que le nombre de balles qui lui restent. Instancie la classe VueSac qui hérite de JPanel.
+
+    • vueCommande : Ensemble de JBouton qui permettent au banditCourrant de planifier ses actions, puis d’effectuer les action planifiées. Instancie la classe VueCommande qui hérite de JPanel, et qui implémente l’interface KeyListener afin de pouvoir réarige aux touches du clavier.
+
+    • vueTrain : affichage du train, c’est à dire de la locomotive et des wagons, ainsi que des personnages et des butins. 
+    Instancie la classe VueTrain qui hérite de JPanel, et qui implémente l’interface Observer, afin de réagir aux notifications envoyées par le modèle.
+
+    • Tableau: un JTable qui représente l’objet dataTableau. Permet l’affichage des action planifiées pour chaque joueur.
+
+---
+
+
+La classe CEVue joue a la fois le rôle de la vue et du contrôleur au sein de l’implémentation du desing pattern modèle-vue-contrôleur. 
+
+J’ai implémenté le design patern observable-observer pour récupérer les informations du train.
+Le train, qui représente le modèle, étend la classe Observable. Il hérite donc des méthodes addObserver et notifyObservers. 
+La classe CEVue implémente Observer, et notamment la méthode update en lui disant de tout redessiner. Dans son constructeur, CEVue s’ajoute comme observer du train. Ce dernier va appeler notifyObserver pour déclencher une mise à jour de l’affichage.
+
+La classe interne vueCommande se charge d’ajouter des actions au banditCourrant lorsque l’on clique sur un bouton ou que l’on appuis sur le clavier. Cela permet au contrôleur VueCommande d’agir sur le modèle Train.
+ 
+---
+
+Concernant l’envoi d’action aux bandits, j’avais commencé par coder une classe abstraite Bouton qui représentait l’action a exécuter lors du cliquage d’un bouton. Je lui faisais hériter une classe pour chaque bouton. Mais je me suis rendu compte qu’elles ne différaient que d’une méthode.
+Après avoir renommé la classe Bouton en SendAction, je l’ai dérivé en autant de classe anonyme que besoin au sein du constructeur de VueCommande. J’ai mis en commentaire les anciennes classes héritées de bouton.
+Ainsi, mon code plus lisible et plus concis.
+
+Au sein de la classe vueCommande, J’ai mis tous les boutons et leurs actions associées dans un HashSet afin de pouvoir les parcourir plus facilement. Cela est utilisé dans la fonction majBoutons(). 
 
 
 

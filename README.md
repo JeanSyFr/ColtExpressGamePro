@@ -49,7 +49,13 @@ La vue est dépendante du modèle. Elle interroge celui-ci pour en afficher une 
 Le contrôleur dépend de la vue et du modèle : la vue comporte des éléments visuels que l'utilisateur peut actionner. Le contrôleur répond aux actions effectuées sur la vue et modifie l'etat du modèle. \
 Plus des detailles sur [MVC wikipidia](https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur)
 
+## Travail en groupe
 
+Ce projet a ete realise par GARDILLE Arnaud et ARBACHE Jean.
+**Jean ARBACHE:** Conception de la Modele (package modele)
+**Arnaud GARDILLE:** Utilisateur de modele et concepteur de Vue et de Controleur (package vue).
+
+# Modele
 
 
 ### Train

@@ -39,6 +39,19 @@ Chaque classe de notre modele a redéfinit la fonction toString() qui affiche l'
 
 ## Architecture de projt
 
+Le projet est organisée selon une architecture Modèle-Vue-Contrôleur (MVC Design Pattern). Le but est la séparation des deux parties suivantes :
+- Le coeur de l'application, appelé le modèle, où est fait l'essentiel du travail.
+- L'interface utilisateur, appelée la vue, qui à la fois montre des choses à l'utilisateur et lui fournit des moyens d'interagir.
+
+Le modèle est indépendant des autres modules. Il ne se sert ni de la vue ni du contrôleur, il peut cependant leur envoyer des messages3. 
+Il y a deux liens entre la vue et le modèle: premièrement la vue lit l'etat du modèle et deuxièmement reçoit des messages provenant du modèle. \
+La vue est dépendante du modèle. Elle interroge celui-ci pour en afficher une représentation.\
+Le contrôleur dépend de la vue et du modèle : la vue comporte des éléments visuels que l'utilisateur peut actionner. Le contrôleur répond aux actions effectuées sur la vue et modifie l'etat du modèle. \
+Plus des detailles sur [MVC wikipidia](https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur)
+
+
+
+
 ### Train
 
 Notre Class train représente le model principale de jeu. C'est une liste dounlement chainée  **DLL** , *Iterable*  et *Observable*.

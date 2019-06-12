@@ -232,7 +232,7 @@ Deux sous-classe de personne. Elle implemente les fonctions d'une facon differen
 
 
 
-# Vue et Contouleur
+# Vue et Controleur
 
 La classe CEVue s’occupe de l’affichage et du contrôleur relatifs à la classe Train.
 
